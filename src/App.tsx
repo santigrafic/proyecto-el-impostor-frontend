@@ -1,10 +1,16 @@
-import { useState } from 'react'
+import { useCallback, useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import Button from './Button'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [name, setName] = useState<string>("")
+  const [count, setCount] = useState<number>(0)
+
+  const countEvent = useCallback(() => {
+    setCount((prevState) => prevState + 1)
+  }, [])
 
   return (
     <>
@@ -18,8 +24,9 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <Button updateState={countEvent} count={count} />
+        <button onClick={() => setName("Manolo")}>
+          change to {name}
         </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
