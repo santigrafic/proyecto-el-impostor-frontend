@@ -37,6 +37,8 @@ a:hover {
   padding: 2rem 0;
 }
 
+/* Header */
+
 /* Footer */
 .app-footer {
   background-color: #020617;
@@ -44,4 +46,5 @@ a:hover {
   padding: 1rem 0;
   text-align: center;
   font-size: 0.9rem;
+  margin-top: 20px;
 }

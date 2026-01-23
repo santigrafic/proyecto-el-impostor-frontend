@@ -1,6 +1,8 @@
 import impostorIcon from '../assets/images/impostor-logo.png'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
+  const navigate = useNavigate()
   return (
     <>
     <div className="text-center">
@@ -16,17 +18,17 @@ const Home = () => {
       </p>
 
       <div className="d-flex justify-content-center gap-3">
-        <button className="btn btn-primary">
+        <button className="btn btn-primary" onClick={() => navigate('/login')}>
           Iniciar sesión
         </button>
 
-        <button className="btn btn-outline-light">
+        <button className="btn btn-outline-light" onClick={() => navigate('/register')}>
           Registrarse
         </button>
       </div>
       <br></br>
       <div>
-        <button className="btn btn-secondary">
+        <button className="btn btn-secondary" onClick={() => navigate('/lobby')}>
           Jugar como invitado
         </button>
       </div>

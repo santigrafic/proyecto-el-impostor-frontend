@@ -1,10 +1,13 @@
-import { createRoot } from 'react-dom/client'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import App from './App'
 import './styles/global.css'
-import Home from './pages/Home.tsx'
-import MainLayout from './application/components/layout/MainLayout.tsx'
 
-createRoot(document.getElementById('root')!).render(
-  <MainLayout>
-    <Home />
-  </MainLayout>,
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 )

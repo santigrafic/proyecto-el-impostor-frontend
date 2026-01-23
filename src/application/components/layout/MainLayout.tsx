@@ -1,13 +1,9 @@
-import type { ReactNode } from 'react'
+import { Outlet } from 'react-router-dom'
 
-interface MainLayoutProps {
-  children: ReactNode
-}
-
-const MainLayout = ({ children }: MainLayoutProps) => {
+export default function MainLayout() {
   return (
-    <div className="app-container">
-      <header className="navbar navbar-dark bg-dark">
+    <div className="main-layout">
+      <header className="navbar navbar-dark bg-dark mb-4">
         <div className="container">
           <span className="navbar-brand mb-0 h1">
             Juego El Impostor
@@ -15,8 +11,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </div>
       </header>
 
-      <main className="main-content container">
-        {children}
+      <main>
+        <Outlet /> {/* 👈 AQUÍ se cargan las páginas */}
       </main>
 
       <footer className="app-footer">
@@ -27,5 +23,3 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     </div>
   )
 }
-
-export default MainLayout
