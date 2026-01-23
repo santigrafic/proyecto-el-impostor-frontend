@@ -28,7 +28,10 @@ const Home = () => {
       </div>
       <br></br>
       <div>
-        <button className="btn btn-secondary" onClick={() => navigate('/lobby')}>
+        <button className="btn btn-secondary" onClick={() => {
+          localStorage.setItem('userType', 'guest')
+          navigate('/lobby')
+        }}>
           Jugar como invitado
         </button>
       </div>

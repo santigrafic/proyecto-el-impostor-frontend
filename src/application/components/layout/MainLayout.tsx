@@ -1,25 +1,23 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
+import Header from './Header'
+import Footer from './Footer'
 
 export default function MainLayout() {
-  return (
-    <div className="main-layout">
-      <header className="navbar navbar-dark bg-dark mb-4">
-        <div className="container">
-          <span className="navbar-brand mb-0 h1">
-            Juego El Impostor
-          </span>
-        </div>
-      </header>
+  const location = useLocation()
 
-      <main>
-        <Outlet /> {/* 👈 AQUÍ se cargan las páginas */}
+  // Ocultar header en la home
+  const hideHeaderPaths = ['/', '/login', '/register']
+  const hideHeader = hideHeaderPaths.includes(location.pathname)
+
+  return (
+    <div className="main-layout" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      {!hideHeader && <Header />}
+
+      <main style={{ flex: 1, padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Outlet />
       </main>
 
-      <footer className="app-footer">
-        <div className="container">
-          © {new Date().getFullYear()} · Juego El Impostor · David Santiago Gavilan
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
