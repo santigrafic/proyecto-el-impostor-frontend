@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function Lobby() {
+const LobbyPage: React.FC = () => {
   const navigate = useNavigate()
   const [codigo, setCodigo] = useState('')
   const isGuest = localStorage.getItem('userType') === 'guest'
@@ -58,3 +58,5 @@ export default function Lobby() {
     </div>
   )
 }
+
+export default LobbyPage

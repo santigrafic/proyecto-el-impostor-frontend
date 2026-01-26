@@ -42,20 +42,3 @@ a:hover {
   flex: 1;
   padding: 2rem 0;
 }
-
-.main-layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-/* Header */
-
-/* Footer */
-.app-footer {
-  background-color: #020617;
-  color: #94a3b8;
-  padding: 1rem 0;
-  text-align: center;
-  font-size: 0.9rem;
-  margin-top: 20px;
-}

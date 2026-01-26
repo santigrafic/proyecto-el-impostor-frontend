@@ -1,18 +1,20 @@
 import { Routes, Route } from 'react-router-dom'
-import MainLayout from './application/components/layout/MainLayout'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Lobby from './pages/Lobby'
 
-function App() {
+import Layout from './application/components/layout'
+
+import HomePage from './pages/home'
+import Login from './pages/login/Login'
+import Register from './pages/register/Register'
+import LobbyPage from './pages/lobby'
+
+const App = () => {
   return (
     <Routes>
-        <Route element={<MainLayout />}>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/lobby" element={<Lobby />} />
+      <Route element={<Layout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/lobby" element={<LobbyPage />} />
       </Route>
     </Routes>
   )

@@ -1,11 +1,16 @@
-import { Outlet, useLocation } from 'react-router-dom'
-import Header from './Header'
-import Footer from './Footer'
+import type React from 'react'
 
-export default function MainLayout() {
+import { Outlet, useLocation } from 'react-router-dom'
+
+import Header from './components/header'
+import Footer from './components/footer'
+
+import "./Layout.css"
+
+const Layout: React.FC = () => {
   const location = useLocation()
 
-  // Ocultar header en la home
+  // Hide header
   const hideHeaderPaths = ['/', '/login', '/register']
   const hideHeader = hideHeaderPaths.includes(location.pathname)
 
@@ -21,3 +26,5 @@ export default function MainLayout() {
     </div>
   )
 }
+
+export default Layout
