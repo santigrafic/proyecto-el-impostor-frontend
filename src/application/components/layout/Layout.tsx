@@ -11,7 +11,7 @@ const Layout: React.FC = () => {
   const location = useLocation()
 
   // Hide header
-  const hideHeaderPaths = ['/', '/login', '/register']
+  const hideHeaderPaths = ['/']
   const hideHeader = hideHeaderPaths.includes(location.pathname)
 
   return (
