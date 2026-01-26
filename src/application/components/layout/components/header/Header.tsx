@@ -1,25 +1,18 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
 
-export default function Header() {
+const Header: React.FC = () => {
   const navigate = useNavigate()
-  const [userType, setUserType] = useState<string | null>(null)
-  const [userName, setUserName] = useState('')
-  const [userAvatar, setUserAvatar] = useState('')
 
-  useEffect(() => {
-    const type = localStorage.getItem('userType')
-    setUserType(type)
-    if (type === 'user') {
-      setUserName(localStorage.getItem('userName') || '')
-      setUserAvatar(localStorage.getItem('userAvatar') || '')
-    }
-  }, [])
+  const userType: string = localStorage.getItem('userType') ?? "guest"
+  const userName: string = localStorage.getItem('userName') ?? "Guest"
+  // TODO: Add default avatar
+  const userAvatar: string = localStorage.getItem('userAvatar') ?? ""
+
+
 
   const handleLogout = () => {
     localStorage.clear()
-    navigate('/')
-    setUserType('guest')
+    navigate('/lobby')
   }
 
   return (
@@ -55,3 +48,5 @@ export default function Header() {
     </header>
   )
 }
+
+export default Header
