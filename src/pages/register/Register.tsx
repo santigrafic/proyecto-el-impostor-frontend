@@ -1,6 +1,8 @@
+import React from 'react'
+
 import RegisterForm from "./components/register-form"
 
-export default function Register() {
+const RegisterPage: React.FC = () => {
   return (
     <div className="register-page">
       <h1>Registrarse</h1>
@@ -8,3 +10,5 @@ export default function Register() {
     </div>
   )
 }
+
+export default RegisterPage;
