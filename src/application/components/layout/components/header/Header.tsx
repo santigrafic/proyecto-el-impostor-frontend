@@ -19,7 +19,7 @@ const Header: React.FC = () => {
     <header style={{ padding: '10px 20px', background: '#222', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <h3>
         <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>
-          Juego El Impostor
+          El Impostor
         </Link>
       </h3>
 
