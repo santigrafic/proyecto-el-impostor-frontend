@@ -1,10 +1,14 @@
+import React from 'react'
+
 import { useNavigate } from 'react-router-dom'
+
+import { ROUTE_PATHS } from '../../application/components/routes/utils/route-paths';
 
 import Button from '../../commons/components/presentational/button'
 
 import impostorIcon from '../../application/assets/images/impostor-logo.png'
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const navigate = useNavigate()
 
   const handleGuestPlay = () => {
@@ -26,7 +30,7 @@ const HomePage = () => {
       </p>
 
       <div className="d-flex justify-content-center gap-3">
-        <Button text="Iniciar sesión" styleClass="btn btn-primary" handleClick={() => navigate('/login')} />
+        <Button text="Iniciar sesión" styleClass="btn btn-primary" handleClick={() => navigate(ROUTE_PATHS.LOGIN)} />
         <Button text="Registrarse" styleClass="btn btn-outline-light" handleClick={() => navigate('/register')} />
       </div>
       <br></br>
