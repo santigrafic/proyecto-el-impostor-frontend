@@ -31,7 +31,7 @@ const HomePage: React.FC = () => {
 
       <div className="d-flex justify-content-center gap-3">
         <Button text="Iniciar sesión" styleClass="btn btn-primary" handleClick={() => navigate(ROUTE_PATHS.LOGIN)} />
-        <Button text="Registrarse" styleClass="btn btn-outline-light" handleClick={() => navigate('/register')} />
+        <Button text="Registrarse" styleClass="btn btn-outline-light" handleClick={() => navigate(ROUTE_PATHS.REGISTER)} />
       </div>
       <br></br>
       <div>

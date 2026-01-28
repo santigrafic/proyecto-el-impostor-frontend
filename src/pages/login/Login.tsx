@@ -1,6 +1,8 @@
+import React from 'react'
+
 import LoginForm from "./components/login-form"
 
-export default function Login() {
+const LoginPage: React.FC = () => {
   return (
     <div className="login-page">
       <h1>Iniciar sesión</h1>
@@ -8,3 +10,5 @@ export default function Login() {
     </div>
   )
 }
+
+export default LoginPage;
