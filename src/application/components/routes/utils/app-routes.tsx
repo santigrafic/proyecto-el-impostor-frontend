@@ -7,6 +7,7 @@ import Login from "../../../../pages/login/Login";
 import Register from "../../../../pages/register/Register";
 import Lobby from "../../../../pages/lobby/Lobby";
 import Room from "../../../../pages/room/Room";
+import RevealPage from "../../../../pages/reveal-page/RevealPage";
 import Game from "../../../../pages/game/Game";
 import NotFound from "../../../../pages/not-found/NotFound";
 
@@ -42,9 +43,9 @@ export const appRoutes: RouteTypes[] = [
     element: <Room />,
   },
   {
-    key: 'room',
-    path: ROUTE_PATHS.ROOM,
-    element: <Room />,
+    key: 'reveal-page',
+    path: ROUTE_PATHS.REVEALPAGE,
+    element: <RevealPage />,
   },
   {
     key: 'game',

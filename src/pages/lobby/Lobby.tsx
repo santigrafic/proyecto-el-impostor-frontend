@@ -3,25 +3,76 @@ import { useNavigate } from "react-router-dom";
 
 const LobbyPage: React.FC = () => {
   const navigate = useNavigate();
-  const [roomID, setCodigo] = useState("");
-  const isGuest = localStorage.getItem("userType") === "guest";
+  const [roomID, setRoomID] = useState("");
+  // const isGuest = localStorage.getItem("userType") === "guest";
 
-  const handleCrearPartida = () => {
-    // Aquí iría la llamada al backend para crear partida
-    const roomID = Math.floor(Math.random() * 9000 + 1000); // ejemplo de código
-    alert(`Partida creada: ${roomID}`);
-    // Luego redirigir al jugador a la sala
-    navigate(`ROUTE_PATHS.ROOM/${roomID}`);
+  // Crear partida
+  const handleCrearPartida = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/api/rooms", {
+        method: "POST",
+      });
+
+      const data = await res.json();
+      const roomID = data.roomId;
+      const playerId = crypto.randomUUID();
+
+      localStorage.setItem("roomId", roomID);
+      localStorage.setItem("playerId", playerId);
+
+      // Llamar al join del backend
+      await fetch(`http://localhost:8000/api/rooms/${roomID}/join`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playerId,
+        }),
+      });
+
+      navigate(`/room/${roomID}`);
+    } catch (error) {
+      console.error(error);
+      alert("Error al crear la partida");
+    }
   };
 
-  const handleUnirsePartida = () => {
+  // Unirse a partida
+  const handleUnirsePartida = async () => {
     if (!roomID) {
       alert("Introduce un código de partida");
       return;
     }
-    // Aquí validarías el código con el backend
-    alert(`Uniéndote a la partida ${roomID}`);
-    navigate(`ROUTE_PATHS.ROOM/${roomID}`);
+
+    try {
+      const playerId = crypto.randomUUID();
+
+      const res = await fetch(
+        `http://localhost:8000/api/rooms/${roomID}/join`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            playerId,
+          }),
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("No se pudo unir a la sala");
+      }
+
+      localStorage.setItem("roomId", roomID.toUpperCase());
+      localStorage.setItem("playerId", playerId);
+
+      navigate(`/room/${roomID}`);
+    } catch (error) {
+      console.error(error);
+      alert("No se pudo unir a la partida");
+    }
   };
 
   return (
@@ -47,7 +98,7 @@ const LobbyPage: React.FC = () => {
           type="text"
           placeholder="Introduce código de partida"
           value={roomID}
-          onChange={(e) => setCodigo(e.target.value)}
+          onChange={(e) => setRoomID(e.target.value.toUpperCase())}
           style={{
             width: "70%",
             padding: "8px",
