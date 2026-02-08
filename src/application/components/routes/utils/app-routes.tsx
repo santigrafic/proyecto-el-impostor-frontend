@@ -13,53 +13,53 @@ import NotFound from "../../../../pages/not-found/NotFound";
 
 import { ROUTE_PATHS } from "./route-paths";
 
-import type { RouteTypes } from "./types"
+import type { RouteTypes } from "./types";
 
 export const appRoutes: RouteTypes[] = [
   {
-    key: 'home',
+    key: "home",
     path: ROUTE_PATHS.HOME,
     element: <HomePage />,
-    hideHeader: true
+    hideHeader: true,
   },
   {
-    key: 'login',
+    key: "login",
     path: ROUTE_PATHS.LOGIN,
     element: <Login />,
   },
   {
-    key: 'register',
+    key: "register",
     path: ROUTE_PATHS.REGISTER,
     element: <Register />,
   },
   {
-    key: 'lobby',
+    key: "lobby",
     path: ROUTE_PATHS.LOBBY,
     element: <Lobby />,
   },
   {
-    key: 'room',
+    key: "room",
     path: ROUTE_PATHS.ROOM,
     element: <Room />,
   },
   {
-    key: 'reveal-page',
+    key: "reveal-page",
     path: ROUTE_PATHS.REVEALPAGE,
     element: <RevealPage />,
   },
   {
-    key: 'game',
+    key: "game",
     path: ROUTE_PATHS.GAME,
     element: <Game />,
   },
   {
-    key: 'not-found',
+    key: "not-found",
     path: ROUTE_PATHS.NOTFOUND,
     element: <NotFound />,
   },
   {
-    key: 'default',
+    key: "default",
     path: ROUTE_PATHS.DEFAULT,
-    element: <Navigate to={ROUTE_PATHS.HOME} replace />
-  }
-]
+    element: <Navigate to={ROUTE_PATHS.HOME} replace />,
+  },
+];
