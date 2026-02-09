@@ -1,0 +1,51 @@
+
+.splash-container {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  color: #00de59;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: "Press Start 2P", monospace;
+}
+
+.splash-content {
+  text-align: center;
+}
+
+.welcome-title {
+  font-size: 64px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 8px #00ff66;
+}
+
+.game-subtitle {
+  font-size: 18px;
+  margin-bottom: 80px;
+  text-shadow: 0 0 6px #00ff66;
+}
+
+.insert-coin {
+  font-size: 20px;
+  animation: blink 1.2s steps(2, start) infinite;
+  margin-bottom: 60px;
+}
+
+.credits {
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

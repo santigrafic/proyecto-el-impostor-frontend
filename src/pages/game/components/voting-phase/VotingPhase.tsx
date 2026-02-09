@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import type { MeType, GameStateType } from "../../types";
 
+import "./VotingPhase.css";
+
 type VotingPhaseProps = {
   me: MeType;
   gameState: GameStateType;
@@ -11,7 +13,13 @@ type VotingPhaseProps = {
   fetchGameState: () => Promise<void>;
 };
 
-const VotingPhase: React.FC<VotingPhaseProps> = ({me, gameState, onVote, roomId, fetchGameState,}) => {
+const VotingPhase: React.FC<VotingPhaseProps> = ({
+  me,
+  gameState,
+  onVote,
+  roomId,
+  fetchGameState,
+}) => {
   const navigate = useNavigate();
   const hasVoted = me.hasVoted;
 
@@ -35,27 +43,24 @@ const VotingPhase: React.FC<VotingPhaseProps> = ({me, gameState, onVote, roomId,
   }, [hasVoted, fetchGameState, navigate, roomId]);
 
   return (
-    <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-      <h1>Fase de Votación</h1>
-      <p>
+    <div className="voting-container">
+      <h1 className="voting-title">Fase de votación</h1>
+
+      <p className="voting-status">
         {hasVoted
           ? "Ya has votado. Espera a que los demás jugadores voten."
-          : "Elige a quién quieres votar:"}
+          : "Quién crees que es el impostor:"}
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      <div className="voting-list">
         {gameState.players
           .filter((p) => p.id !== me.playerId)
           .map((p) => (
             <button
               key={p.id}
+              className="arcade-btn voting-btn"
               disabled={hasVoted}
               onClick={() => onVote(p.id)}
-              style={{
-                padding: "10px",
-                fontSize: "16px",
-                cursor: hasVoted ? "not-allowed" : "pointer",
-              }}
             >
               {p.nickname}
             </button>

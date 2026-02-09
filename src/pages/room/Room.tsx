@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import './Room.css'
+
 interface Player {
   id: string;
   nickname: string;
@@ -22,7 +24,9 @@ const RoomPage: React.FC = () => {
   // Función para hacer polling al backend
   const fetchRoomState = async () => {
     try {
-      const res = await fetch(`http://localhost:8000/api/rooms/${roomId}/state`);
+      const res = await fetch(
+        `http://localhost:8000/api/rooms/${roomId}/state`,
+      );
       if (!res.ok) throw new Error("Error al obtener estado de la sala");
       const data = await res.json();
       setRoom(data);
@@ -43,11 +47,14 @@ const RoomPage: React.FC = () => {
   // Start game (solo host)
   const handleStartGame = async () => {
     try {
-      const res = await fetch(`http://localhost:8000/api/rooms/${roomId}/start`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hostId: playerId })
-      });
+      const res = await fetch(
+        `http://localhost:8000/api/rooms/${roomId}/start`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ hostId: playerId }),
+        },
+      );
       if (!res.ok) throw new Error("No se pudo iniciar la partida");
       await fetchRoomState(); // actualizar inmediatamente
     } catch (err) {
@@ -65,23 +72,28 @@ const RoomPage: React.FC = () => {
   if (!room) return <div>Cargando sala...</div>;
 
   return (
-    <div style={{ maxWidth: "600px", margin: "50px auto", textAlign: "center" }}>
-      <h2>Sala {roomId}</h2>
-      <p>Estado: {room.status === "waiting" ? "Esperando jugadores..." : "Jugando"}</p>
+    <div className="room-container">
+      <h2 className="room-title">SALA {roomId}</h2>
 
-      <h3>Jugadores:</h3>
-      <ul>
+      <p className="room-status">
+        ESTADO:{" "}
+        {room.status === "waiting" ? "ESPERANDO JUGADORES..." : "JUGANDO"}
+      </p>
+
+      <h3 className="room-subtitle">JUGADORES</h3>
+
+      <ul className="players-list">
         {room.players.map((p) => (
-          <li key={p.id}>{p.nickname}{p.id === room.hostId ? " (host)" : ""}</li>
+          <li key={p.id} className="player-item">
+            <span className="cursor">&gt;</span> {p.nickname}
+            {p.id === room.hostId && <span className="host-tag"> (HOST)</span>}
+          </li>
         ))}
       </ul>
 
       {isHost && room.status === "waiting" && (
-        <button
-          onClick={handleStartGame}
-          style={{ padding: "10px 20px", fontSize: "16px", marginTop: "20px" }}
-        >
-          Iniciar Partida
+        <button className="arcade-btn start-btn" onClick={handleStartGame}>
+          Iniciar partida
         </button>
       )}
     </div>

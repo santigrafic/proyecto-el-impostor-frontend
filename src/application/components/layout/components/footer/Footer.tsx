@@ -1,15 +1,22 @@
-import type React from "react"
+import type React from "react";
 
-import "./Footer.css"
+import "./Footer.css";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="app-footer">
-      <div className="container">
-        © {new Date().getFullYear()} · Juego El Impostor · David Santiago Gavilan
+    <footer className="arcade-footer">
+      <div className="footer-content">
+        © {new Date().getFullYear()} · El Impostor ·{" "}
+        <a
+          href="https://www.linkedin.com/in/santigrafic/"
+          className="footer-link"
+          target="_blank"
+        >
+          David Santiago Gavilan<span className="cursor">_</span>
+        </a>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

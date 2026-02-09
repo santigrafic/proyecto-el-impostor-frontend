@@ -2,6 +2,7 @@
 
 import { Navigate } from "react-router-dom";
 
+import Welcome from "../../../../pages/welcome";
 import HomePage from "../../../../pages/home";
 import Login from "../../../../pages/login/Login";
 import Register from "../../../../pages/register/Register";
@@ -16,6 +17,12 @@ import { ROUTE_PATHS } from "./route-paths";
 import type { RouteTypes } from "./types";
 
 export const appRoutes: RouteTypes[] = [
+  {
+    key: "welcome",
+    path: ROUTE_PATHS.WELCOME,
+    element: <Welcome  />,
+    hideHeader: true,
+  },
   {
     key: "home",
     path: ROUTE_PATHS.HOME,
@@ -51,6 +58,7 @@ export const appRoutes: RouteTypes[] = [
     key: "game",
     path: ROUTE_PATHS.GAME,
     element: <Game />,
+    hideHeader: true,
   },
   {
     key: "not-found",

@@ -1,0 +1,92 @@
+.login-page {
+  width: 100%;
+  max-width: 400px;
+  margin: 50px auto;
+  background: #000;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  padding: 30px 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px #00ff66;
+  text-align: center;
+}
+
+.page-title {
+  font-size: 20px;
+  text-shadow: 0 0 8px #00ff66;
+  margin-bottom: 30px;
+}
+
+.login-form .form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 6px;
+  text-shadow: 0 0 6px #00ff66;
+}
+
+.arcade-input {
+  width: 100%;
+  padding: 10px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 14px;
+  text-transform: uppercase;
+  background: #000;
+  color: #00ff66;
+  border: 2px solid #00ff66;
+  box-shadow: 0 0 8px #00ff66 inset;
+}
+
+.arcade-input::placeholder {
+  color: #00ff66;
+  opacity: 0.7;
+}
+
+.form-check {
+  margin-bottom: 20px;
+  font-size: 12px;
+  text-shadow: 0 0 4px #00ff66;
+}
+
+.form-check-input {
+  margin-right: 6px;
+}
+
+.arcade-btn {
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  font-size: 14px;
+  border: 2px solid #00ff66;
+  background: #000;
+  color: #00ff66;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00ff66;
+  transition: all 0.2s;
+}
+
+.arcade-btn:hover {
+  box-shadow: 0 0 20px #00ff66;
+  transform: scale(1.05);
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .page-title { font-size: 24px; }
+  .arcade-input { font-size: 16px; padding: 14px 28px; }
+  .arcade-btn { font-size: 16px; padding: 14px 28px; }
+}
+
+@media (min-width: 992px) {
+  .page-title { font-size: 28px; }
+  .arcade-input { font-size: 18px; padding: 16px 32px; }
+  .arcade-btn { font-size: 18px; padding: 16px 32px; }
+}

@@ -1,0 +1,133 @@
+.lobby-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: center;
+  background: #000;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px #00ff66;
+}
+
+.lobby-title {
+  font-size: 24px;
+  text-shadow: 0 0 8px #00ff66;
+  margin-bottom: 10px;
+}
+
+.lobby-subtitle {
+  font-size: 12px;
+  text-shadow: 0 0 6px #00ff66;
+  margin-bottom: 30px;
+}
+
+.crear-partida,
+.unirse-partida {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Botones estilo arcade */
+.arcade-btn,
+.arcade-btn-outline {
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  font-size: 14px;
+  border: 2px solid #00ff66;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00ff66;
+  transition: all 0.2s;
+}
+
+.arcade-btn {
+  background: #000;
+  color: #00ff66;
+}
+
+.arcade-btn:hover {
+  box-shadow: 0 0 20px #00ff66;
+  transform: scale(1.05);
+}
+
+.arcade-btn-outline {
+  background: transparent;
+  color: #00ff66;
+  border: 2px dashed #00ff66;
+}
+
+.arcade-btn-outline:hover {
+  box-shadow: 0 0 20px #00ff66;
+  transform: scale(1.05);
+}
+
+.full-width-create {
+      width: calc(260px + 10px + 80px); /* input + gap + botón unirse */
+      max-width: 100%;
+    }
+
+/* Input estilo terminal */
+.code-input {
+  background: #000;
+  color: #00ff66;
+  border: 2px solid #00ff66;
+  padding: 10px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 14px;
+  text-transform: uppercase;
+  width: 200px;
+  box-shadow: 0 0 8px #00ff66 inset;
+}
+
+.code-input::placeholder {
+  color: #00ff66;
+  opacity: 0.7;
+}
+
+@media (min-width: 768px) {
+  .lobby-title {
+    font-size: 28px;
+  }
+  .lobby-subtitle {
+    font-size: 14px;
+  }
+  .arcade-btn,
+  .arcade-btn-outline,
+  .code-input {
+    font-size: 16px;
+    padding: 14px 28px;
+  }
+  .code-input {
+    width: 250px;
+  }
+  .full-width-create {
+    width: calc(315px + 10px + 90px);
+  }
+}
+
+@media (min-width: 992px) {
+  .lobby-title {
+    font-size: 32px;
+  }
+  .lobby-subtitle {
+    font-size: 16px;
+  }
+  .arcade-btn,
+  .arcade-btn-outline,
+  .code-input {
+    font-size: 18px;
+    padding: 16px 32px;
+  }
+  .code-input {
+    width: 300px;
+  }
+  .full-width-create {
+    width: calc(375px + 10px + 100px);
+  }
+}

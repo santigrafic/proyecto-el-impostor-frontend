@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import './Lobby.css'
+
 const LobbyPage: React.FC = () => {
   const navigate = useNavigate();
   const [roomID, setRoomID] = useState("");
@@ -76,41 +78,25 @@ const LobbyPage: React.FC = () => {
   };
 
   return (
-    <div
-      className="lobby-container"
-      style={{ maxWidth: "600px", margin: "50px auto", textAlign: "center" }}
-    >
-      <h2>Sala de Juego</h2>
-      <p>Bienvenido al juego El Impostor</p>
+    <div className="lobby-container">
+      <h2 className="lobby-title">SALA DE JUEGO</h2>
+      <p className="lobby-subtitle">Prepárate para jugar</p>
 
-      <div className="crear-partida" style={{ margin: "20px 0" }}>
-        <button
-          className="btn btn-success"
-          onClick={handleCrearPartida}
-          style={{ width: "400px", padding: "10px", fontSize: "16px" }}
-        >
+      <div className="crear-partida">
+        <button className="arcade-btn full-width-create" onClick={handleCrearPartida}>
           Crear partida
         </button>
       </div>
 
-      <div className="unirse-partida" style={{ margin: "20px 0" }}>
+      <div className="unirse-partida">
         <input
           type="text"
-          placeholder="Introduce código de partida"
+          placeholder="INSERT CODE"
           value={roomID}
           onChange={(e) => setRoomID(e.target.value.toUpperCase())}
-          style={{
-            width: "70%",
-            padding: "8px",
-            fontSize: "16px",
-            marginRight: "5px",
-          }}
+          className="code-input"
         />
-        <button
-          className="btn btn-primary"
-          onClick={handleUnirsePartida}
-          style={{ padding: "8px 12px", fontSize: "16px" }}
-        >
+        <button className="arcade-btn" onClick={handleUnirsePartida}>
           Unirse
         </button>
       </div>

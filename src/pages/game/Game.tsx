@@ -1,9 +1,11 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import VotingPhase from "./components/voting-phase/VotingPhase";
 import ResultsPhase from "./components/results-phase/ResultsPhase";
+
+import "./Game.css";
 
 import type { MeType, GameStateType } from "./types";
 
@@ -46,8 +48,6 @@ const GamePage: React.FC = () => {
         clearInterval(pollingRef.current);
         pollingRef.current = null;
       }
-
-      
     };
   }, []);
 
@@ -203,42 +203,49 @@ const GamePage: React.FC = () => {
 
   if (gameState.status === "playing") {
     return (
-      <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-        <h1>Partida {roomId}</h1>
-        {/* Info privada */}
-        <section>
-          <h2>Tu información</h2>
-          <p>Nickname: {me.nickname}</p>
-          <p>Rol: {me.role}</p>
+      <div className="game-container">
+        <h1 className="game-title">Partida {roomId}</h1>
+
+        <section className="game-section">
+          <h2 className="game-subtitle">Tu información</h2>
+
+          <p><span className="cursor">&gt;</span> Nickname: {me.nickname}</p>
+          <p>
+            <span className="cursor">&gt;</span> Rol: <span className={`role ${me.role}`}>{me.role}</span>
+          </p>
+
           {me.role === "player" ? (
             <p>
-              <strong>Tu palabra:</strong> {me.word}
+              <span className="cursor">&gt;</span> Tu palabra: {me.word}
             </p>
           ) : (
             <p>
-              <strong>No tienes palabra</strong>
+              No tienes palabra
             </p>
           )}
-          {me.hasPlayed && <p>Ya has jugado todas tus palabra</p>}
+
+          {me.hasPlayed && (
+            <p className="status-ok">Ya has jugado todas tus palabras</p>
+          )}
         </section>
-        {/* Estado global */}
-        <section>
-          <h2>Estado de la partida</h2>
+
+        <section className="game-section">
+          <h2 className="game-subtitle">Estado de la partida</h2>
           <p>
-            Tus palabras: {me.words.length} / {me.wordsPerPlayer}
+            <span className="cursor">&gt;</span> Tus palabras: {me.words.length} / {me.wordsPerPlayer}
           </p>
         </section>
-        {/* Listado de palabras */}
-        <section>
-          <h2>Palabras jugadas</h2>
+
+        <section className="game-section">
+          <h2 className="game-subtitle">Palabras jugadas</h2>
 
           {gameState.wordsByPlayer.length === 0 ? (
-            <p>Aún no hay palabras</p>
+            <p className="muted">Aún no hay palabras</p>
           ) : (
-            <ul>
+            <ul className="words-list">
               {gameState.wordsByPlayer.map((p, index) => (
-                <li key={index}>
-                  <strong>{p.nickname}:</strong>{" "}
+                <li key={index} className="word-item">
+                  <span className="cursor">&gt;</span> {p.nickname}:{" "}
                   {p.words.length > 0 ? p.words.join(", ") : "—"}
                 </li>
               ))}
@@ -246,29 +253,25 @@ const GamePage: React.FC = () => {
           )}
         </section>
 
-        {/* Boton de ir a la votación */}
         {allWordsPlayed && (
-          <section style={{ marginTop: "20px", textAlign: "center" }}>
+          <div className="center">
             <button
+              className="arcade-btn"
               onClick={goToVoting}
               disabled={votingStarted}
-              style={{
-                padding: "10px 20px",
-                fontSize: "16px",
-                cursor: "pointer",
-              }}
             >
               Ir a votación
             </button>
-          </section>
+          </div>
         )}
 
-        {/* Input */}
         {me.isMyTurn && !me.hasPlayed && (
-          <section>
-            <h2>Es tu turno</h2>
-            <form onSubmit={handleSubmit}>
+          <section className="game-section">
+            <h2 className="game-subtitle blink">Es tu turno</h2>
+
+            <form className="word-form" onSubmit={handleSubmit}>
               <input
+                className="arcade-input"
                 type="text"
                 value={wordInput}
                 onChange={(e) => setWordInput(e.target.value)}
@@ -277,11 +280,11 @@ const GamePage: React.FC = () => {
                 required
                 placeholder={
                   me.role === "impostor"
-                    ? "Escribe algo para confundir..."
+                    ? "Intenta confundirles..."
                     : "Tu palabra"
                 }
               />
-              <button type="submit">Enviar</button>
+              <button type="submit" className="arcade-btn">Enviar</button>
             </form>
           </section>
         )}

@@ -8,6 +8,8 @@ import Button from '../../commons/components/presentational/button'
 
 import impostorIcon from '../../application/assets/images/impostor-logo.png'
 
+import './Home.css'
+
 const HomePage: React.FC = () => {
   const navigate = useNavigate()
 
@@ -17,27 +19,36 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <div className="text-center">
-
-      <div className="mb-4 d-flex justify-content-center">
-        <img src={impostorIcon} alt="Icono Juego El Impostor" className="rounded-4" style={{width: '400px', height: '400px', objectFit: 'cover'}} />
+    <div className="home-container">
+      {/* Logo */}
+      <div className="home-logo-wrapper">
+        <img src={impostorIcon} alt="Icono Juego El Impostor" className="home-logo" />
       </div>
 
-      <h1 className="mb-4">BIENVENIDO A EL IMPOSTOR</h1>
+      {/* Título */}
+      <h1 className="home-title">BIENVENIDO A EL IMPOSTOR</h1>
 
-      <p className="text-secondary mb-4">
-        Descubre quién miente… o conviértete en él.
-      </p>
+      {/* Subtítulo */}
+      <p className="home-subtitle"><span className="cursor">&gt;</span>Descubre quién miente… o traiciona a los demás.</p>
 
-      <div className="d-flex justify-content-center gap-3">
-        <Button text="Iniciar sesión" styleClass="btn btn-primary" handleClick={() => navigate(ROUTE_PATHS.LOGIN)} />
-        <Button text="Registrarse" styleClass="btn btn-outline-light" handleClick={() => navigate(ROUTE_PATHS.REGISTER)} />
+      {/* Botones */}
+      <div className="home-buttons">
+        <Button
+          text="LOGIN"
+          styleClass="arcade-btn"
+          handleClick={() => navigate(ROUTE_PATHS.LOGIN)}
+        />
+        <Button
+          text="REGISTER"
+          styleClass="arcade-btn"
+          handleClick={() => navigate(ROUTE_PATHS.REGISTER)}
+        />
+        <Button
+          text="PLAY"
+          styleClass="arcade-btn"
+          handleClick={handleGuestPlay}
+        />
       </div>
-      <br></br>
-      <div>
-        <Button text="Jugar como invitado" styleClass="btn btn-secondary" handleClick={handleGuestPlay} />
-      </div>
-
     </div>
   );
 };

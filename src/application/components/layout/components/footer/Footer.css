@@ -1,8 +1,45 @@
-.app-footer {
-  background-color: #020617;
-  color: #94a3b8;
-  padding: 1rem 0;
+.arcade-footer {
+  width: 100%;
+  background: #000;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  padding: 15px 20px;
   text-align: center;
-  font-size: 0.9rem;
-  margin-top: 20px;
+}
+
+.footer-content {
+  font-size: 12px;
+  text-shadow: 0 0 6px #00ff66;
+}
+
+.footer-link {
+  color: #00ff66;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-shadow: 0 0 15px #00ff66;
+  text-decoration: none;
+}
+
+/* Cursor parpadeante */
+.cursor {
+  margin-left: 4px;
+  animation: blink 1.2s steps(2, start) infinite;
+}
+
+/* Reutilizamos keyframes de otras páginas */
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .footer-content { font-size: 14px; }
+}
+
+@media (min-width: 992px) {
+  .footer-content { font-size: 16px; }
 }
