@@ -74,6 +74,7 @@ const RoomPage: React.FC = () => {
   return (
     <div className="room-container">
       <h2 className="room-title">SALA {roomId}</h2>
+      <p>(Comparte el número de la sala para invitar jugadores)</p>
 
       <p className="room-status">
         ESTADO:{" "}

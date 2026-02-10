@@ -39,12 +39,12 @@ const HomePage: React.FC = () => {
           handleClick={() => navigate(ROUTE_PATHS.LOGIN)}
         />
         <Button
-          text="REGISTER"
+          text="REGISTRO"
           styleClass="arcade-btn"
           handleClick={() => navigate(ROUTE_PATHS.REGISTER)}
         />
         <Button
-          text="PLAY"
+          text="JUGAR"
           styleClass="arcade-btn"
           handleClick={handleGuestPlay}
         />

@@ -91,7 +91,7 @@ const LobbyPage: React.FC = () => {
       <div className="unirse-partida">
         <input
           type="text"
-          placeholder="INSERT CODE"
+          placeholder="INSERTA CÓD."
           value={roomID}
           onChange={(e) => setRoomID(e.target.value.toUpperCase())}
           className="code-input"

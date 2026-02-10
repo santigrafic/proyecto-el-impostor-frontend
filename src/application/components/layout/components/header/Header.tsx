@@ -19,7 +19,7 @@ const Header: React.FC = () => {
     <header className="arcade-header">
       <h3 className="header-title">
         <Link to="/home" className="header-link">
-          <span className="cursor">_</span>Return
+          <span className="cursor">&lt;</span>Volver
         </Link>
       </h3>
 
@@ -32,7 +32,7 @@ const Header: React.FC = () => {
             className="arcade-btn"
             onClick={() => navigate("/register")}
           >
-            Register
+            Registro
           </button>
         </div>
       )}
