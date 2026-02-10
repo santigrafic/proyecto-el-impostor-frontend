@@ -6,7 +6,7 @@ import { ROUTE_PATHS } from '../../application/components/routes/utils/route-pat
 
 import Button from '../../commons/components/presentational/button'
 
-import impostorIcon from '../../application/assets/images/impostor-logo.png'
+import impostorIcon from '../../application/assets/images/impostor-logo-green-pixel.svg'
 
 import './Home.css'
 
@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
     <div className="home-container">
       {/* Logo */}
       <div className="home-logo-wrapper">
-        <img src={impostorIcon} alt="Icono Juego El Impostor" className="home-logo" />
+        <img src={impostorIcon} className="home-logo" alt="Impostor Logo" />
       </div>
 
       {/* Título */}
