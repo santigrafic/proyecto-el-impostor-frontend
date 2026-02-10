@@ -6,7 +6,7 @@
 }
 
 html, #root {
-  height: 80%;
+  height: 100%;
   margin: 0;
 }
 
@@ -17,7 +17,7 @@ body {
 
   background-color: #000; /* fondo oscuro */
   color: #e5e7eb;
-  height: 80%;
+  height: 100%;
   margin: 0;
 }
 
