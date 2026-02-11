@@ -1,15 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import useLobby from "./hooks/use-lobby";
+
 import './Lobby.css'
 
 const LobbyPage: React.FC = () => {
   const navigate = useNavigate();
+  const { createGame, joinGame } = useLobby();
+
   const [roomID, setRoomID] = useState("");
   // const isGuest = localStorage.getItem("userType") === "guest";
 
   // Crear partida
   const handleCrearPartida = async () => {
+    createGame()
+
     try {
       const res = await fetch("http://localhost:8000/api/rooms", {
         method: "POST",
@@ -46,6 +52,8 @@ const LobbyPage: React.FC = () => {
       alert("Introduce un código de partida");
       return;
     }
+
+    joinGame()
 
     try {
       const playerId = crypto.randomUUID();

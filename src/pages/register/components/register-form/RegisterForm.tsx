@@ -1,7 +1,7 @@
 const RegisterForm = () => {
   return (
     <div className="register-form">
-      <form action="/action_page.php">
+      <form id="formRegistro">
         <div className="mb-3 mt-3">
           <label htmlFor="name" className="form-label">Nombre:</label>
           <input type="text" className="form-control" id="name" placeholder="Introduce nombre" name="name" />
