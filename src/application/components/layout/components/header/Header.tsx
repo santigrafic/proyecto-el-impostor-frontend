@@ -1,18 +1,32 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import "./Header.css";
 
+interface User {
+  userName: string;
+  email: string;
+  password: string;
+  userAvatar?: string; // opcional
+}
+
 const Header: React.FC = () => {
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const userType: string = localStorage.getItem("userType") ?? "guest";
-  const userName: string = localStorage.getItem("userName") ?? "Guest";
-  // TODO: Add default avatar
-  const userAvatar: string = localStorage.getItem("userAvatar") ?? "";
+  // Comprobar si hay usuario logueado al cargar
+  useEffect(() => {
+    const storedUser = localStorage.getItem("currentUser");
+    if (storedUser) {
+      setCurrentUser(JSON.parse(storedUser));
+    }
+  }, []);
 
+  // Logout
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/lobby");
+    localStorage.removeItem("currentUser");
+    setCurrentUser(null);
+    navigate("/home");
   };
 
   return (
@@ -23,7 +37,7 @@ const Header: React.FC = () => {
         </Link>
       </h3>
 
-      {userType === "guest" && (
+      {!currentUser && (
         <div className="header-buttons">
           <button className="arcade-btn" onClick={() => navigate("/login")}>
             Login
@@ -37,39 +51,12 @@ const Header: React.FC = () => {
         </div>
       )}
 
-      {userType === "user" && (
+      {currentUser && (
         <div className="header-user">
-          <img src={userAvatar} alt="Avatar" className="user-avatar" />
-          <span className="user-name">{userName}</span>
-          <div className="dropdown">
-            <button
-              className="arcade-btn"
-              type="button"
-              id="userMenu"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Opciones
-            </button>
-            <ul
-              className="dropdown-menu dropdown-menu-end"
-              aria-labelledby="userMenu"
-            >
-              <li>
-                <button
-                  className="dropdown-item"
-                  onClick={() => navigate("/profile")}
-                >
-                  Perfil
-                </button>
-              </li>
-              <li>
-                <button className="dropdown-item" onClick={handleLogout}>
-                  Cerrar sesión
-                </button>
-              </li>
-            </ul>
-          </div>
+          <span className="user-name">Hola, {currentUser.userName}</span>
+          <button className="arcade-btn" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       )}
     </header>

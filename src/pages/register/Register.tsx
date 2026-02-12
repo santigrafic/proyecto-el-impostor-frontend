@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import "./Register.css";
 
 const RegisterPage: React.FC = () => {
+  const navigate = useNavigate();
+
   const [registerForm, setRegisterForm] = useState<any>({
     userName: "",
     email: "",
@@ -24,7 +28,16 @@ const RegisterPage: React.FC = () => {
         password: registerForm.password,
       });
 
+      const registedUser = {
+        userName: registerForm.userName.trim(),
+        email: registerForm.email.trim().toLowerCase(),
+        password: registerForm.password,
+      };
+
       localStorage.setItem("users", JSON.stringify(tempUsersList));
+      localStorage.setItem("currentUser", JSON.stringify(registedUser));
+      alert("Usuario registrado correctamente");
+      navigate("/home");
     }
   };
 
