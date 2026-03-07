@@ -1,0 +1,132 @@
+.game-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: left;
+  background: #000;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  padding: 30px 20px;
+  box-shadow: 0 0 15px #00ff66;
+  border-radius: 8px;
+}
+
+/* Título */
+.game-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 25px;
+  text-shadow: 0 0 8px #00ff66;
+}
+
+/* Secciones */
+.game-section {
+  margin-bottom: 30px;
+}
+
+/* Subtítulos */
+.game-subtitle {
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-shadow: 0 0 6px #00ff66;
+}
+
+/* Texto */
+.game-section p {
+  font-size: 12px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 4px #00ff66;
+}
+
+.muted {
+  opacity: 0.7;
+}
+
+/* Estado OK */
+.status-ok {
+  color: #00ffaa;
+  text-shadow: 0 0 6px #00ffaa;
+}
+
+/* Roles */
+.role.player {
+  color: #00ff66;
+}
+
+.role.impostor {
+  color: #ff4444;
+  text-shadow: 0 0 6px #ff4444;
+}
+
+/* Palabras */
+.words-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.word-item {
+  font-size: 12px;
+  margin-bottom: 8px;
+  text-shadow: 0 0 4px #00ff66;
+}
+
+/* Formulario */
+.word-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.word-form input {
+  flex: 1;
+  background: #000;
+  border: 2px solid #00ff66;
+  color: #00ff66;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+/* Centro */
+.center {
+  text-align: center;
+}
+
+/* Parpadeo */
+.blink {
+  animation: blink 1.2s steps(2, start) infinite;
+}
+
+.cursor {
+  margin-right: 6px;
+  animation: blink 1.2s steps(2, start) infinite;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .game-title {
+    font-size: 28px;
+  }
+
+  .game-subtitle {
+    font-size: 18px;
+  }
+
+  .game-section p,
+  .word-item,
+  .word-form input,
+  .word-form button {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 992px) {
+  .game-title {
+    font-size: 32px;
+  }
+
+  .word-item {
+    font-size: 16px;
+  }
+}

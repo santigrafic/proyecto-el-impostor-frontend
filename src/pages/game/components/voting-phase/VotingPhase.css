@@ -1,0 +1,73 @@
+.voting-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: center;
+  background: #000;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  padding: 30px 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px #00ff66;
+}
+
+/* Título */
+.voting-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 8px #00ff66;
+}
+
+/* Estado */
+.voting-status {
+  font-size: 12px;
+  margin-bottom: 30px;
+  text-shadow: 0 0 6px #00ff66;
+}
+
+/* Lista de votos */
+.voting-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Botones de jugador */
+.voting-btn {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Estado deshabilitado */
+.voting-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .voting-title {
+    font-size: 28px;
+  }
+
+  .voting-status {
+    font-size: 14px;
+  }
+
+  .voting-btn {
+    max-width: 350px;
+  }
+}
+
+@media (min-width: 992px) {
+  .voting-title {
+    font-size: 32px;
+  }
+
+  .voting-btn {
+    max-width: 400px;
+  }
+}

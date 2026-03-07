@@ -1,0 +1,86 @@
+.arcade-header {
+  width: 100%;
+  background: #000;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  font-size: 16px;
+  margin: 0;
+  text-shadow: 0 0 8px #00ff66;
+}
+
+.header-link {
+  color: #00ff66;
+  text-decoration: none;
+}
+
+.header-link:hover {
+  text-shadow: 0 0 15px #00ff66;
+  text-decoration: none;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #00ff66;
+  box-shadow: 0 0 6px #00ff66;
+}
+
+.user-name {
+  font-size: 12px;
+  text-shadow: 0 0 6px #00ff66;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background: #000;
+  color: #00ff66;
+  border: 2px solid #00ff66;
+  box-shadow: 0 0 10px #00ff66;
+}
+
+.dropdown-item {
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+}
+
+.dropdown-item:hover {
+  background: #00ff66;
+  color: #000;
+}
+
+.cursor {
+  margin-right: 6px;
+  animation: blink 1.2s steps(2, start) infinite;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .header-title { font-size: 18px; }
+  .user-name { font-size: 14px; }
+}
+
+@media (min-width: 992px) {
+  .header-title { font-size: 20px; }
+  .user-name { font-size: 16px; }
+}

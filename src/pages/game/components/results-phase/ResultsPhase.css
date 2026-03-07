@@ -1,0 +1,103 @@
+.results-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: center;
+  background: #000;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  padding: 30px 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px #00ff66;
+}
+
+/* Título */
+.results-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 8px #00ff66;
+}
+
+/* Ganador */
+.results-winner {
+  font-size: 18px;
+  margin-bottom: 30px;
+  text-shadow: 0 0 10px;
+}
+
+.results-winner.players {
+  color: #00ff66;
+  text-shadow: 0 0 12px #00ff66;
+}
+
+.results-winner.impostor {
+  color: #ff4444;
+  text-shadow: 0 0 12px #ff4444;
+}
+
+/* Subtítulos */
+.results-subtitle {
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-shadow: 0 0 6px #00ff66;
+}
+
+/* Lista de votos */
+.results-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 25px 0;
+  text-align: left;
+}
+
+.results-item {
+  font-size: 12px;
+  margin-bottom: 8px;
+  text-shadow: 0 0 4px #00ff66;
+}
+
+/* Impostor */
+.results-impostor {
+  margin-bottom: 25px;
+  font-size: 14px;
+  text-shadow: 0 0 6px #00ff66;
+}
+
+/* Botón */
+.results-btn {
+  margin-top: 10px;
+}
+
+.cursor {
+  margin-right: 6px;
+  animation: blink 1.2s steps(2, start) infinite;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .results-title {
+    font-size: 28px;
+  }
+
+  .results-winner {
+    font-size: 22px;
+  }
+
+  .results-item {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 992px) {
+  .results-title {
+    font-size: 32px;
+  }
+
+  .results-winner {
+    font-size: 24px;
+  }
+
+  .results-item {
+    font-size: 16px;
+  }
+}
