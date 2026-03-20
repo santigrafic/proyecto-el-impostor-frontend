@@ -19,7 +19,7 @@ async function fetchResults(roomId: string): Promise<ResultsType> {
   return res.json();
 }
 
-const ResultsPhase: React.FC<ResultsPhaseProps> = ({ me, gameState }) => {
+const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState }) => {
   const navigate = useNavigate();
   const [results, setResults] = useState<ResultsType | null>(null);
   const [loading, setLoading] = useState(true);

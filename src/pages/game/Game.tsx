@@ -9,6 +9,8 @@ import "./Game.css";
 
 import type { MeType, GameStateType } from "./types";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const GamePage: React.FC = () => {
   const { roomId } = useParams();
   const playerId = localStorage.getItem("playerId");
@@ -77,7 +79,7 @@ const GamePage: React.FC = () => {
 
   const fetchMe = async () => {
     try {
-      const res = await fetch(`http://localhost:8000/api/games/${roomId}/me`, {
+      const res = await fetch(`${API_URL}/api/games/${roomId}/me`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ playerId }),
@@ -97,7 +99,7 @@ const GamePage: React.FC = () => {
   const fetchGameState = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8000/api/games/${roomId}/state`,
+        `${API_URL}/api/games/${roomId}/state`,
       );
       if (!res.ok) return;
       const data: GameStateType = await res.json();
@@ -115,7 +117,7 @@ const GamePage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/api/games/${roomId}/word`,
+        `${API_URL}/api/games/${roomId}/word`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -147,7 +149,7 @@ const GamePage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/api/games/${roomId}/start-voting`,
+        `${API_URL}/api/games/${roomId}/start-voting`,
         {
           method: "POST",
         },
@@ -171,7 +173,7 @@ const GamePage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/api/games/${roomId}/vote`,
+        `${API_URL}/api/games/${roomId}/vote`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
