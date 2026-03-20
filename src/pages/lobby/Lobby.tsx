@@ -5,6 +5,8 @@ import useLobby from "./hooks/use-lobby";
 
 import './Lobby.css'
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const LobbyPage: React.FC = () => {
   const navigate = useNavigate();
   const { createGame, joinGame } = useLobby();
@@ -17,7 +19,7 @@ const LobbyPage: React.FC = () => {
     createGame()
 
     try {
-      const res = await fetch("http://localhost:8000/api/rooms", {
+      const res = await fetch(`${API_URL}/api/rooms`, {
         method: "POST",
       });
 
@@ -29,7 +31,7 @@ const LobbyPage: React.FC = () => {
       localStorage.setItem("playerId", playerId);
 
       // Llamar al join del backend
-      await fetch(`http://localhost:8000/api/rooms/${roomID}/join`, {
+      await fetch(`${API_URL}/api/rooms/${roomID}/join`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +61,7 @@ const LobbyPage: React.FC = () => {
       const playerId = crypto.randomUUID();
 
       const res = await fetch(
-        `http://localhost:8000/api/rooms/${roomID}/join`,
+        `${API_URL}/api/rooms/${roomID}/join`,
         {
           method: "POST",
           headers: {

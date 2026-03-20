@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import './Room.css'
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 interface Player {
   id: string;
   nickname: string;
@@ -25,7 +27,7 @@ const RoomPage: React.FC = () => {
   const fetchRoomState = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8000/api/rooms/${roomId}/state`,
+        `${API_URL}/api/rooms/${roomId}/state`,
       );
       if (!res.ok) throw new Error("Error al obtener estado de la sala");
       const data = await res.json();
@@ -48,7 +50,7 @@ const RoomPage: React.FC = () => {
   const handleStartGame = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8000/api/rooms/${roomId}/start`,
+        `${API_URL}/api/rooms/${roomId}/start`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
