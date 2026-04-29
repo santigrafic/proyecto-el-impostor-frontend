@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import './Room.css'
+import echo from '../../lib/echo';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -67,9 +68,23 @@ const RoomPage: React.FC = () => {
 
   useEffect(() => {
     fetchRoomState();
-    const interval = setInterval(fetchRoomState, 2000); // polling cada 2s
-    return () => clearInterval(interval);
-  }, []);
+
+    const channel = echo.channel(`room.${roomId}`);
+
+    channel.listen('.player.joined', (event: any) => {
+        setRoom(event.room);
+
+        if (event.room.status === 'playing') {
+            navigate(`/game/${roomId}`);
+        }
+
+        setIsHost(playerId === event.room.hostId);
+    });
+
+    return () => {
+        echo.leave(`room.${roomId}`);
+    };
+}, [roomId]);
 
   if (!room) return <div>Cargando sala...</div>;
 
