@@ -1,9 +1,11 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import VotingPhase from "./components/voting-phase/VotingPhase";
 import ResultsPhase from "./components/results-phase/ResultsPhase";
+
+import echo from '../../lib/echo';
 
 import "./Game.css";
 
@@ -14,6 +16,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 const GamePage: React.FC = () => {
   const { roomId } = useParams();
   const playerId = localStorage.getItem("playerId");
+
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,20 +42,35 @@ const GamePage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Polling seguro
   useEffect(() => {
-    pollingRef.current = window.setInterval(() => {
-      fetchGameState();
-      fetchMe(); // refrescar también info privada
-    }, 3000);
+    // Carga inicial
+    fetchGameState();
+    fetchMe();
+
+    const channel = echo.channel(`room.${roomId}`);
+
+    console.log("SUBSCRIBED TO ROOM:", roomId);
+
+    channel.listen('.word.played', (event: any) => {
+        console.log('WORD PLAYED', event);
+
+        setGameState(event.room);
+
+        // Actualizar también la información privada del jugador
+        fetchMe();
+    });
+
+    channel.listen('.game.finished', (event: any) => {
+        console.log('GAME FINISHED', event);
+
+        setGameState(event.room);
+        navigate(`/results/${roomId}`);
+    });
 
     return () => {
-      if (pollingRef.current !== null) {
-        clearInterval(pollingRef.current);
-        pollingRef.current = null;
-      }
+        echo.leave(`room.${roomId}`);
     };
-  }, []);
+}, [roomId, navigate]);
 
   useEffect(() => {
     if (!gameState || !me) return;

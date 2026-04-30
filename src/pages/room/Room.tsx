@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import './Room.css'
 import echo from '../../lib/echo';
+
+import './Room.css'
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -67,6 +68,9 @@ const RoomPage: React.FC = () => {
   };
 
   useEffect(() => {
+
+    console.log("SUBSCRIBED TO ROOM:", roomId);
+
     fetchRoomState();
 
     const channel = echo.channel(`room.${roomId}`);
@@ -79,6 +83,11 @@ const RoomPage: React.FC = () => {
         }
 
         setIsHost(playerId === event.room.hostId);
+    });
+
+    channel.listen('.game.started', (event: any) => {
+        console.log('GAME STARTED', event);
+        navigate(`/game/${roomId}`);
     });
 
     return () => {

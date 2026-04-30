@@ -33,7 +33,6 @@ const Welcome: React.FC = () => {
     <div className="splash-container" onClick={handleStart}>
       <div className="splash-content">
         <h1 className="welcome-title">EL IMPOSTOR</h1>
-
         <h2 className="insert-coin">INSERT COIN</h2>
       </div>
     </div>
