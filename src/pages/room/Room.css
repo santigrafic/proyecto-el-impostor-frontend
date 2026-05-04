@@ -11,6 +11,13 @@
   border-radius: 8px;
 }
 
+.room-charge {
+  text-align: center;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  font-size: large;
+}
+
 .room-title {
   font-size: 24px;
   margin-bottom: 15px;

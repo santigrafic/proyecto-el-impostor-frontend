@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import echo from '../../lib/echo';
+import echo from "../../lib/echo";
 
-import './Room.css'
+import "./Room.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -21,46 +21,44 @@ interface RoomState {
 const RoomPage: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
+
   const [room, setRoom] = useState<RoomState | null>(null);
   const [isHost, setIsHost] = useState(false);
-  const playerId = localStorage.getItem("playerId"); // tu id guardado al unirse
 
-  // Función para hacer polling al backend
+  const playerId = localStorage.getItem("playerId");
+
+  const hasNavigatedRef = useRef(false);
+
+  // 🔹 Fetch inicial (solo 1 vez)
   const fetchRoomState = async () => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/rooms/${roomId}/state`,
-      );
+      const res = await fetch(`${API_URL}/api/rooms/${roomId}/state`);
       if (!res.ok) throw new Error("Error al obtener estado de la sala");
-      const data = await res.json();
-      setRoom(data);
 
-      // Redirigir a GamePage si la partida ha empezado
-      if (data.status === "playing") {
+      const data = await res.json();
+
+      setRoom(data);
+      setIsHost(playerId === data.hostId);
+
+      if (data.status === "playing" && !hasNavigatedRef.current) {
+        hasNavigatedRef.current = true;
         navigate(`/game/${roomId}`);
       }
-
-      // Comprobar si soy host
-      setIsHost(playerId === data.hostId);
     } catch (err) {
       console.error(err);
       alert("No se pudo cargar la sala");
     }
   };
 
-  // Start game (solo host)
   const handleStartGame = async () => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/rooms/${roomId}/start`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ hostId: playerId }),
-        },
-      );
+      const res = await fetch(`${API_URL}/api/rooms/${roomId}/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hostId: playerId }),
+      });
+
       if (!res.ok) throw new Error("No se pudo iniciar la partida");
-      await fetchRoomState(); // actualizar inmediatamente
     } catch (err) {
       console.error(err);
       alert("Error al iniciar la partida");
@@ -68,34 +66,38 @@ const RoomPage: React.FC = () => {
   };
 
   useEffect(() => {
-
-    console.log("SUBSCRIBED TO ROOM:", roomId);
+    if (!roomId) return;
 
     fetchRoomState();
 
+    console.log("SUBSCRIBED TO ROOM:", roomId);
+
     const channel = echo.channel(`room.${roomId}`);
 
-    channel.listen('.player.joined', (event: any) => {
-        setRoom(event.room);
+    // 🔹 Player joined
+    channel.listen(".player.joined", (event: any) => {
+      console.log("PLAYER JOINED", event);
 
-        if (event.room.status === 'playing') {
-            navigate(`/game/${roomId}`);
-        }
-
-        setIsHost(playerId === event.room.hostId);
+      setRoom(event.room);
+      setIsHost(playerId === event.room.hostId);
     });
 
-    channel.listen('.game.started', (event: any) => {
-        console.log('GAME STARTED', event);
+    // 🔹 Game started
+    channel.listen(".game.started", (event: any) => {
+      console.log("GAME STARTED", event);
+
+      if (!hasNavigatedRef.current) {
+        hasNavigatedRef.current = true;
         navigate(`/game/${roomId}`);
+      }
     });
 
     return () => {
-        echo.leave(`room.${roomId}`);
+      echo.leave(`room.${roomId}`);
     };
-}, [roomId]);
+  }, [roomId]);
 
-  if (!room) return <div>Cargando sala...</div>;
+  if (!room) return <div className="room-charge">CARGANDO SALA...</div>;
 
   return (
     <div className="room-container">
@@ -113,7 +115,9 @@ const RoomPage: React.FC = () => {
         {room.players.map((p) => (
           <li key={p.id} className="player-item">
             <span className="cursor">&gt;</span> {p.nickname}
-            {p.id === room.hostId && <span className="host-tag"> (HOST)</span>}
+            {p.id === room.hostId && (
+              <span className="host-tag"> (HOST)</span>
+            )}
           </li>
         ))}
       </ul>

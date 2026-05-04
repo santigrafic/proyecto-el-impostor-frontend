@@ -54,17 +54,23 @@ const GamePage: React.FC = () => {
     channel.listen('.word.played', (event: any) => {
         console.log('WORD PLAYED', event);
 
-        setGameState(event.room);
+        setGameState(event.gameState);
 
         // Actualizar también la información privada del jugador
         fetchMe();
     });
 
+    channel.listen('.vote.registered', (event: any) => {
+    console.log('VOTE REGISTERED', event);
+
+    setGameState(event.gameState);
+});
+
     channel.listen('.game.finished', (event: any) => {
         console.log('GAME FINISHED', event);
 
-        setGameState(event.room);
-        navigate(`/results/${roomId}`);
+        setGameState(event.gameState);
+        //navigate(`/results/${roomId}`);
     });
 
     return () => {
@@ -326,7 +332,7 @@ const GamePage: React.FC = () => {
   }
 
   if (gameState.status === "finished") {
-    return <ResultsPhase me={me} gameState={gameState} />;
+    return <ResultsPhase me={me} gameState={gameState} roomId={roomId!} />;
   }
 };
 
