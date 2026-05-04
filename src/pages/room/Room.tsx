@@ -58,10 +58,12 @@ const RoomPage: React.FC = () => {
         body: JSON.stringify({ hostId: playerId }),
       });
 
-      if (!res.ok) throw new Error("No se pudo iniciar la partida");
-    } catch (err) {
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error);
+    } catch (err: any) {
       console.error(err);
-      alert("Error al iniciar la partida");
+      alert(err.message);
     }
   };
 

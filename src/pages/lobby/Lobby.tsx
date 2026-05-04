@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 
 //import useLobby from "./hooks/use-lobby";
 
@@ -96,11 +97,7 @@ const LobbyPage: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="lobby-loading">
-        CARGANDO SALA...
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (
@@ -117,7 +114,7 @@ const LobbyPage: React.FC = () => {
       <div className="unirse-partida">
         <input
           type="text"
-          placeholder="INSERT CÓDIGO"
+          placeholder="INS. CÓDIGO"
           value={roomID}
           onChange={(e) => setRoomID(e.target.value.toUpperCase())}
           className="code-input"
