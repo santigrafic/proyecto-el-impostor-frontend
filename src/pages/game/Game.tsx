@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import VotingPhase from "./components/voting-phase/VotingPhase";
 import ResultsPhase from "./components/results-phase/ResultsPhase";
 
+import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
+
 import echo from '../../lib/echo';
 
 import "./Game.css";
@@ -51,32 +53,43 @@ const GamePage: React.FC = () => {
 
     console.log("SUBSCRIBED TO ROOM:", roomId);
 
+    channel.listen('.game.exit', (event: any) => {
+      console.log('A PLAYER EXITS', event);
+
+      // setGameState(event.gameState);
+
+      // Actualizar también la información privada del jugador
+      // fetchMe();
+      alert("Un jugador abandonó la partida");
+      navigate("/home");
+    });
+
     channel.listen('.word.played', (event: any) => {
-        console.log('WORD PLAYED', event);
+      console.log('WORD PLAYED', event);
 
-        setGameState(event.gameState);
+      setGameState(event.gameState);
 
-        // Actualizar también la información privada del jugador
-        fetchMe();
+      // Actualizar también la información privada del jugador
+      fetchMe();
     });
 
     channel.listen('.vote.registered', (event: any) => {
-    console.log('VOTE REGISTERED', event);
+      console.log('VOTE REGISTERED', event);
 
-    setGameState(event.gameState);
-});
+      setGameState(event.gameState);
+    });
 
     channel.listen('.game.finished', (event: any) => {
-        console.log('GAME FINISHED', event);
+      console.log('GAME FINISHED', event);
 
-        setGameState(event.gameState);
-        //navigate(`/results/${roomId}`);
+      setGameState(event.gameState);
+      //navigate(`/results/${roomId}`);
     });
 
     return () => {
-        echo.leave(`room.${roomId}`);
+      echo.leave(`room.${roomId}`);
     };
-}, [roomId, navigate]);
+  }, [roomId, navigate]);
 
   useEffect(() => {
     if (!gameState || !me) return;
@@ -224,13 +237,52 @@ const GamePage: React.FC = () => {
     }
   };
 
-  if (loading) return <p>Cargando partida...</p>;
+  const handleExitGame = async () => {
+    const confirmExit = window.confirm(
+      "¿Seguro que quieres salir? La partida termina aquí."
+    );
+
+    if (!confirmExit) return;
+
+    try {
+      console.log("ROOM ID:", roomId);
+console.log("PLAYER ID:", playerId);
+      const res = await fetch(
+        `${API_URL}/api/games/${roomId}/exit`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            roomId,
+            playerId,
+          }),
+        });
+
+      const data = await res.json();
+
+      console.log("EXIT RESPONSE:", data);
+
+      navigate("/home");
+    } catch (error) {
+      console.error("Error exiting game:", error);
+    }
+  }
+
+  // if (loading) return <p>Cargando partida...</p>;
+  if (loading) {
+    return <LoadingScreen />;
+  }
   if (error) return <p>Error: {error}</p>;
-  if (!me || !gameState) return <p>Cargando datos...</p>;
+  if (!me || !gameState) return
+  //<p>Cargando datos...</p>;
+  <LoadingScreen />;
 
   if (gameState.status === "playing") {
     return (
       <div className="game-container">
+        <button className="btn-exit" onClick={handleExitGame}><span className="cursor">&lt;</span>Salir</button>
         <h1 className="game-title">Partida {roomId}</h1>
 
         <section className="game-section">

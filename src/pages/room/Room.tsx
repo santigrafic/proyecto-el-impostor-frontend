@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
+import CopyRoomCode from "../../commons/components/copyRoomCode/copyRoomCode";
 
 import echo from "../../lib/echo";
 
@@ -29,7 +31,7 @@ const RoomPage: React.FC = () => {
 
   const hasNavigatedRef = useRef(false);
 
-  // 🔹 Fetch inicial (solo 1 vez)
+  // Fetch inicial (solo 1 vez)
   const fetchRoomState = async () => {
     try {
       const res = await fetch(`${API_URL}/api/rooms/${roomId}/state`);
@@ -76,7 +78,7 @@ const RoomPage: React.FC = () => {
 
     const channel = echo.channel(`room.${roomId}`);
 
-    // 🔹 Player joined
+    // Player joined
     channel.listen(".player.joined", (event: any) => {
       console.log("PLAYER JOINED", event);
 
@@ -84,7 +86,7 @@ const RoomPage: React.FC = () => {
       setIsHost(playerId === event.room.hostId);
     });
 
-    // 🔹 Game started
+    // Game started
     channel.listen(".game.started", (event: any) => {
       console.log("GAME STARTED", event);
 
@@ -99,11 +101,15 @@ const RoomPage: React.FC = () => {
     };
   }, [roomId]);
 
-  if (!room) return <div className="room-charge">CARGANDO SALA...</div>;
+  // if (!room) return <div className="room-charge">CARGANDO SALA...</div>;
+  
+  if (!room) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="room-container">
-      <h2 className="room-title">SALA {roomId}</h2>
+      <h2 className="room-title">SALA {roomId} <CopyRoomCode roomId={roomId!} /></h2>
       <p>(Comparte el número de la sala para invitar jugadores)</p>
 
       <p className="room-status">

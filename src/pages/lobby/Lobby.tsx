@@ -35,7 +35,7 @@ const LobbyPage: React.FC = () => {
       localStorage.setItem("roomId", roomID);
       localStorage.setItem("playerId", playerId);
 
-      navigate(`/room/${roomID}`);
+      // navigate(`/room/${roomID}`);
 
       // Llamar al join del backend
       await fetch(`${API_URL}/api/rooms/${roomID}/join`, {
@@ -48,7 +48,7 @@ const LobbyPage: React.FC = () => {
         }),
       });
 
-      // navigate(`/room/${roomID}`);
+      navigate(`/room/${roomID}`);
     } catch (error) {
       console.error(error);
       alert("Error al crear la partida");
@@ -65,6 +65,7 @@ const LobbyPage: React.FC = () => {
     }
 
     //joinGame()
+    setLoading(true);
 
     try {
       const playerId = crypto.randomUUID();
@@ -93,7 +94,9 @@ const LobbyPage: React.FC = () => {
     } catch (error) {
       console.error(error);
       alert("No se pudo unir a la partida");
-    }
+    } finally {
+    setLoading(false);
+  }
   };
 
   if (loading) {

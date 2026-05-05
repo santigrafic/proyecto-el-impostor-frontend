@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import type { MeType, GameStateType, ResultsType } from "../../types";
 import { useNavigate } from "react-router-dom";
 
+import LoadingScreen from "../../../../commons/components/loadingScreen/LoadingScreen";
+
 import "./ResultsPhase.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -42,7 +44,9 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
     loadResults();
   }, [gameState.roomId]);
 
-  if (loading) return <p>Cargando resultados...</p>;
+  if (loading)
+    // return <p>Cargando resultados...</p>;
+    return <LoadingScreen />;
   if (!results) return <p>No se pudieron cargar los resultados</p>;
 
   const { winner, votes, impostorNickname } = results;
