@@ -49,3 +49,9 @@
     opacity: 1;
   }
 }
+
+@media (max-width: 700px) {
+  .welcome-title {
+  font-size: 45px;
+}
+}

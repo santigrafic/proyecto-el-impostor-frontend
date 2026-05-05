@@ -13,3 +13,26 @@ const echo = new Echo({
 });
 
 export default echo;
+
+// ECHO.JOIN
+/*
+import Echo from "laravel-echo";
+
+const token = localStorage.getItem("token");
+
+const echo = new Echo({
+  broadcaster: "reverb",
+  wsHost: window.location.hostname,
+  wsPort: 8080,
+
+  authEndpoint: "/broadcasting/auth",
+
+  auth: {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  },
+});
+
+export default echo;
+*/

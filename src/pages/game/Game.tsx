@@ -7,7 +7,7 @@ import ResultsPhase from "./components/results-phase/ResultsPhase";
 
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 
-import echo from '../../lib/echo';
+import echo from "../../lib/echo";
 
 import "./Game.css";
 
@@ -50,11 +50,12 @@ const GamePage: React.FC = () => {
     fetchMe();
 
     const channel = echo.channel(`room.${roomId}`);
+    //const channel = echo.join(`room.${roomId}`);
 
     console.log("SUBSCRIBED TO ROOM:", roomId);
 
-    channel.listen('.game.exit', (event: any) => {
-      console.log('A PLAYER EXITS', event);
+    channel.listen(".game.exit", (event: any) => {
+      console.log("A PLAYER EXITS", event);
 
       // setGameState(event.gameState);
 
@@ -64,8 +65,8 @@ const GamePage: React.FC = () => {
       navigate("/home");
     });
 
-    channel.listen('.word.played', (event: any) => {
-      console.log('WORD PLAYED', event);
+    channel.listen(".word.played", (event: any) => {
+      console.log("WORD PLAYED", event);
 
       setGameState(event.gameState);
 
@@ -73,14 +74,14 @@ const GamePage: React.FC = () => {
       fetchMe();
     });
 
-    channel.listen('.vote.registered', (event: any) => {
-      console.log('VOTE REGISTERED', event);
+    channel.listen(".vote.registered", (event: any) => {
+      console.log("VOTE REGISTERED", event);
 
       setGameState(event.gameState);
     });
 
-    channel.listen('.game.finished', (event: any) => {
-      console.log('GAME FINISHED', event);
+    channel.listen(".game.finished", (event: any) => {
+      console.log("GAME FINISHED", event);
 
       setGameState(event.gameState);
       //navigate(`/results/${roomId}`);
@@ -136,9 +137,7 @@ const GamePage: React.FC = () => {
 
   const fetchGameState = async () => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/games/${roomId}/state`,
-      );
+      const res = await fetch(`${API_URL}/api/games/${roomId}/state`);
       if (!res.ok) return;
       const data: GameStateType = await res.json();
       // Asegurarse de que playedWords exista
@@ -154,17 +153,14 @@ const GamePage: React.FC = () => {
     if (!wordInput.trim()) return;
 
     try {
-      const res = await fetch(
-        `${API_URL}/api/games/${roomId}/word`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            playerId,
-            word: wordInput.trim(),
-          }),
-        },
-      );
+      const res = await fetch(`${API_URL}/api/games/${roomId}/word`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playerId,
+          word: wordInput.trim(),
+        }),
+      });
 
       if (!res.ok) {
         const errData = await res.json();
@@ -186,12 +182,9 @@ const GamePage: React.FC = () => {
     setVotingStarted(true);
 
     try {
-      const res = await fetch(
-        `${API_URL}/api/games/${roomId}/start-voting`,
-        {
-          method: "POST",
-        },
-      );
+      const res = await fetch(`${API_URL}/api/games/${roomId}/start-voting`, {
+        method: "POST",
+      });
       if (!res.ok) {
         const errData = await res.json();
         alert(errData.error || "Error al iniciar votación");
@@ -210,17 +203,14 @@ const GamePage: React.FC = () => {
     if (!playerId) return;
 
     try {
-      const res = await fetch(
-        `${API_URL}/api/games/${roomId}/vote`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            playerId: playerId,
-            votedPlayerId: targetPlayerId,
-          }),
-        },
-      );
+      const res = await fetch(`${API_URL}/api/games/${roomId}/vote`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playerId: playerId,
+          votedPlayerId: targetPlayerId,
+        }),
+      });
 
       if (!res.ok) {
         const errData = await res.json();
@@ -239,26 +229,24 @@ const GamePage: React.FC = () => {
 
   const handleExitGame = async () => {
     const confirmExit = window.confirm(
-      "¿Seguro que quieres salir? La partida termina aquí."
+      "¿Seguro que quieres salir? La partida termina aquí.",
     );
 
     if (!confirmExit) return;
 
     try {
       console.log("ROOM ID:", roomId);
-console.log("PLAYER ID:", playerId);
-      const res = await fetch(
-        `${API_URL}/api/games/${roomId}/exit`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            roomId,
-            playerId,
-          }),
-        });
+      console.log("PLAYER ID:", playerId);
+      const res = await fetch(`${API_URL}/api/games/${roomId}/exit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          roomId,
+          playerId,
+        }),
+      });
 
       const data = await res.json();
 
@@ -268,29 +256,34 @@ console.log("PLAYER ID:", playerId);
     } catch (error) {
       console.error("Error exiting game:", error);
     }
-  }
+  };
 
   // if (loading) return <p>Cargando partida...</p>;
   if (loading) {
     return <LoadingScreen />;
   }
   if (error) return <p>Error: {error}</p>;
-  if (!me || !gameState) return
+  if (!me || !gameState) return;
   //<p>Cargando datos...</p>;
   <LoadingScreen />;
 
   if (gameState.status === "playing") {
     return (
       <div className="game-container">
-        <button className="btn-exit" onClick={handleExitGame}><span className="cursor">&lt;</span>Salir</button>
+        <button className="btn-exit" onClick={handleExitGame}>
+          <span className="cursor">&lt;</span>Salir
+        </button>
         <h1 className="game-title">Partida {roomId}</h1>
 
         <section className="game-section">
           <h2 className="game-subtitle">Tu información</h2>
 
-          <p><span className="cursor">&gt;</span> Nickname: {me.nickname}</p>
           <p>
-            <span className="cursor">&gt;</span> Rol: <span className={`role ${me.role}`}>{me.role}</span>
+            <span className="cursor">&gt;</span> Nickname: {me.nickname}
+          </p>
+          <p>
+            <span className="cursor">&gt;</span> Rol:{" "}
+            <span className={`role ${me.role}`}>{me.role}</span>
           </p>
 
           {me.role === "player" ? (
@@ -298,9 +291,7 @@ console.log("PLAYER ID:", playerId);
               <span className="cursor">&gt;</span> Tu palabra: {me.word}
             </p>
           ) : (
-            <p>
-              No tienes palabra
-            </p>
+            <p>No tienes palabra</p>
           )}
 
           {me.hasPlayed && (
@@ -311,7 +302,8 @@ console.log("PLAYER ID:", playerId);
         <section className="game-section">
           <h2 className="game-subtitle">Estado de la partida</h2>
           <p>
-            <span className="cursor">&gt;</span> Tus palabras: {me.words.length} / {me.wordsPerPlayer}
+            <span className="cursor">&gt;</span> Tus palabras: {me.words.length}{" "}
+            / {me.wordsPerPlayer}
           </p>
         </section>
 
@@ -363,7 +355,9 @@ console.log("PLAYER ID:", playerId);
                     : "Tu palabra"
                 }
               />
-              <button type="submit" className="arcade-btn">Enviar</button>
+              <button type="submit" className="arcade-btn">
+                Enviar
+              </button>
             </form>
           </section>
         )}
