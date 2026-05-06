@@ -23,25 +23,6 @@ const VotingPhase: React.FC<VotingPhaseProps> = ({
   const navigate = useNavigate();
   const hasVoted = me.hasVoted;
 
-  // Polling para comprobar si todos los votos se han registrado
-  useEffect(() => {
-    if (!hasVoted) return; // solo los que ya han votado hacen polling
-
-    const interval = setInterval(async () => {
-      try {
-        await fetchGameState();
-        if (gameState.status === "finished") {
-          clearInterval(interval);
-          navigate(`/game/${roomId}/result`);
-        }
-      } catch (err) {
-        console.error("Error fetching game state:", err);
-      }
-    }, 2000); // cada 2 segundos
-
-    return () => clearInterval(interval);
-  }, [hasVoted, fetchGameState, navigate, roomId]);
-
   return (
     <div className="voting-container">
       <h1 className="voting-title">Fase de votación</h1>

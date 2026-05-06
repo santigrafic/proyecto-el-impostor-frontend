@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
+import CopyRoomCode from "../../commons/components/copyRoomCode/CopyRoomCode";
 
-import './Room.css'
+import echo from "../../lib/echo";
+
+import "./Room.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -19,63 +23,120 @@ interface RoomState {
 const RoomPage: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
+
   const [room, setRoom] = useState<RoomState | null>(null);
   const [isHost, setIsHost] = useState(false);
-  const playerId = localStorage.getItem("playerId"); // tu id guardado al unirse
 
-  // Función para hacer polling al backend
+  const playerId = localStorage.getItem("playerId");
+
+  const hasNavigatedRef = useRef(false);
+
+  // Fetch inicial (solo 1 vez)
   const fetchRoomState = async () => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/rooms/${roomId}/state`,
-      );
+      const res = await fetch(`${API_URL}/api/rooms/${roomId}/state`);
       if (!res.ok) throw new Error("Error al obtener estado de la sala");
-      const data = await res.json();
-      setRoom(data);
 
-      // Redirigir a GamePage si la partida ha empezado
-      if (data.status === "playing") {
+      const data = await res.json();
+
+      setRoom(data);
+      setIsHost(playerId === data.hostId);
+
+      if (data.status === "playing" && !hasNavigatedRef.current) {
+        hasNavigatedRef.current = true;
         navigate(`/game/${roomId}`);
       }
-
-      // Comprobar si soy host
-      setIsHost(playerId === data.hostId);
     } catch (err) {
       console.error(err);
       alert("No se pudo cargar la sala");
     }
   };
 
-  // Start game (solo host)
   const handleStartGame = async () => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/rooms/${roomId}/start`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ hostId: playerId }),
-        },
-      );
-      if (!res.ok) throw new Error("No se pudo iniciar la partida");
-      await fetchRoomState(); // actualizar inmediatamente
-    } catch (err) {
+      const res = await fetch(`${API_URL}/api/rooms/${roomId}/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hostId: playerId }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error);
+    } catch (err: any) {
       console.error(err);
-      alert("Error al iniciar la partida");
+      alert(err.message);
     }
   };
 
-  useEffect(() => {
-    fetchRoomState();
-    const interval = setInterval(fetchRoomState, 2000); // polling cada 2s
-    return () => clearInterval(interval);
-  }, []);
+  /*const handleLeaveRoom = async () => {
+    const socketId = (window as any).Echo?.socketId();
 
-  if (!room) return <div>Cargando sala...</div>;
+    await fetch(`${API_URL}/api/rooms/${roomId}/leave`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Socket-Id": socketId,
+      },
+      body: JSON.stringify({ playerId }),
+    });
+
+    navigate("/home");
+  };*/
+
+  useEffect(() => {
+    if (!roomId) return;
+
+    fetchRoomState();
+
+    console.log("SUBSCRIBED TO ROOM:", roomId);
+
+    const channel = echo.channel(`room.${roomId}`);
+
+    // Player joined
+    channel.listen(".player.joined", (event: any) => {
+      console.log("PLAYER JOINED", event);
+
+      setRoom(event.room);
+      setIsHost(playerId === event.room.hostId);
+    });
+
+    // Player exits
+    channel.listen(".room.exit", (event: any) => {
+      console.log("PLAYER LEFT ROOM", event);
+      setRoom(event.room);
+    });
+
+    // Host exits
+    channel.listen(".room.closed", () => {
+      alert("El host abandonó la partida. La sala se ha cerrado.");
+      navigate("/home");
+    });
+
+    // Game started
+    channel.listen(".game.started", (event: any) => {
+      console.log("GAME STARTED", event);
+
+      if (!hasNavigatedRef.current) {
+        hasNavigatedRef.current = true;
+        navigate(`/game/${roomId}`);
+      }
+    });
+
+    return () => {
+      echo.leave(`room.${roomId}`);
+    };
+  }, [roomId]);
+
+  // if (!room) return <div className="room-charge">CARGANDO SALA...</div>;
+  
+  if (!room) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="room-container">
-      <h2 className="room-title">SALA {roomId}</h2>
+      <h2 className="room-title">SALA {roomId} <CopyRoomCode roomId={roomId!} /></h2>
       <p>(Comparte el número de la sala para invitar jugadores)</p>
 
       <p className="room-status">
@@ -86,10 +147,12 @@ const RoomPage: React.FC = () => {
       <h3 className="room-subtitle">JUGADORES</h3>
 
       <ul className="players-list">
-        {room.players.map((p) => (
+        {(room?.players ?? []).map((p) => (
           <li key={p.id} className="player-item">
             <span className="cursor">&gt;</span> {p.nickname}
-            {p.id === room.hostId && <span className="host-tag"> (HOST)</span>}
+            {p.id === room.hostId && (
+              <span className="host-tag"> (HOST)</span>
+            )}
           </li>
         ))}
       </ul>

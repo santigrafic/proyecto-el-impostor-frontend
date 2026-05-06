@@ -1,0 +1,14 @@
+.copy-btn {
+  background: transparent;
+  color: #00ff66;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.copy-icon {
+  width: 30px;
+  height: 30px;
+  margin-top: -15px;
+  filter: invert(75%) sepia(100%) saturate(500%) hue-rotate(90deg);
+}

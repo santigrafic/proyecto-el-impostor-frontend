@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import type { MeType, GameStateType, ResultsType } from "../../types";
 import { useNavigate } from "react-router-dom";
 
+import LoadingScreen from "../../../../commons/components/loadingScreen/LoadingScreen";
+
 import "./ResultsPhase.css";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 type ResultsPhaseProps = {
   me: MeType;
   gameState: GameStateType;
+  roomId: string;
 };
 
 async function fetchResults(roomId: string): Promise<ResultsType> {
-  const res = await fetch(`http://localhost:8000/api/games/${roomId}/results`);
+  const res = await fetch(`${API_URL}/api/games/${roomId}/results`);
 
   if (!res.ok) {
     throw new Error("Error obteniendo resultados");
@@ -19,7 +24,7 @@ async function fetchResults(roomId: string): Promise<ResultsType> {
   return res.json();
 }
 
-const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState }) => {
+const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
   const navigate = useNavigate();
   const [results, setResults] = useState<ResultsType | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,7 +32,7 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState }) => {
   useEffect(() => {
     async function loadResults() {
       try {
-        const data = await fetchResults(gameState.roomId);
+        const data = await fetchResults(roomId);
         setResults(data);
       } catch (err) {
         console.error(err);
@@ -39,7 +44,9 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState }) => {
     loadResults();
   }, [gameState.roomId]);
 
-  if (loading) return <p>Cargando resultados...</p>;
+  if (loading)
+    // return <p>Cargando resultados...</p>;
+    return <LoadingScreen />;
   if (!results) return <p>No se pudieron cargar los resultados</p>;
 
   const { winner, votes, impostorNickname } = results;

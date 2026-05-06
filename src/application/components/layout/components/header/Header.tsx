@@ -1,7 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import echo from "../../../../../lib/echo";
+
 import "./Header.css";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface User {
   userName: string;
@@ -13,6 +17,9 @@ interface User {
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const location = useLocation();
+  const roomId = location.pathname.split("/")[2];
+  const playerId = localStorage.getItem("playerId");
 
   // Comprobar si hay usuario logueado al cargar
   useEffect(() => {
@@ -29,23 +36,70 @@ const Header: React.FC = () => {
     navigate("/home");
   };
 
+  // Volver
+  const inRoom = location.pathname.includes("room");
+
+  const handleExit = async () => {
+    if (!inRoom) {
+      navigate("/home");
+      return;
+    }
+
+    await handleExitRoom();
+    navigate("/lobby");
+  };
+
+  const loginExit = async () => {
+    if (!inRoom) {
+      navigate("/login");
+      return;
+    }
+
+    await handleExitRoom();
+    navigate("/login");
+  };
+
+  const registerExit = async () => {
+    if (!inRoom) {
+      navigate("/register");
+      return;
+    }
+
+    await handleExitRoom();
+    navigate("/register");
+  };
+
+  const handleExitRoom = async () => {
+    const socketId = echo.socketId();
+    console.log("socketId:", socketId);
+
+    await fetch(`${API_URL}/api/rooms/${roomId}/exit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(socketId ? { "X-Socket-Id": socketId } : {})
+      },
+      body: JSON.stringify({ playerId }),
+    });
+  };
+
   return (
     <header className="arcade-header">
       <h3 className="header-title">
-        <Link to="/home" className="header-link">
+        {/*<Link to="/home" className="header-link">
           <span className="cursor">&lt;</span>Volver
-        </Link>
+        </Link>*/}
+        <button className="btn-exit" onClick={handleExit}>
+          <span className="cursor">&lt;</span>Volver
+        </button>
       </h3>
 
       {!currentUser && (
         <div className="header-buttons">
-          <button className="arcade-btn" onClick={() => navigate("/login")}>
+          <button className="arcade-btn" onClick={loginExit}>
             Login
           </button>
-          <button
-            className="arcade-btn"
-            onClick={() => navigate("/register")}
-          >
+          <button className="arcade-btn" onClick={registerExit}>
             Registro
           </button>
         </div>

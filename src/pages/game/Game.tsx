@@ -1,9 +1,13 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import VotingPhase from "./components/voting-phase/VotingPhase";
 import ResultsPhase from "./components/results-phase/ResultsPhase";
+
+import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
+
+import echo from "../../lib/echo";
 
 import "./Game.css";
 
@@ -14,6 +18,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 const GamePage: React.FC = () => {
   const { roomId } = useParams();
   const playerId = localStorage.getItem("playerId");
+
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,26 +38,60 @@ const GamePage: React.FC = () => {
     !!me &&
     gameState.playedWordsCount === gameState.totalPlayers * me.wordsPerPlayer;
 
+  (window as any).Echo = echo;
+
   // Fetch inicial
   useEffect(() => {
     fetchInitialData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Polling seguro
   useEffect(() => {
-    pollingRef.current = window.setInterval(() => {
-      fetchGameState();
-      fetchMe(); // refrescar también info privada
-    }, 3000);
+    // Carga inicial
+    fetchGameState();
+    fetchMe();
+
+    //EVENTOS
+    const channel = echo.channel(`room.${roomId}`);
+    //const channel = echo.join(`room.${roomId}`);
+
+    channel.listen(".game.exit", (event: any) => {
+      console.log("A PLAYER EXITS", event);
+
+      // setGameState(event.gameState);
+
+      // Actualizar también la información privada del jugador
+      // fetchMe();
+      alert("Un jugador abandonó la partida");
+      navigate("/home");
+    });
+
+    channel.listen(".word.played", (event: any) => {
+      console.log("WORD PLAYED", event);
+
+      setGameState(event.gameState);
+
+      // Actualizar también la información privada del jugador
+      fetchMe();
+    });
+
+    channel.listen(".vote.registered", (event: any) => {
+      console.log("VOTE REGISTERED", event);
+
+      setGameState(event.gameState);
+    });
+
+    channel.listen(".game.finished", (event: any) => {
+      console.log("GAME FINISHED", event);
+
+      setGameState(event.gameState);
+      //navigate(`/results/${roomId}`);
+    });
 
     return () => {
-      if (pollingRef.current !== null) {
-        clearInterval(pollingRef.current);
-        pollingRef.current = null;
-      }
+      echo.leave(`room.${roomId}`);
     };
-  }, []);
+  }, [roomId, navigate]);
 
   useEffect(() => {
     if (!gameState || !me) return;
@@ -98,9 +138,7 @@ const GamePage: React.FC = () => {
 
   const fetchGameState = async () => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/games/${roomId}/state`,
-      );
+      const res = await fetch(`${API_URL}/api/games/${roomId}/state`);
       if (!res.ok) return;
       const data: GameStateType = await res.json();
       // Asegurarse de que playedWords exista
@@ -116,17 +154,14 @@ const GamePage: React.FC = () => {
     if (!wordInput.trim()) return;
 
     try {
-      const res = await fetch(
-        `${API_URL}/api/games/${roomId}/word`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            playerId,
-            word: wordInput.trim(),
-          }),
-        },
-      );
+      const res = await fetch(`${API_URL}/api/games/${roomId}/word`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playerId,
+          word: wordInput.trim(),
+        }),
+      });
 
       if (!res.ok) {
         const errData = await res.json();
@@ -148,12 +183,9 @@ const GamePage: React.FC = () => {
     setVotingStarted(true);
 
     try {
-      const res = await fetch(
-        `${API_URL}/api/games/${roomId}/start-voting`,
-        {
-          method: "POST",
-        },
-      );
+      const res = await fetch(`${API_URL}/api/games/${roomId}/start-voting`, {
+        method: "POST",
+      });
       if (!res.ok) {
         const errData = await res.json();
         alert(errData.error || "Error al iniciar votación");
@@ -172,17 +204,14 @@ const GamePage: React.FC = () => {
     if (!playerId) return;
 
     try {
-      const res = await fetch(
-        `${API_URL}/api/games/${roomId}/vote`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            playerId: playerId,
-            votedPlayerId: targetPlayerId,
-          }),
-        },
-      );
+      const res = await fetch(`${API_URL}/api/games/${roomId}/vote`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playerId: playerId,
+          votedPlayerId: targetPlayerId,
+        }),
+      });
 
       if (!res.ok) {
         const errData = await res.json();
@@ -199,21 +228,63 @@ const GamePage: React.FC = () => {
     }
   };
 
-  if (loading) return <p>Cargando partida...</p>;
+  const handleExitGame = async () => {
+    const confirmExit = window.confirm(
+      "¿Seguro que quieres salir? La partida termina aquí.",
+    );
+
+    if (!confirmExit) return;
+
+    try {
+      const socketId = (window as any).Echo?.socketId();
+      const res = await fetch(`${API_URL}/api/games/${roomId}/exit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Socket-Id": socketId,
+        },
+        body: JSON.stringify({
+          roomId,
+          playerId,
+        }),
+      });
+
+      const data = await res.json();
+
+      console.log("EXIT RESPONSE:", data);
+
+      navigate("/home");
+    } catch (error) {
+      console.error("Error exiting game:", error);
+    }
+  };
+
+  // if (loading) return <p>Cargando partida...</p>;
+  if (loading) {
+    return <LoadingScreen />;
+  }
   if (error) return <p>Error: {error}</p>;
-  if (!me || !gameState) return <p>Cargando datos...</p>;
+  if (!me || !gameState) return;
+  //<p>Cargando datos...</p>;
+  <LoadingScreen />;
 
   if (gameState.status === "playing") {
     return (
       <div className="game-container">
+        <button className="btn-exit" onClick={handleExitGame}>
+          <span className="cursor">&lt;</span>Salir
+        </button>
         <h1 className="game-title">Partida {roomId}</h1>
 
         <section className="game-section">
           <h2 className="game-subtitle">Tu información</h2>
 
-          <p><span className="cursor">&gt;</span> Nickname: {me.nickname}</p>
           <p>
-            <span className="cursor">&gt;</span> Rol: <span className={`role ${me.role}`}>{me.role}</span>
+            <span className="cursor">&gt;</span> Nickname: {me.nickname}
+          </p>
+          <p>
+            <span className="cursor">&gt;</span> Rol:{" "}
+            <span className={`role ${me.role}`}>{me.role}</span>
           </p>
 
           {me.role === "player" ? (
@@ -221,9 +292,7 @@ const GamePage: React.FC = () => {
               <span className="cursor">&gt;</span> Tu palabra: {me.word}
             </p>
           ) : (
-            <p>
-              No tienes palabra
-            </p>
+            <p>No tienes palabra</p>
           )}
 
           {me.hasPlayed && (
@@ -234,7 +303,8 @@ const GamePage: React.FC = () => {
         <section className="game-section">
           <h2 className="game-subtitle">Estado de la partida</h2>
           <p>
-            <span className="cursor">&gt;</span> Tus palabras: {me.words.length} / {me.wordsPerPlayer}
+            <span className="cursor">&gt;</span> Tus palabras: {me.words.length}{" "}
+            / {me.wordsPerPlayer}
           </p>
         </section>
 
@@ -286,7 +356,9 @@ const GamePage: React.FC = () => {
                     : "Tu palabra"
                 }
               />
-              <button type="submit" className="arcade-btn">Enviar</button>
+              <button type="submit" className="arcade-btn">
+                Enviar
+              </button>
             </form>
           </section>
         )}
@@ -307,7 +379,7 @@ const GamePage: React.FC = () => {
   }
 
   if (gameState.status === "finished") {
-    return <ResultsPhase me={me} gameState={gameState} />;
+    return <ResultsPhase me={me} gameState={gameState} roomId={roomId!} />;
   }
 };
 

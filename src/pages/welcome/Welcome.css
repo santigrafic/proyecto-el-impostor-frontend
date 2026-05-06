@@ -1,7 +1,6 @@
 
 .splash-container {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
   background: #000;
   color: #00de59;
   display: flex;
@@ -17,6 +16,7 @@
 
 .welcome-title {
   font-size: 64px;
+  margin-top: 50%;
   margin-bottom: 20px;
   text-shadow: 0 0 8px #00ff66;
 }
@@ -48,4 +48,10 @@
   100% {
     opacity: 1;
   }
+}
+
+@media (max-width: 700px) {
+  .welcome-title {
+  font-size: 45px;
+}
 }

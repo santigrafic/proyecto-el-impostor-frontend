@@ -130,3 +130,22 @@
     font-size: 16px;
   }
 }
+
+/* Boton Salir */
+.btn-exit {
+  position:fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #000000;
+  color: #00ff66;
+  border: none;
+}
+
+.btn-exit:active {
+  box-shadow: none !important;
+}
+
+.btn-exit:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}

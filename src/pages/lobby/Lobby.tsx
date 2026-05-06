@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 
-import useLobby from "./hooks/use-lobby";
+//import useLobby from "./hooks/use-lobby";
 
 import './Lobby.css'
 
@@ -9,14 +10,17 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const LobbyPage: React.FC = () => {
   const navigate = useNavigate();
-  const { createGame, joinGame } = useLobby();
+  const [loading, setLoading] = useState(false);
+
+  //const { createGame, joinGame } = useLobby();
 
   const [roomID, setRoomID] = useState("");
   // const isGuest = localStorage.getItem("userType") === "guest";
 
   // Crear partida
   const handleCrearPartida = async () => {
-    createGame()
+    //createGame()
+    setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/api/rooms`, {
@@ -26,9 +30,12 @@ const LobbyPage: React.FC = () => {
       const data = await res.json();
       const roomID = data.roomId;
       const playerId = crypto.randomUUID();
+      //console.log(roomID);
 
       localStorage.setItem("roomId", roomID);
       localStorage.setItem("playerId", playerId);
+
+      // navigate(`/room/${roomID}`);
 
       // Llamar al join del backend
       await fetch(`${API_URL}/api/rooms/${roomID}/join`, {
@@ -45,7 +52,9 @@ const LobbyPage: React.FC = () => {
     } catch (error) {
       console.error(error);
       alert("Error al crear la partida");
-    }
+    } finally {
+    setLoading(false);
+  }
   };
 
   // Unirse a partida
@@ -55,7 +64,8 @@ const LobbyPage: React.FC = () => {
       return;
     }
 
-    joinGame()
+    //joinGame()
+    setLoading(true);
 
     try {
       const playerId = crypto.randomUUID();
@@ -84,8 +94,14 @@ const LobbyPage: React.FC = () => {
     } catch (error) {
       console.error(error);
       alert("No se pudo unir a la partida");
-    }
+    } finally {
+    setLoading(false);
+  }
   };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="lobby-container">
@@ -101,7 +117,7 @@ const LobbyPage: React.FC = () => {
       <div className="unirse-partida">
         <input
           type="text"
-          placeholder="INSERTA CÓD."
+          placeholder="INS. CÓDIGO"
           value={roomID}
           onChange={(e) => setRoomID(e.target.value.toUpperCase())}
           className="code-input"

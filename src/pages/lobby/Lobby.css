@@ -11,6 +11,13 @@
   box-shadow: 0 0 15px #00ff66;
 }
 
+.lobby-loading {
+  text-align: center;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  font-size: large;
+}
+
 .lobby-title {
   font-size: 24px;
   text-shadow: 0 0 8px #00ff66;
