@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
-import CopyRoomCode from "../../commons/components/copyRoomCode/copyRoomCode";
+import CopyRoomCode from "../../commons/components/copyRoomCode/CopyRoomCode";
 
 import echo from "../../lib/echo";
 
@@ -69,6 +69,21 @@ const RoomPage: React.FC = () => {
     }
   };
 
+  /*const handleLeaveRoom = async () => {
+    const socketId = (window as any).Echo?.socketId();
+
+    await fetch(`${API_URL}/api/rooms/${roomId}/leave`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Socket-Id": socketId,
+      },
+      body: JSON.stringify({ playerId }),
+    });
+
+    navigate("/home");
+  };*/
+
   useEffect(() => {
     if (!roomId) return;
 
@@ -84,6 +99,18 @@ const RoomPage: React.FC = () => {
 
       setRoom(event.room);
       setIsHost(playerId === event.room.hostId);
+    });
+
+    // Player exits
+    channel.listen(".room.exit", (event: any) => {
+      console.log("PLAYER LEFT ROOM", event);
+      setRoom(event.room);
+    });
+
+    // Host exits
+    channel.listen(".room.closed", () => {
+      alert("El host abandonó la partida. La sala se ha cerrado.");
+      navigate("/home");
     });
 
     // Game started
@@ -120,7 +147,7 @@ const RoomPage: React.FC = () => {
       <h3 className="room-subtitle">JUGADORES</h3>
 
       <ul className="players-list">
-        {room.players.map((p) => (
+        {(room?.players ?? []).map((p) => (
           <li key={p.id} className="player-item">
             <span className="cursor">&gt;</span> {p.nickname}
             {p.id === room.hostId && (

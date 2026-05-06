@@ -38,6 +38,8 @@ const GamePage: React.FC = () => {
     !!me &&
     gameState.playedWordsCount === gameState.totalPlayers * me.wordsPerPlayer;
 
+  (window as any).Echo = echo;
+
   // Fetch inicial
   useEffect(() => {
     fetchInitialData();
@@ -49,10 +51,9 @@ const GamePage: React.FC = () => {
     fetchGameState();
     fetchMe();
 
+    //EVENTOS
     const channel = echo.channel(`room.${roomId}`);
     //const channel = echo.join(`room.${roomId}`);
-
-    console.log("SUBSCRIBED TO ROOM:", roomId);
 
     channel.listen(".game.exit", (event: any) => {
       console.log("A PLAYER EXITS", event);
@@ -235,12 +236,12 @@ const GamePage: React.FC = () => {
     if (!confirmExit) return;
 
     try {
-      console.log("ROOM ID:", roomId);
-      console.log("PLAYER ID:", playerId);
+      const socketId = (window as any).Echo?.socketId();
       const res = await fetch(`${API_URL}/api/games/${roomId}/exit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Socket-Id": socketId,
         },
         body: JSON.stringify({
           roomId,
