@@ -1,6 +1,6 @@
 import React from "react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useEffect } from "react";
+//import { useNavigate } from "react-router-dom";
 import type { MeType, GameStateType } from "../../types";
 
 import "./VotingPhase.css";
@@ -17,10 +17,10 @@ const VotingPhase: React.FC<VotingPhaseProps> = ({
   me,
   gameState,
   onVote,
-  roomId,
-  fetchGameState,
+  // roomId,
+  // fetchGameState,
 }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const hasVoted = me.hasVoted;
 
   return (
