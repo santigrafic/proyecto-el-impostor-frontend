@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import VotingPhase from "./components/voting-phase/VotingPhase";
@@ -7,7 +7,8 @@ import ResultsPhase from "./components/results-phase/ResultsPhase";
 
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 
-import echo from "../../lib/echo";
+import { getEcho } from "../../lib/echo";
+const echo = getEcho();
 
 import "./Game.css";
 
@@ -29,7 +30,7 @@ const GamePage: React.FC = () => {
 
   const [wordInput, setWordInput] = useState("");
 
-  const pollingRef = useRef<number | null>(null);
+  // const pollingRef = useRef<number | null>(null);
 
   const [votingStarted, setVotingStarted] = useState(false);
 
@@ -48,8 +49,8 @@ const GamePage: React.FC = () => {
 
   useEffect(() => {
     // Carga inicial
-    fetchGameState();
-    fetchMe();
+    // fetchGameState();
+    // fetchMe();
 
     //EVENTOS
     const channel = echo.channel(`room.${roomId}`);
@@ -57,22 +58,19 @@ const GamePage: React.FC = () => {
 
     channel.listen(".game.exit", (event: any) => {
       console.log("A PLAYER EXITS", event);
-
       // setGameState(event.gameState);
-
       // Actualizar también la información privada del jugador
       // fetchMe();
       alert("Un jugador abandonó la partida");
       navigate("/home");
     });
 
-    channel.listen(".word.played", (event: any) => {
+    channel.listen(".word.played", async (event: any) => {
       console.log("WORD PLAYED", event);
-
       setGameState(event.gameState);
-
+      // setMe(event.me);
       // Actualizar también la información privada del jugador
-      fetchMe();
+      await fetchMe();
     });
 
     channel.listen(".vote.registered", (event: any) => {
@@ -93,7 +91,7 @@ const GamePage: React.FC = () => {
     };
   }, [roomId, navigate]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!gameState || !me) return;
     const allWordsPlayed =
       gameState.playedWordsCount === gameState.totalPlayers * me.wordsPerPlayer;
@@ -102,7 +100,7 @@ const GamePage: React.FC = () => {
       clearInterval(pollingRef.current);
       pollingRef.current = null;
     }
-  }, [gameState]);
+  }, [gameState]);*/
 
   const fetchInitialData = async () => {
     try {
@@ -170,8 +168,8 @@ const GamePage: React.FC = () => {
       }
 
       setWordInput("");
-      await fetchMe();
-      await fetchGameState();
+      // await fetchMe();
+      // await fetchGameState();
     } catch (err) {
       console.error(err);
       alert("Error enviando palabra");
