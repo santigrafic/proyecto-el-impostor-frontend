@@ -148,7 +148,7 @@ const RoomPage: React.FC = () => {
       <h3 className="room-subtitle">JUGADORES</h3>
 
       <ul className="players-list">
-        {(room?.players ?? []).map((p) => (
+        {(Object.values(room?.players ?? {})).map((p) => (
           <li key={p.id} className="player-item">
             <span className="cursor">&gt;</span> {p.nickname}
             {p.id === room.hostId && (

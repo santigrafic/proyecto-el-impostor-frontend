@@ -10,5 +10,6 @@
   width: 30px;
   height: 30px;
   margin-top: -15px;
+  margin-left: -10px;
   filter: invert(75%) sepia(100%) saturate(500%) hue-rotate(90deg);
 }
