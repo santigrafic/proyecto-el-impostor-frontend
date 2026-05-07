@@ -20,9 +20,15 @@ export default function CopyRoomCode({ roomId }: CopyRoomCodeProps) {
 
   return (
   <button className="copy-btn" onClick={copiarCodigo}>
-    {copiado ? "✔" : (
+    {copiado ? (
       <img
-        src="/clipboard-lines.svg"
+        src="/clipboard-check.svg"
+        alt="Copiado"
+        className="copy-icon"
+      />
+    ) : (
+      <img
+        src="/clipboard-add.svg"
         alt="Copiar"
         className="copy-icon"
       />
