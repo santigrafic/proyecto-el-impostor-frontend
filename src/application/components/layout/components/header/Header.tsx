@@ -1,7 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import echo from "../../../../../lib/echo";
+import { getEcho } from "../../../../../lib/echo";
+const echo = getEcho();
 
 import "./Header.css";
 

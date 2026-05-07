@@ -30,7 +30,8 @@ const LobbyPage: React.FC = () => {
       const data = await res.json();
       const roomID = data.roomId;
       const playerId = crypto.randomUUID();
-      //console.log(roomID);
+      console.log(roomID);
+      console.log(data);
 
       localStorage.setItem("roomId", roomID);
       localStorage.setItem("playerId", playerId);

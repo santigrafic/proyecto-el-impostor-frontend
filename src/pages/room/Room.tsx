@@ -3,7 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 import CopyRoomCode from "../../commons/components/copyRoomCode/CopyRoomCode";
 
-import echo from "../../lib/echo";
+import { getEcho } from "../../lib/echo";
+const echo = getEcho();
 
 import "./Room.css";
 
