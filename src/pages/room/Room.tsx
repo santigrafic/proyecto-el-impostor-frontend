@@ -32,6 +32,8 @@ const RoomPage: React.FC = () => {
 
   const hasNavigatedRef = useRef(false);
 
+  const [theme, setTheme] = useState("");
+
   // Fetch inicial (solo 1 vez)
   const fetchRoomState = async () => {
     try {
@@ -58,7 +60,7 @@ const RoomPage: React.FC = () => {
       const res = await fetch(`${API_URL}/api/rooms/${roomId}/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hostId: playerId }),
+        body: JSON.stringify({ hostId: playerId, theme: theme, }),
       });
 
       const data = await res.json();
@@ -130,14 +132,16 @@ const RoomPage: React.FC = () => {
   }, [roomId]);
 
   // if (!room) return <div className="room-charge">CARGANDO SALA...</div>;
-  
+
   if (!room) {
     return <LoadingScreen />;
   }
 
   return (
     <div className="room-container">
-      <h2 className="room-title">SALA {roomId} <CopyRoomCode roomId={roomId!} /></h2>
+      <h2 className="room-title">
+        SALA {roomId} <CopyRoomCode roomId={roomId!} />
+      </h2>
       <p>(Comparte el número de la sala para invitar jugadores)</p>
 
       <p className="room-status">
@@ -148,20 +152,39 @@ const RoomPage: React.FC = () => {
       <h3 className="room-subtitle">JUGADORES</h3>
 
       <ul className="players-list">
-        {(Object.values(room?.players ?? {})).map((p) => (
+        {Object.values(room?.players ?? {}).map((p) => (
           <li key={p.id} className="player-item">
             <span className="cursor">&gt;</span> {p.nickname}
-            {p.id === room.hostId && (
-              <span className="host-tag"> (HOST)</span>
-            )}
+            {p.id === room.hostId && <span className="host-tag"> (HOST)</span>}
           </li>
         ))}
       </ul>
 
       {isHost && room.status === "waiting" && (
-        <button className="arcade-btn start-btn" onClick={handleStartGame}>
-          Iniciar partida
-        </button>
+        <>
+          <div className="theme-selector">
+            <label className="theme-label"></label>
+
+            <select
+              className="theme-input"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+            >
+              <option value="" disabled>
+                Temática
+              </option>
+              <option value="default">General</option>
+              <option value="animals">Animales</option>
+              <option value="movies">Películas</option>
+              <option value="simpsons">The Simpsons</option>
+              <option value="movies80s">Películas 80s</option>
+              <option value="movies90s">Películas 90s</option>
+            </select>
+          </div>
+          <button className="arcade-btn start-btn" onClick={handleStartGame}>
+            Iniciar partida
+          </button>
+        </>
       )}
     </div>
   );
