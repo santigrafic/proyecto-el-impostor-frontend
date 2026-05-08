@@ -55,3 +55,9 @@
   font-size: 45px;
 }
 }
+
+@media (max-width: 400px) {
+  .welcome-title {
+    font-size:28px;
+  }
+}

@@ -103,3 +103,15 @@
   box-shadow: none !important;
   outline: none !important;
 }
+
+@media (max-width: 480px) {
+  .header-buttons {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.header-buttons .arcade-btn {
+    width: 100%;
+  }
+}
