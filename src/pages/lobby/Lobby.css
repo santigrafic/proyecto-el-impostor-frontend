@@ -84,12 +84,12 @@
   background: #000;
   color: #00ff66;
   border: 2px solid #00ff66;
-  padding: 10px;
+  padding: 12px 24px;
   font-family: "Press Start 2P", monospace;
   font-size: 14px;
   text-transform: uppercase;
   width: 200px;
-  box-shadow: 0 0 8px #00ff66 inset;
+  box-shadow: 0 0 10px #00ff66 inset;
 }
 
 .code-input::placeholder {
@@ -105,13 +105,14 @@
     font-size: 14px;
   }
   .arcade-btn,
-  .arcade-btn-outline,
-  .code-input {
+  .arcade-btn-outline {
     font-size: 16px;
     padding: 14px 28px;
   }
   .code-input {
     width: 250px;
+    font-size: 16px;
+    padding: 14px 28px;
   }
   .full-width-create {
     width: calc(315px + 10px + 90px);
@@ -126,15 +127,23 @@
     font-size: 16px;
   }
   .arcade-btn,
-  .arcade-btn-outline,
-  .code-input {
+  .arcade-btn-outline {
     font-size: 18px;
     padding: 16px 32px;
   }
   .code-input {
     width: 300px;
+    font-size: 18px;
+    padding: 16px 32px;
   }
   .full-width-create {
     width: calc(375px + 10px + 100px);
+  }
+}
+
+@media (max-width: 429px) {
+  .code-input {
+    width: 100%;
+    margin-bottom: 8px;
   }
 }

@@ -21,6 +21,8 @@ const Header: React.FC = () => {
   const location = useLocation();
   const roomId = location.pathname.split("/")[2];
   const playerId = localStorage.getItem("playerId");
+  const isLoginPage = location.pathname.includes("/login");
+  const isRegisterPage = location.pathname.includes("/register");
 
   // Comprobar si hay usuario logueado al cargar
   useEffect(() => {
@@ -78,7 +80,7 @@ const Header: React.FC = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(socketId ? { "X-Socket-Id": socketId } : {})
+        ...(socketId ? { "X-Socket-Id": socketId } : {}),
       },
       body: JSON.stringify({ playerId }),
     });
@@ -97,12 +99,17 @@ const Header: React.FC = () => {
 
       {!currentUser && (
         <div className="header-buttons">
-          <button className="arcade-btn" onClick={loginExit}>
-            Login
-          </button>
-          <button className="arcade-btn" onClick={registerExit}>
-            Registro
-          </button>
+          {!isLoginPage && (
+            <button className="arcade-btn" onClick={loginExit}>
+              Login
+            </button>
+          )}
+
+          {!isRegisterPage && (
+            <button className="arcade-btn" onClick={registerExit}>
+              Registro
+            </button>
+          )}
         </div>
       )}
 
