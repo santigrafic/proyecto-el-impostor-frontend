@@ -3,37 +3,44 @@ import { useNavigate } from "react-router-dom";
 
 import "./Login.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const storedUsers = localStorage.getItem("users");
-    if (!storedUsers) {
-      alert("No hay usuarios registrados");
-      return;
-    }
+    try {
+    const res = await fetch(`${API_URL}/api/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
 
-    const users = JSON.parse(storedUsers);
-
-    const userFound = users.find(
-      (user: any) =>
-        user.email.trim().toLowerCase() === email.trim().toLowerCase() &&
-        user.password === password,
-    );
-
-    if (!userFound) {
+    if (!res.ok) {
       alert("Credenciales incorrectas");
       return;
     }
 
-    // Guardar usuario logueado
-    localStorage.setItem("currentUser", JSON.stringify(userFound));
+    const data = await res.json();
+
+    // guardar token + usuario
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("currentUser", JSON.stringify(data.user));
 
     navigate("/home");
+  } catch (err) {
+    console.error(err);
+    alert("Error en el login");
+  }
   };
 
   return (

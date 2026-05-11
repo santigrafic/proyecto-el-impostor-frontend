@@ -102,6 +102,14 @@ const GamePage: React.FC = () => {
     }
   }, [gameState]);*/
 
+  useEffect(() => {
+    if (!gameState) return;
+
+    if (gameState.status === "finished") {
+      saveGameToDatabase();
+    }
+  }, [gameState?.status]);
+
   const fetchInitialData = async () => {
     try {
       await Promise.all([fetchMe(), fetchGameState()]);
@@ -254,6 +262,27 @@ const GamePage: React.FC = () => {
       navigate("/home");
     } catch (error) {
       console.error("Error exiting game:", error);
+    }
+  };
+
+  const saveGameToDatabase = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/games/${roomId}/finish`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-GAME-TOKEN": "super-secret-token",
+        },
+        body: JSON.stringify({
+          gameState,
+        }),
+      });
+
+      if (!res.ok) {
+        console.error("Error guardando partida");
+      }
+    } catch (err) {
+      console.error("Error finish game:", err);
     }
   };
 
