@@ -6,6 +6,8 @@ import Welcome from "../../../../pages/welcome";
 import HomePage from "../../../../pages/home";
 import Login from "../../../../pages/login/Login";
 import Register from "../../../../pages/register/Register";
+import Profile from "../../../../pages/profile/Profile";
+import Ranking from "../../../../pages/ranking/Ranking";
 import Lobby from "../../../../pages/lobby/Lobby";
 import Room from "../../../../pages/room/Room";
 import RevealPage from "../../../../pages/reveal-page/RevealPage";
@@ -38,6 +40,16 @@ export const appRoutes: RouteTypes[] = [
     key: "register",
     path: ROUTE_PATHS.REGISTER,
     element: <Register />,
+  },
+  {
+    key: "profile",
+    path: ROUTE_PATHS.PROFILE,
+    element: <Profile />,
+  },
+  {
+    key: "ranking",
+    path: ROUTE_PATHS.RANKING,
+    element: <Ranking />,
   },
   {
     key: "lobby",

@@ -1,6 +1,7 @@
 import React from "react";
 
 import { useNavigate } from "react-router-dom";
+import {  useState } from "react";
 
 import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
@@ -12,6 +13,9 @@ import "./Home.css";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
+  const [currentUser] = useState(() => {
+  return JSON.parse(localStorage.getItem("currentUser") || "null");
+});
 
   const handleGuestPlay = () => {
     localStorage.setItem("userType", "guest");
@@ -36,7 +40,7 @@ const HomePage: React.FC = () => {
 
       {/* Botones */}
       <div className="home-buttons">
-        {!localStorage.getItem("currentUser") && (
+        {!currentUser && (
           <>
             <Button
               text="LOGIN"
@@ -50,11 +54,27 @@ const HomePage: React.FC = () => {
             />
           </>
         )}
+
         <Button
           text="JUGAR"
           styleClass="arcade-btn"
           handleClick={handleGuestPlay}
         />
+
+        {currentUser && (
+          <>
+            <Button
+              text="VER PERFIL"
+              styleClass="arcade-btn"
+              handleClick={() => navigate("/profile")}
+            />
+            <Button
+              text="VER RANKING"
+              styleClass="arcade-btn"
+              handleClick={() => navigate("/ranking")}
+            />
+          </>
+        )}
       </div>
     </div>
   );

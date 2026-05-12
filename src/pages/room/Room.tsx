@@ -32,7 +32,7 @@ const RoomPage: React.FC = () => {
 
   const hasNavigatedRef = useRef(false);
 
-  const [theme, setTheme] = useState("");
+  const [theme, setTheme] = useState<string>("default");
 
   // Fetch inicial (solo 1 vez)
   const fetchRoomState = async () => {
@@ -68,6 +68,7 @@ const RoomPage: React.FC = () => {
       if (!res.ok) throw new Error(data.error);
     } catch (err: any) {
       console.error(err);
+      alert("ERROR EMPEZANDO PARTIDA");
       alert(err.message);
     }
   };
@@ -170,7 +171,7 @@ const RoomPage: React.FC = () => {
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
             >
-              <option value="" disabled>
+              <option value="default" disabled>
                 Temática
               </option>
               <option value="default">General</option>

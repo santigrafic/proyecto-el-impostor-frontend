@@ -1,0 +1,93 @@
+.profile-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: left;
+  background: #000;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  padding: 30px 20px;
+  box-shadow: 0 0 15px #00ff66;
+  border-radius: 8px;
+}
+
+/* Título */
+.profile-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 25px;
+  text-shadow: 0 0 8px #00ff66;
+}
+
+/* Secciones */
+.profile-section {
+  margin-bottom: 30px;
+}
+
+/* Subtítulo */
+.profile-subtitle {
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-shadow: 0 0 6px #00ff66;
+}
+
+/* Texto */
+.profile-section p {
+  font-size: 12px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 4px #00ff66;
+}
+
+/* Cursor estilo retro */
+.cursor {
+  margin-right: 6px;
+  animation: blink 1.2s steps(2, start) infinite;
+}
+
+/* Botón volver */
+.btn-exit {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: transparent;
+  color: #00ff66;
+  border: none;
+  font-family: inherit;
+}
+
+/* Botón imprimir */
+.print-btn {
+  margin-top: 20px;
+  width: 100%;
+}
+
+@media print {
+  .btn-exit,
+  .print-btn {
+    display: none;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .profile-container {
+    box-shadow: none;
+  }
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .profile-title {
+    font-size: 28px;
+  }
+
+  .profile-subtitle {
+    font-size: 18px;
+  }
+
+  .profile-section p {
+    font-size: 14px;
+  }
+}

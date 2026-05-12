@@ -4,6 +4,8 @@ export const ROUTE_PATHS = {
   HOME: '/home',
   LOGIN: '/login',
   REGISTER: '/register',
+  PROFILE: '/profile',
+  RANKING: '/ranking',
   LOBBY: '/lobby',
   ROOM: '/room/:roomId',
   REVEALPAGE: '/reveal-page/:roomId',

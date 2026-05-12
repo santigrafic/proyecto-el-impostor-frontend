@@ -27,11 +27,33 @@ const LobbyPage: React.FC = () => {
         method: "POST",
       });
 
+      if (!res.ok) {
+        throw new Error("Error creando room");
+      }
+
       const data = await res.json();
       const roomID = data.roomId;
-      const playerId = crypto.randomUUID();
       console.log(roomID);
       console.log(data);
+
+
+      // Generar playerId
+      const user = JSON.parse(localStorage.getItem("currentUser") || "null");
+
+      let playerId;
+
+      if (user?.id) {
+        playerId = String(user.id);; // usuario real de BD
+      } else {
+        let guestId = localStorage.getItem("guestId");
+
+        if (!guestId) {
+          guestId = crypto.randomUUID();
+          localStorage.setItem("guestId", guestId);
+        }
+
+        playerId = guestId;
+      }
 
       localStorage.setItem("roomId", roomID);
       localStorage.setItem("playerId", playerId);
@@ -39,16 +61,23 @@ const LobbyPage: React.FC = () => {
       // navigate(`/room/${roomID}`);
 
       // Llamar al join del backend
-      await fetch(`${API_URL}/api/rooms/${roomID}/join`, {
+      const joinRes = await fetch(`${API_URL}/api/rooms/${roomID}/join`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           playerId,
+          nickname: user?.nickname || null,
         }),
       });
 
+      if (!joinRes.ok) {
+        const err = await joinRes.json();
+        throw new Error(err.message || "Error al unirse");
+      }
+
+      console.log(user);
       navigate(`/room/${roomID}`);
     } catch (error) {
       console.error(error);
