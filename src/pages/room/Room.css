@@ -65,6 +65,9 @@
   margin-right: 6px;
   animation: blink 1.2s steps(2, start) infinite;
 }
+.theme-label {
+  margin-bottom: 10px;
+}
 
 /* Input estilo terminal */
 .theme-input {

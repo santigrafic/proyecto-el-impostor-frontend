@@ -164,16 +164,13 @@ const RoomPage: React.FC = () => {
       {isHost && room.status === "waiting" && (
         <>
           <div className="theme-selector">
-            <label className="theme-label"></label>
-
+            <label className="theme-label">Elije el tema</label>
+            <br></br>
             <select
               className="theme-input"
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
             >
-              <option value="default" disabled>
-                Temática
-              </option>
               <option value="default">General</option>
               <option value="animals">Animales</option>
               <option value="movies">Películas</option>
