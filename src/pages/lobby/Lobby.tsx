@@ -77,7 +77,6 @@ const LobbyPage: React.FC = () => {
         throw new Error(err.message || "Error al unirse");
       }
 
-      console.log(user);
       navigate(`/room/${roomID}`);
     } catch (error) {
       console.error(error);

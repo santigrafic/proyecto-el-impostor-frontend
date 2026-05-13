@@ -19,6 +19,7 @@ export type WordsByPlayerType = {
 export interface GameStateType {
   roomId: string;
   status: "waiting" | "playing" | "voting" | "finished";
+  game_id: number | null;
   players: { id: string; nickname: string }[];
   playedWordsCount: number;
   totalPlayers: number;

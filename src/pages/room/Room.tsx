@@ -9,6 +9,7 @@ const echo = getEcho();
 import "./Room.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const API_TOKEN = import.meta.env.VITE_GAME_API_TOKEN;
 
 interface Player {
   id: string;
@@ -59,7 +60,10 @@ const RoomPage: React.FC = () => {
     try {
       const res = await fetch(`${API_URL}/api/rooms/${roomId}/start`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-GAME-TOKEN": `${API_TOKEN}`,
+       },
         body: JSON.stringify({ hostId: playerId, theme: theme, }),
       });
 

@@ -7,6 +7,7 @@ import "./Ranking.css";
 const API_URL = import.meta.env.VITE_API_URL;
 
 interface PlayerRanking {
+  id: number;
   nickname: string;
   games_won: number;
 }
@@ -52,7 +53,7 @@ const Ranking: React.FC = () => {
         ) : (
           <ol className="ranking-list">
             {ranking.map((user) => (
-              <li className="ranking-item">
+              <li key={user.id} className="ranking-item">
                 <span className="ranking-left">
                     <span className="cursor">&gt;</span>
                     {user.nickname}

@@ -27,10 +27,9 @@ const GamePage: React.FC = () => {
 
   const [me, setMe] = useState<MeType | null>(null);
   const [gameState, setGameState] = useState<GameStateType | null>(null);
+  const gameId = gameState?.game_id;
 
   const [wordInput, setWordInput] = useState("");
-
-  // const pollingRef = useRef<number | null>(null);
 
   const [votingStarted, setVotingStarted] = useState(false);
 
@@ -106,7 +105,7 @@ const GamePage: React.FC = () => {
     if (!gameState) return;
 
     if (gameState.status === "finished") {
-      saveGameToDatabase();
+      finishGame();
     }
   }, [gameState?.status]);
 
@@ -265,13 +264,14 @@ const GamePage: React.FC = () => {
     }
   };
 
-  const saveGameToDatabase = async () => {
+  const finishGame = async () => {
+    if (!gameId) return;
     try {
       const res = await fetch(`${API_URL}/api/games/${roomId}/finish`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-GAME-TOKEN": "super-secret-token",
+          "X-GAME-TOKEN": import.meta.env.VITE_GAME_API_TOKEN,
         },
         body: JSON.stringify({
           gameState,
