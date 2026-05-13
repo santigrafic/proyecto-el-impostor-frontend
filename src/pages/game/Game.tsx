@@ -104,9 +104,9 @@ const GamePage: React.FC = () => {
   useEffect(() => {
     if (!gameState) return;
 
-    if (gameState.status === "finished") {
+    /*if (gameState.status === "finished") {
       finishGame();
-    }
+    }*/
   }, [gameState?.status]);
 
   const fetchInitialData = async () => {
@@ -264,17 +264,20 @@ const GamePage: React.FC = () => {
     }
   };
 
-  const finishGame = async () => {
+  /*const finishGame = async () => {
     if (!gameId) return;
     try {
+      console.log(gameState);
       const res = await fetch(`${API_URL}/api/games/${roomId}/finish`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "application/json",
           "X-GAME-TOKEN": import.meta.env.VITE_GAME_API_TOKEN,
         },
         body: JSON.stringify({
-          gameState,
+          winner: gameState.winner,
+          players: gameState.players,
         }),
       });
 
@@ -284,7 +287,7 @@ const GamePage: React.FC = () => {
     } catch (err) {
       console.error("Error finish game:", err);
     }
-  };
+  };*/
 
   // if (loading) return <p>Cargando partida...</p>;
   if (loading) {
