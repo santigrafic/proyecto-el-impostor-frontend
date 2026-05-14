@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import type { MeType, GameStateType, ResultsType } from "../../types";
 import { useNavigate } from "react-router-dom";
 
@@ -30,8 +30,10 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
   const navigate = useNavigate();
   const [results, setResults] = useState<ResultsType | null>(null);
   const [loading, setLoading] = useState(true);
-  const [saved, setSaved] = useState(false);
-  const gameId = gameState?.game_id;
+  const [saved] = useState(false);
+  const game_id = gameState?.game_id;
+  //const hostId = gameState?.hostId;
+  const finishedRef = useRef(false);
 
 
   useEffect(() => {
@@ -51,9 +53,20 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
 
   useEffect(() => {
     if (!results || saved) return;
-    if (gameId == null) return;
+    console.log(gameState.hostId);
+
+    if (finishedRef.current) return;
+
+    finishedRef.current = true;
+
     const currentResults = results;
-    console.log(currentResults);
+
+    console.log(JSON.stringify({
+      winner: currentResults.winner,
+      players: gameState.players,
+      game_id: game_id
+    }));
+
     async function finishGame() {
       try {
         const res = await fetch(`${API_URL}/api/games/${roomId}/finish`, {
@@ -66,18 +79,17 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
           body: JSON.stringify({
             winner: currentResults.winner,
             players: gameState.players,
-            gameId: gameId
+            game_id: game_id
           }),
         });
 
-        console.log("Llega aqui");
+        console.log("Partida finalizada");
+
         if (!res.ok) {
           const err = await res.json();
           console.error(err);
           return;
         }
-
-        setSaved(true);
 
       } catch (err) {
         console.error(err);
@@ -86,6 +98,10 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
 
     finishGame();
 
+  }, [results]);
+
+  useEffect(() => {
+    console.log("FINISH EFFECT TRIGGERED");
   }, [results]);
 
   if (loading)

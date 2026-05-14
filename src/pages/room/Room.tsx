@@ -72,7 +72,6 @@ const RoomPage: React.FC = () => {
       if (!res.ok) throw new Error(data.error);
     } catch (err: any) {
       console.error(err);
-      alert("ERROR EMPEZANDO PARTIDA");
       alert(err.message);
     }
   };
