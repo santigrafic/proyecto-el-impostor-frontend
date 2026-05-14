@@ -27,8 +27,7 @@ const GamePage: React.FC = () => {
 
   const [me, setMe] = useState<MeType | null>(null);
   const [gameState, setGameState] = useState<GameStateType | null>(null);
-  const gameId = gameState?.game_id;
-
+  //console.log("gameState: ", gameState);
   const [wordInput, setWordInput] = useState("");
 
   const [votingStarted, setVotingStarted] = useState(false);
@@ -144,8 +143,9 @@ const GamePage: React.FC = () => {
   const fetchGameState = async () => {
     try {
       const res = await fetch(`${API_URL}/api/games/${roomId}/state`);
-      if (!res.ok) return;
+      if (!res.ok) return;  
       const data: GameStateType = await res.json();
+      console.log("game_id:", data.game_id);
       // Asegurarse de que playedWords exista
       if (!data.wordsByPlayer) data.wordsByPlayer = [];
       setGameState(data);

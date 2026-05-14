@@ -31,6 +31,8 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
   const [results, setResults] = useState<ResultsType | null>(null);
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
+  const gameId = gameState?.game_id;
+
 
   useEffect(() => {
     async function loadResults() {
@@ -49,6 +51,7 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
 
   useEffect(() => {
     if (!results || saved) return;
+    if (gameId == null) return;
     const currentResults = results;
     console.log(currentResults);
     async function finishGame() {
@@ -63,9 +66,11 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
           body: JSON.stringify({
             winner: currentResults.winner,
             players: gameState.players,
+            gameId: gameId
           }),
         });
 
+        console.log("Llega aqui");
         if (!res.ok) {
           const err = await res.json();
           console.error(err);

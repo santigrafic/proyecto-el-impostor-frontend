@@ -19,7 +19,7 @@ export type WordsByPlayerType = {
 export interface GameStateType {
   roomId: string;
   status: "waiting" | "playing" | "voting" | "finished";
-  game_id: number | null;
+  game_id: string | null;
   players: { id: string; nickname: string }[];
   playedWordsCount: number;
   totalPlayers: number;
@@ -27,7 +27,7 @@ export interface GameStateType {
   currentTurn?: string | null;
   wordsPerPlayer?: number;
   wordsByPlayer: WordsByPlayerType[];
-  impostorNickname?: "string | null";
+  impostorNickname?: string | null;
   winner: "players" | "impostor";
   votesCount: number;
   votes?: Record<string, string>;
