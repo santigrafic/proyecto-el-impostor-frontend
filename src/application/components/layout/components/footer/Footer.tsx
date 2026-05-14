@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
       <div className="footer-content">
         © {new Date().getFullYear()} · El Impostor ·{" "}
         <a
-          href="https://www.linkedin.com/in/santigrafic/"
+          href="https://www.linkedin.com/in/santigrafic"
           className="footer-link"
           target="_blank"
         >

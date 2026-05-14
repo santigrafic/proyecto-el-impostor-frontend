@@ -4,40 +4,56 @@ import { useNavigate } from "react-router-dom";
 
 import "./Register.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [registerForm, setRegisterForm] = useState<any>({
-    userName: "",
+    name: "",
+    nickname: "",
     email: "",
     password: "",
     repeatPassword: "",
   });
 
-  const hundleSubmitRegisterForm = () => {
-    if (registerForm.password === registerForm.repeatPassword) {
-      const isUsersList = Boolean(localStorage.getItem("users"));
-      let tempUsersList = [];
+  const handleSubmitRegisterForm = async () => {
+    if (registerForm.password !== registerForm.repeatPassword) {
+      alert("Las contraseñas no coinciden");
+      return;
+    }
 
-      if (isUsersList)
-        tempUsersList = JSON.parse(localStorage.getItem("users") as string);
-
-      tempUsersList.push({
-        userName: registerForm.userName,
+    try {
+    const res = await fetch(`${API_URL}/api/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: registerForm.name,
+        nickname: registerForm.nickname,
         email: registerForm.email,
         password: registerForm.password,
-      });
+      }),
+    });
 
-      const registedUser = {
-        userName: registerForm.userName.trim(),
-        email: registerForm.email.trim().toLowerCase(),
-        password: registerForm.password,
-      };
+    if (!res.ok) {
+      const err = await res.json();
+      alert(err.message || "Error en el registro");
+      return;
+    }
+    
+    const data = await res.json();
 
-      localStorage.setItem("users", JSON.stringify(tempUsersList));
-      localStorage.setItem("currentUser", JSON.stringify(registedUser));
-      alert("Usuario registrado correctamente");
-      navigate("/home");
+    // guardar login automático si quieres
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("currentUser", JSON.stringify(data.user));
+
+    alert("Usuario registrado correctamente");
+    navigate("/home");
+    } catch (err) {
+      console.error(err);
+      alert("Error en el registro");
     }
   };
 
@@ -59,7 +75,25 @@ const RegisterPage: React.FC = () => {
               onChange={(e: any) =>
                 setRegisterForm({
                   ...registerForm,
-                  userName: e.target.value,
+                  name: e.target.value,
+                })
+              }
+            />
+          </div>
+          <div className="mb-3 mt-3">
+            <label htmlFor="nickname" className="form-label">
+              Nick:
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="nickname"
+              placeholder="Introduce nick"
+              name="nickname"
+              onChange={(e: any) =>
+                setRegisterForm({
+                  ...registerForm,
+                  nickname: e.target.value,
                 })
               }
             />
@@ -122,7 +156,7 @@ const RegisterPage: React.FC = () => {
             type="button"
             className="btn btn-primary"
             disabled={false}
-            onClick={hundleSubmitRegisterForm}
+            onClick={handleSubmitRegisterForm}
           >
             Enviar
           </button>

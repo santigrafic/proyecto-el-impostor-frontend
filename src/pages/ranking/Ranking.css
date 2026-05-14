@@ -1,0 +1,61 @@
+.ranking-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 50px auto;
+  text-align: left;
+  background: #000;
+  color: #00ff66;
+  font-family: "Press Start 2P", monospace;
+  padding: 30px 20px;
+  box-shadow: 0 0 15px #00ff66;
+  border-radius: 8px;
+}
+
+.ranking-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 25px;
+  text-shadow: 0 0 8px #00ff66;
+}
+
+.ranking-section {
+  margin-top: 20px;
+}
+
+.ranking-list {
+  list-style: none;
+  padding: 0;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  margin-bottom: 12px;
+  text-shadow: 0 0 4px #00ff66;
+}
+
+/* izquierda */
+.ranking-left {
+  white-space: nowrap;
+}
+
+/* línea de puntos */
+.ranking-dots {
+  flex: 1;
+  border-bottom: 5px dotted #00ff66;
+  margin: 0 10px;
+  transform: translateY(4px);
+  opacity: 0.7;
+}
+
+/* derecha */
+.ranking-right {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.cursor {
+  margin-right: 6px;
+  animation: blink 1.2s steps(2, start) infinite;
+}

@@ -9,6 +9,7 @@ const echo = getEcho();
 import "./Room.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const API_TOKEN = import.meta.env.VITE_GAME_API_TOKEN;
 
 interface Player {
   id: string;
@@ -32,7 +33,7 @@ const RoomPage: React.FC = () => {
 
   const hasNavigatedRef = useRef(false);
 
-  const [theme, setTheme] = useState("");
+  const [theme, setTheme] = useState<string>("default");
 
   // Fetch inicial (solo 1 vez)
   const fetchRoomState = async () => {
@@ -59,7 +60,10 @@ const RoomPage: React.FC = () => {
     try {
       const res = await fetch(`${API_URL}/api/rooms/${roomId}/start`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-GAME-TOKEN": `${API_TOKEN}`,
+       },
         body: JSON.stringify({ hostId: playerId, theme: theme, }),
       });
 
@@ -163,16 +167,13 @@ const RoomPage: React.FC = () => {
       {isHost && room.status === "waiting" && (
         <>
           <div className="theme-selector">
-            <label className="theme-label"></label>
-
+            <label className="theme-label">Elije el tema</label>
+            <br></br>
             <select
               className="theme-input"
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
             >
-              <option value="" disabled>
-                Temática
-              </option>
               <option value="default">General</option>
               <option value="animals">Animales</option>
               <option value="movies">Películas</option>

@@ -27,10 +27,8 @@ const GamePage: React.FC = () => {
 
   const [me, setMe] = useState<MeType | null>(null);
   const [gameState, setGameState] = useState<GameStateType | null>(null);
-
+  //console.log("gameState: ", gameState);
   const [wordInput, setWordInput] = useState("");
-
-  // const pollingRef = useRef<number | null>(null);
 
   const [votingStarted, setVotingStarted] = useState(false);
 
@@ -102,6 +100,14 @@ const GamePage: React.FC = () => {
     }
   }, [gameState]);*/
 
+  useEffect(() => {
+    if (!gameState) return;
+
+    /*if (gameState.status === "finished") {
+      finishGame();
+    }*/
+  }, [gameState?.status]);
+
   const fetchInitialData = async () => {
     try {
       await Promise.all([fetchMe(), fetchGameState()]);
@@ -137,8 +143,9 @@ const GamePage: React.FC = () => {
   const fetchGameState = async () => {
     try {
       const res = await fetch(`${API_URL}/api/games/${roomId}/state`);
-      if (!res.ok) return;
+      if (!res.ok) return;  
       const data: GameStateType = await res.json();
+      console.log("game_id:", data.game_id);
       // Asegurarse de que playedWords exista
       if (!data.wordsByPlayer) data.wordsByPlayer = [];
       setGameState(data);
@@ -256,6 +263,31 @@ const GamePage: React.FC = () => {
       console.error("Error exiting game:", error);
     }
   };
+
+  /*const finishGame = async () => {
+    if (!gameId) return;
+    try {
+      console.log(gameState);
+      const res = await fetch(`${API_URL}/api/games/${roomId}/finish`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "X-GAME-TOKEN": import.meta.env.VITE_GAME_API_TOKEN,
+        },
+        body: JSON.stringify({
+          winner: gameState.winner,
+          players: gameState.players,
+        }),
+      });
+
+      if (!res.ok) {
+        console.error("Error guardando partida");
+      }
+    } catch (err) {
+      console.error("Error finish game:", err);
+    }
+  };*/
 
   // if (loading) return <p>Cargando partida...</p>;
   if (loading) {

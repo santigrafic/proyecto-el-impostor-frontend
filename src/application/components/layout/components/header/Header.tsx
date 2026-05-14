@@ -9,9 +9,8 @@ import "./Header.css";
 const API_URL = import.meta.env.VITE_API_URL;
 
 interface User {
-  userName: string;
+  name: string;
   email: string;
-  password: string;
   userAvatar?: string; // opcional
 }
 
@@ -115,7 +114,7 @@ const Header: React.FC = () => {
 
       {currentUser && (
         <div className="header-user">
-          <span className="user-name">Hola, {currentUser.userName}</span>
+          <span className="user-name">Hola, {currentUser.name.split(" ")[0]}</span>
           <button className="arcade-btn" onClick={handleLogout}>
             Logout
           </button>

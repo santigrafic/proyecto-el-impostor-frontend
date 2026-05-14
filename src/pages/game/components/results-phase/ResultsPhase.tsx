@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import type { MeType, GameStateType, ResultsType } from "../../types";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +7,8 @@ import LoadingScreen from "../../../../commons/components/loadingScreen/LoadingS
 import "./ResultsPhase.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const API_TOKEN = import.meta.env.VITE_GAME_API_TOKEN
+
 
 type ResultsPhaseProps = {
   me: MeType;
@@ -28,6 +30,11 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
   const navigate = useNavigate();
   const [results, setResults] = useState<ResultsType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [saved] = useState(false);
+  const game_id = gameState?.game_id;
+  //const hostId = gameState?.hostId;
+  const finishedRef = useRef(false);
+
 
   useEffect(() => {
     async function loadResults() {
@@ -43,6 +50,59 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
 
     loadResults();
   }, [gameState.roomId]);
+
+  useEffect(() => {
+    if (!results || saved) return;
+    console.log(gameState.hostId);
+
+    if (finishedRef.current) return;
+
+    finishedRef.current = true;
+
+    const currentResults = results;
+
+    console.log(JSON.stringify({
+      winner: currentResults.winner,
+      players: gameState.players,
+      game_id: game_id
+    }));
+
+    async function finishGame() {
+      try {
+        const res = await fetch(`${API_URL}/api/games/${roomId}/finish`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-GAME-TOKEN": `${API_TOKEN}`,
+          },
+          body: JSON.stringify({
+            winner: currentResults.winner,
+            players: gameState.players,
+            game_id: game_id
+          }),
+        });
+
+        console.log("Partida finalizada");
+
+        if (!res.ok) {
+          const err = await res.json();
+          console.error(err);
+          return;
+        }
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    finishGame();
+
+  }, [results]);
+
+  useEffect(() => {
+    console.log("FINISH EFFECT TRIGGERED");
+  }, [results]);
 
   if (loading)
     // return <p>Cargando resultados...</p>;

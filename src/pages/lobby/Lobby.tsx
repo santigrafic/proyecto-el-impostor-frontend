@@ -27,11 +27,33 @@ const LobbyPage: React.FC = () => {
         method: "POST",
       });
 
+      if (!res.ok) {
+        throw new Error("Error creando room");
+      }
+
       const data = await res.json();
       const roomID = data.roomId;
-      const playerId = crypto.randomUUID();
       console.log(roomID);
       console.log(data);
+
+
+      // Generar playerId
+      const user = JSON.parse(localStorage.getItem("currentUser") || "null");
+
+      let playerId;
+
+      if (user?.id) {
+        playerId = String(user.id);; // usuario real de BD
+      } else {
+        let guestId = localStorage.getItem("guestId");
+
+        if (!guestId) {
+          guestId = crypto.randomUUID();
+          localStorage.setItem("guestId", guestId);
+        }
+
+        playerId = guestId;
+      }
 
       localStorage.setItem("roomId", roomID);
       localStorage.setItem("playerId", playerId);
@@ -39,15 +61,21 @@ const LobbyPage: React.FC = () => {
       // navigate(`/room/${roomID}`);
 
       // Llamar al join del backend
-      await fetch(`${API_URL}/api/rooms/${roomID}/join`, {
+      const joinRes = await fetch(`${API_URL}/api/rooms/${roomID}/join`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           playerId,
+          nickname: user?.nickname || null,
         }),
       });
+
+      if (!joinRes.ok) {
+        const err = await joinRes.json();
+        throw new Error(err.message || "Error al unirse");
+      }
 
       navigate(`/room/${roomID}`);
     } catch (error) {
@@ -60,45 +88,65 @@ const LobbyPage: React.FC = () => {
 
   // Unirse a partida
   const handleUnirsePartida = async () => {
-    if (!roomID) {
-      alert("Introduce un código de partida");
-      return;
-    }
+  if (!roomID) {
+    alert("Introduce un código de partida");
+    return;
+  }
 
-    //joinGame()
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const playerId = crypto.randomUUID();
+  try {
+    const user = JSON.parse(
+      localStorage.getItem("currentUser") || "null",
+    );
 
-      const res = await fetch(
-        `${API_URL}/api/rooms/${roomID}/join`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            playerId,
-          }),
-        },
-      );
+    let playerId;
 
-      if (!res.ok) {
-        throw new Error("No se pudo unir a la sala");
+    // Usuario logueado
+    if (user?.id) {
+      playerId = String(user.id);
+    } else {
+      // Invitado
+      let guestId = localStorage.getItem("guestId");
+
+      if (!guestId) {
+        guestId = crypto.randomUUID();
+        localStorage.setItem("guestId", guestId);
       }
 
-      localStorage.setItem("roomId", roomID.toUpperCase());
-      localStorage.setItem("playerId", playerId);
+      playerId = guestId;
+    }
 
-      navigate(`/room/${roomID}`);
-    } catch (error) {
-      console.error(error);
-      alert("No se pudo unir a la partida");
-    } finally {
+    const res = await fetch(
+      `${API_URL}/api/rooms/${roomID}/join`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playerId,
+          nickname: user?.nickname || null,
+        }),
+      },
+    );
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "No se pudo unir a la sala");
+    }
+
+    localStorage.setItem("roomId", roomID.toUpperCase());
+    localStorage.setItem("playerId", String(playerId));
+
+    navigate(`/room/${roomID}`);
+  } catch (error) {
+    console.error(error);
+    alert("No se pudo unir a la partida");
+  } finally {
     setLoading(false);
   }
-  };
+};
 
   if (loading) {
     return <LoadingScreen />;
