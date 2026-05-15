@@ -109,9 +109,14 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
-}
+  }
 
-.header-buttons .arcade-btn {
-    width: 100%;
+  .header-buttons .arcade-btn {
+      width: 100%;
+    }
+}
+@media (max-width: 500px) {
+  .user-name {
+    display: none;
   }
 }

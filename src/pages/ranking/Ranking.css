@@ -30,7 +30,7 @@
 .ranking-item {
   display: flex;
   align-items: center;
-  font-size: 18px;
+  font-size: clamp(6px, 3vw, 22px);
   margin-bottom: 12px;
   text-shadow: 0 0 4px #00ff66;
 }
@@ -59,3 +59,4 @@
   margin-right: 6px;
   animation: blink 1.2s steps(2, start) infinite;
 }
+
