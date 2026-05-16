@@ -69,8 +69,13 @@
   margin-bottom: 10px;
 }
 
+.wordsPerPlayer-label {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
 /* Input estilo terminal */
-.theme-input {
+.options-input {
   background: #000;
   color: #00ff66;
   border: 2px solid #00ff66;
@@ -83,13 +88,13 @@
   width: 100%;
 }
 
-.theme-input::placeholder {
+.options-input::placeholder {
   color: #00ff66;
   opacity: 0.7;
 }
 
 @media (min-width: 350px) {
-  .theme-input {
+  .options-input {
     width: 270px;
   }
 }
@@ -115,7 +120,7 @@
     font-size: 16px;
   }
 
-  .theme-input {
+  .options-input {
     width: 300px;
   }
 
@@ -134,7 +139,7 @@
     font-size: 18px;
   }
 
-  .theme-input {
+  .options-input {
     width: 330px;
   }
   

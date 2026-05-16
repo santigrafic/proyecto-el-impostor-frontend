@@ -17,11 +17,45 @@ const RegisterPage: React.FC = () => {
     repeatPassword: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmitRegisterForm = async () => {
+
+    if (loading) return;
+
+    // VALIDAR NOMBRE
+    if (registerForm.name.trim().length < 3) {
+      alert("El nombre debe tener al menos 3 caracteres");
+      return;
+    }
+
+    // VALIDAR NICK
+    if (registerForm.nickname.trim().length < 3) {
+      alert("El nick debe tener al menos 3 caracteres");
+      return;
+    }
+
+    // VALIDAR EMAIL
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(registerForm.email)) {
+      alert("Introduce un email válido");
+      return;
+    }
+
+    // VALIDAR PASSWORD
+    if (registerForm.password.length < 6) {
+      alert("La contraseña debe tener al menos 6 caracteres");
+      return;
+    }
+
+    // VALIDAR REPETICIÓN PASSWORD
     if (registerForm.password !== registerForm.repeatPassword) {
       alert("Las contraseñas no coinciden");
       return;
     }
+
+    setLoading(true);
 
     try {
     const res = await fetch(`${API_URL}/api/register`, {
@@ -54,6 +88,8 @@ const RegisterPage: React.FC = () => {
     } catch (err) {
       console.error(err);
       alert("Error en el registro");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -141,7 +177,7 @@ const RegisterPage: React.FC = () => {
             <input
               type="password"
               className="form-control"
-              id="pwd"
+              id="repwd"
               placeholder="Repite password"
               name="repswd"
               onChange={(e: any) =>
@@ -155,10 +191,10 @@ const RegisterPage: React.FC = () => {
           <button
             type="button"
             className="btn btn-primary"
-            disabled={false}
+            disabled={loading}
             onClick={handleSubmitRegisterForm}
           >
-            Enviar
+            {loading ? "Enviando..." : "Enviar"}
           </button>
         </form>
       </div>
