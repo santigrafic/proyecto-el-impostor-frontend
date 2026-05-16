@@ -56,7 +56,7 @@ const GamePage: React.FC = () => {
     (p) => String(p.id) === String(gameState?.currentTurn)
   );
 
-  const [timeLeft, setTimeLeft] = useState(15);
+  //const [timeLeft, setTimeLeft] = useState(15);
 
   // Fetch inicial
   useEffect(() => {
@@ -144,7 +144,7 @@ const GamePage: React.FC = () => {
     }
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
   if (!me?.isMyTurn || me.hasPlayed) return;
 
   setTimeLeft(20);
@@ -169,7 +169,7 @@ useEffect(() => {
   if (me.hasPlayed) return;
 
   sendAutomaticWord();
-}, [timeLeft]);
+}, [timeLeft]);*/
 
   const fetchMe = async () => {
     try {
@@ -215,7 +215,7 @@ useEffect(() => {
 
     setLoadingWord(true);
 
-    setTimeLeft(0);
+    //setTimeLeft(0);
 
     try {
       const res = await fetch(`${API_URL}/api/games/${roomId}/word`, {
@@ -245,7 +245,7 @@ useEffect(() => {
     }
   };
 
-  const sendAutomaticWord = async () => {
+  /*const sendAutomaticWord = async () => {
   try {
     await fetch(`${API_URL}/api/games/${roomId}/word`, {
       method: "POST",
@@ -260,7 +260,7 @@ useEffect(() => {
   } catch (err) {
     console.error("Error enviando palabra automática", err);
   }
-};
+};*/
 
   const goToVoting = async () => {
 
@@ -449,7 +449,7 @@ useEffect(() => {
 
         {me.isMyTurn && !me.hasPlayed && !wordSubmitted && (
           <section className="game-section">
-            <h2 className="game-subtitle"><span className="blink">ES TU TURNO:</span> {timeLeft}</h2>
+            <h2 className="game-subtitle"><span className="blink">ES TU TURNO:</span></h2>
             {loadingWord ? (
               <p className="sending-text">ENVIANDO PALABRA...</p>
             ) : (
