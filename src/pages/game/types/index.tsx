@@ -25,6 +25,7 @@ export interface GameStateType {
   playedWordsCount: number;
   totalPlayers: number;
   words: { word: string }[];
+  theme: string;
   currentTurn?: string | null;
   wordsPerPlayer?: number;
   wordsByPlayer: WordsByPlayerType[];

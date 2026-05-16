@@ -34,6 +34,7 @@ const RoomPage: React.FC = () => {
   const hasNavigatedRef = useRef(false);
 
   const [theme, setTheme] = useState<string>("default");
+  const [wordsPerPlayer, setWordsPerPlayer] = useState<number>(1);
 
   // Fetch inicial (solo 1 vez)
   const fetchRoomState = async () => {
@@ -64,7 +65,7 @@ const RoomPage: React.FC = () => {
           "Content-Type": "application/json",
           "X-GAME-TOKEN": `${API_TOKEN}`,
        },
-        body: JSON.stringify({ hostId: playerId, theme: theme, }),
+        body: JSON.stringify({ hostId: playerId, theme: theme, wordsPerPlayer: wordsPerPlayer }),
       });
 
       const data = await res.json();
@@ -158,7 +159,7 @@ const RoomPage: React.FC = () => {
       <ul className="players-list">
         {Object.values(room?.players ?? {}).map((p) => (
           <li key={p.id} className="player-item">
-            <span className="cursor">&gt;</span> {p.nickname}
+            <span>&gt;</span> {p.nickname}
             {p.id === room.hostId && <span className="host-tag"> (HOST)</span>}
           </li>
         ))}
@@ -170,7 +171,7 @@ const RoomPage: React.FC = () => {
             <label className="theme-label">Elije el tema</label>
             <br></br>
             <select
-              className="theme-input"
+              className="options-input"
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
             >
@@ -180,6 +181,21 @@ const RoomPage: React.FC = () => {
               <option value="simpsons">The Simpsons</option>
               <option value="movies80s">Películas 80s</option>
               <option value="movies90s">Películas 90s</option>
+            </select>
+          </div>
+          <div className="wordsPerPlayer-selector">
+            <label className="wordsPerPlayer-label">Palabras a introducir</label>
+            <br></br>
+            <select
+              className="options-input"
+              value={wordsPerPlayer}
+              onChange={(e) => setWordsPerPlayer(Number(e.target.value))}
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
             </select>
           </div>
           <button className="arcade-btn start-btn" onClick={handleStartGame}>

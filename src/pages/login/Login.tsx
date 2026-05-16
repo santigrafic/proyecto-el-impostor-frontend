@@ -10,37 +10,46 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
+
+    if (loading) return;
+
     e.preventDefault();
 
+    setLoading(true);
+
     try {
-    const res = await fetch(`${API_URL}/api/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+      const res = await fetch(`${API_URL}/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-    if (!res.ok) {
-      alert("Credenciales incorrectas");
-      return;
+      if (!res.ok) {
+        alert("Credenciales incorrectas");
+        return;
+      }
+
+      const data = await res.json();
+
+      // guardar token + usuario
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+
+      navigate("/home");
+    } catch (err) {
+      console.error(err);
+      alert("Error en el login");
+    } finally {
+      setLoading(false);
     }
-
-    const data = await res.json();
-
-    // guardar token + usuario
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("currentUser", JSON.stringify(data.user));
-
-    navigate("/home");
-  } catch (err) {
-    console.error(err);
-    alert("Error en el login");
-  }
   };
 
   return (
@@ -76,8 +85,8 @@ const LoginPage: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-primary">
-            Enviar
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? "Enviando..." : "Enviar"}
           </button>
         </form>
       </div>

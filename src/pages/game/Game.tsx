@@ -23,6 +23,7 @@ const GamePage: React.FC = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingWord, setLoadingWord] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [me, setMe] = useState<MeType | null>(null);
@@ -38,6 +39,15 @@ const GamePage: React.FC = () => {
     gameState.playedWordsCount === gameState.totalPlayers * me.wordsPerPlayer;
 
   (window as any).Echo = echo;
+
+  const themeLabels: Record<string, string> = {
+    default: "General",
+    animals: "Animales",
+    movies: "Películas",
+    simpsons: "The Simpsons",
+    movies80s: "Películas 80s",
+    movies90s: "Películas 90s",
+  };
 
   // Fetch inicial
   useEffect(() => {
@@ -146,6 +156,7 @@ const GamePage: React.FC = () => {
       if (!res.ok) return;  
       const data: GameStateType = await res.json();
       console.log("game_id:", data.game_id);
+      console.log("theme:", data.theme);
       // Asegurarse de que playedWords exista
       if (!data.wordsByPlayer) data.wordsByPlayer = [];
       setGameState(data);
@@ -156,6 +167,10 @@ const GamePage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (loadingWord) return;
+
+    setLoadingWord(true);
     if (!wordInput.trim()) return;
 
     try {
@@ -180,6 +195,8 @@ const GamePage: React.FC = () => {
     } catch (err) {
       console.error(err);
       alert("Error enviando palabra");
+    } finally {
+      setLoadingWord(false);
     }
   };
 
@@ -307,39 +324,41 @@ const GamePage: React.FC = () => {
         <h1 className="game-title">Partida {roomId}</h1>
 
         <section className="game-section">
-          <h2 className="game-subtitle">Tu información</h2>
+          <h2 className="game-subtitle">INFO JUGADOR</h2>
 
           <p>
-            <span className="cursor">&gt;</span> Nickname: {me.nickname}
+            <span>&gt;</span> Nickname: {me.nickname}
           </p>
           <p>
-            <span className="cursor">&gt;</span> Rol:{" "}
+            <span>&gt;</span> Rol:{" "}
             <span className={`role ${me.role}`}>{me.role}</span>
           </p>
+        </section>
 
+        <section className="game-section">
+          <h2 className="game-subtitle">INFO PARTIDA</h2>
+            <p>
+              <span>&gt;</span> Tema: {themeLabels[gameState.theme]}
+            </p>
           {me.role === "player" ? (
             <p>
-              <span className="cursor">&gt;</span> Tu palabra: {me.word}
+              <span>&gt;</span> Palabra: {me.word}
             </p>
           ) : (
-            <p>No tienes palabra</p>
+            <p>Eres el impostor. No puedes saber la palabra</p>
           )}
 
           {me.hasPlayed && (
             <p className="status-ok">Ya has jugado todas tus palabras</p>
           )}
-        </section>
-
-        <section className="game-section">
-          <h2 className="game-subtitle">Estado de la partida</h2>
           <p>
-            <span className="cursor">&gt;</span> Tus palabras: {me.words.length}{" "}
+            <span>&gt;</span> Tus palabras: {me.words.length}{" "}
             / {me.wordsPerPlayer}
           </p>
         </section>
 
         <section className="game-section">
-          <h2 className="game-subtitle">Palabras jugadas</h2>
+          <h2 className="game-subtitle">PALABRAS JUGADAS</h2>
 
           {gameState.wordsByPlayer.length === 0 ? (
             <p className="muted">Aún no hay palabras</p>
@@ -347,7 +366,7 @@ const GamePage: React.FC = () => {
             <ul className="words-list">
               {gameState.wordsByPlayer.map((p, index) => (
                 <li key={index} className="word-item">
-                  <span className="cursor">&gt;</span> {p.nickname}:{" "}
+                  <span>&gt;</span> {p.nickname}:{" "}
                   {p.words.length > 0 ? p.words.join(", ") : "—"}
                 </li>
               ))}
@@ -380,14 +399,15 @@ const GamePage: React.FC = () => {
                 minLength={2}
                 maxLength={15}
                 required
+                disabled={loadingWord}
                 placeholder={
                   me.role === "impostor"
                     ? "Intenta confundirles..."
                     : "Tu palabra"
                 }
               />
-              <button type="submit" className="arcade-btn">
-                Enviar
+              <button type="submit" className="arcade-btn" disabled={loadingWord}>
+                {loading ? "Enviando..." : "Enviar"}
               </button>
             </form>
           </section>
