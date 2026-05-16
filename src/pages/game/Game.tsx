@@ -24,6 +24,8 @@ const GamePage: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingWord, setLoadingWord] = useState(false);
+  const [wordSubmitted, setWordSubmitted] = useState(false);
+  const [loadingVote, setLoadingVote] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [me, setMe] = useState<MeType | null>(null);
@@ -44,10 +46,17 @@ const GamePage: React.FC = () => {
     default: "General",
     animals: "Animales",
     movies: "Películas",
+    harrypotter: "Harry Potter",
     simpsons: "The Simpsons",
     movies80s: "Películas 80s",
     movies90s: "Películas 90s",
   };
+
+  const currentPlayer = gameState?.players.find(
+    (p) => String(p.id) === String(gameState?.currentTurn)
+  );
+
+  const [timeLeft, setTimeLeft] = useState(15);
 
   // Fetch inicial
   useEffect(() => {
@@ -118,6 +127,10 @@ const GamePage: React.FC = () => {
     }*/
   }, [gameState?.status]);
 
+  useEffect(() => {
+  setWordSubmitted(false);
+}, [me?.isMyTurn]);
+
   const fetchInitialData = async () => {
     try {
       await Promise.all([fetchMe(), fetchGameState()]);
@@ -130,6 +143,33 @@ const GamePage: React.FC = () => {
       }
     }
   };
+
+  useEffect(() => {
+  if (!me?.isMyTurn || me.hasPlayed) return;
+
+  setTimeLeft(20);
+
+  const interval = setInterval(() => {
+    setTimeLeft((prev) => {
+      if (prev <= 1) {
+        clearInterval(interval);
+        return 0;
+      }
+
+      return prev - 1;
+    });
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [me?.isMyTurn]);
+
+useEffect(() => {
+  if (timeLeft !== 0) return;
+  if (!me?.isMyTurn) return;
+  if (me.hasPlayed) return;
+
+  sendAutomaticWord();
+}, [timeLeft]);
 
   const fetchMe = async () => {
     try {
@@ -157,6 +197,7 @@ const GamePage: React.FC = () => {
       const data: GameStateType = await res.json();
       console.log("game_id:", data.game_id);
       console.log("theme:", data.theme);
+      console.log("turno de:", data.currentTurn);
       // Asegurarse de que playedWords exista
       if (!data.wordsByPlayer) data.wordsByPlayer = [];
       setGameState(data);
@@ -168,10 +209,13 @@ const GamePage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (loadingWord) return;
+    if (loadingWord || wordSubmitted) return;
+
+    if (!wordInput.trim()) return;
 
     setLoadingWord(true);
-    if (!wordInput.trim()) return;
+
+    setTimeLeft(0);
 
     try {
       const res = await fetch(`${API_URL}/api/games/${roomId}/word`, {
@@ -190,6 +234,7 @@ const GamePage: React.FC = () => {
       }
 
       setWordInput("");
+      setWordSubmitted(true);
       // await fetchMe();
       // await fetchGameState();
     } catch (err) {
@@ -200,7 +245,28 @@ const GamePage: React.FC = () => {
     }
   };
 
+  const sendAutomaticWord = async () => {
+  try {
+    await fetch(`${API_URL}/api/games/${roomId}/word`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        playerId,
+        word: "---",
+      }),
+    });
+  } catch (err) {
+    console.error("Error enviando palabra automática", err);
+  }
+};
+
   const goToVoting = async () => {
+
+    if (loadingVote) return;
+    setLoadingVote(true);
+
     if (votingStarted) return;
     setVotingStarted(true);
 
@@ -219,6 +285,8 @@ const GamePage: React.FC = () => {
       await fetchGameState();
     } catch (e) {
       console.error("Error al pasar a votación", e);
+    } finally {
+      setLoadingVote(false);
     }
   };
 
@@ -323,43 +391,48 @@ const GamePage: React.FC = () => {
         </button>
         <h1 className="game-title">Partida {roomId}</h1>
 
+        <section className="top-info">
+          <p>
+            <span>\\</span>Rol:{" "}
+            <span className={`role ${me.role}`}>{me.role}</span>
+          </p>
+          {me.role === "player" ? (
+            <p>
+              <span>\\</span>Palabra: {me.word}
+            </p>
+          ) : (
+            <p>
+              <span>\\</span>Palabra: ---
+            </p>
+          )}
+          <p>
+              <span>\\</span>Tema: {themeLabels[gameState.theme]}
+            </p>
+        </section>
+
         <section className="game-section">
           <h2 className="game-subtitle">INFO JUGADOR</h2>
-
           <p>
             <span>&gt;</span> Nickname: {me.nickname}
-          </p>
-          <p>
-            <span>&gt;</span> Rol:{" "}
-            <span className={`role ${me.role}`}>{me.role}</span>
           </p>
         </section>
 
         <section className="game-section">
           <h2 className="game-subtitle">INFO PARTIDA</h2>
-            <p>
-              <span>&gt;</span> Tema: {themeLabels[gameState.theme]}
-            </p>
-          {me.role === "player" ? (
-            <p>
-              <span>&gt;</span> Palabra: {me.word}
-            </p>
-          ) : (
-            <p>Eres el impostor. No puedes saber la palabra</p>
-          )}
-
           {me.hasPlayed && (
-            <p className="status-ok">Ya has jugado todas tus palabras</p>
+            <p className="status-ok"><span>&gt;</span> Ya has jugado todas tus palabras</p>
           )}
           <p>
             <span>&gt;</span> Tus palabras: {me.words.length}{" "}
             / {me.wordsPerPlayer}
           </p>
+          {currentPlayer && (
+            <p><span>&gt;</span> Turno de: {currentPlayer.nickname}</p>
+          )}
         </section>
 
         <section className="game-section">
           <h2 className="game-subtitle">PALABRAS JUGADAS</h2>
-
           {gameState.wordsByPlayer.length === 0 ? (
             <p className="muted">Aún no hay palabras</p>
           ) : (
@@ -374,44 +447,51 @@ const GamePage: React.FC = () => {
           )}
         </section>
 
-        {allWordsPlayed && (
-          <div className="center">
-            <button
-              className="arcade-btn"
-              onClick={goToVoting}
-              disabled={votingStarted}
-            >
-              Ir a votación
-            </button>
-          </div>
-        )}
-
-        {me.isMyTurn && !me.hasPlayed && (
+        {me.isMyTurn && !me.hasPlayed && !wordSubmitted && (
           <section className="game-section">
-            <h2 className="game-subtitle blink">Es tu turno</h2>
-
-            <form className="word-form" onSubmit={handleSubmit}>
-              <input
-                className="arcade-input"
-                type="text"
-                value={wordInput}
-                onChange={(e) => setWordInput(e.target.value)}
-                minLength={2}
-                maxLength={15}
-                required
-                disabled={loadingWord}
-                placeholder={
-                  me.role === "impostor"
-                    ? "Intenta confundirles..."
-                    : "Tu palabra"
-                }
-              />
-              <button type="submit" className="arcade-btn" disabled={loadingWord}>
-                {loading ? "Enviando..." : "Enviar"}
-              </button>
-            </form>
+            <h2 className="game-subtitle"><span className="blink">ES TU TURNO:</span> {timeLeft}</h2>
+            {loadingWord ? (
+              <p className="sending-text">ENVIANDO PALABRA...</p>
+            ) : (
+              <form className="word-form" onSubmit={handleSubmit}>
+                <input
+                  className="arcade-input"
+                  type="text"
+                  value={wordInput}
+                  onChange={(e) => setWordInput(e.target.value)}
+                  minLength={2}
+                  maxLength={15}
+                  required
+                  placeholder={
+                    me.role === "impostor"
+                      ? "Confúndeles"
+                      : "Tu palabra"
+                  }
+                />
+                <button type="submit" className="arcade-btn">
+                  Enviar
+                </button>
+              </form>
+            )}
           </section>
         )}
+
+        {allWordsPlayed && (
+          <div className="center">
+            {loadingVote ? (
+              <p className="loading-text">CARGANDO...</p>
+            ) : (
+              <button
+                className="arcade-btn"
+                onClick={goToVoting}
+                disabled={votingStarted}
+              >
+                Ir a votación
+              </button>
+            )} 
+          </div>
+        )}
+        
       </div>
     );
   }
