@@ -93,6 +93,12 @@
   opacity: 0.7;
 }
 
+.loading-text {
+  color: #00ff66;
+  padding: 12px;
+  font-family: "Press Start 2P", monospace;
+}
+
 @media (min-width: 350px) {
   .options-input {
     width: 270px;

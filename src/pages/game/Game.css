@@ -20,6 +20,11 @@
 }
 
 /* Secciones */
+.top-info {
+  margin-bottom: 30px;
+  font-size: large;
+}
+
 .game-section {
   margin-bottom: 30px;
 }
@@ -86,6 +91,16 @@
   padding: 10px;
   font-family: inherit;
   font-size: 12px;
+}
+
+.sending-text {
+  color: #00ff66;
+  padding: 12px;
+  font-family: "Press Start 2P", monospace;
+}
+
+.turn-timer {
+  margin-top: 10px;
 }
 
 /* Centro */

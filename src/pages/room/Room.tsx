@@ -36,6 +36,8 @@ const RoomPage: React.FC = () => {
   const [theme, setTheme] = useState<string>("default");
   const [wordsPerPlayer, setWordsPerPlayer] = useState<number>(1);
 
+  const [loading, setLoading] = useState(false);
+
   // Fetch inicial (solo 1 vez)
   const fetchRoomState = async () => {
     try {
@@ -58,6 +60,8 @@ const RoomPage: React.FC = () => {
   };
 
   const handleStartGame = async () => {
+    if (loading) return;
+    setLoading(true);
     try {
       const res = await fetch(`${API_URL}/api/rooms/${roomId}/start`, {
         method: "POST",
@@ -74,6 +78,8 @@ const RoomPage: React.FC = () => {
     } catch (err: any) {
       console.error(err);
       alert(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -178,6 +184,7 @@ const RoomPage: React.FC = () => {
               <option value="default">General</option>
               <option value="animals">Animales</option>
               <option value="movies">Películas</option>
+              <option value="harrypotter">Harry Potter</option>
               <option value="simpsons">The Simpsons</option>
               <option value="movies80s">Películas 80s</option>
               <option value="movies90s">Películas 90s</option>
@@ -198,9 +205,14 @@ const RoomPage: React.FC = () => {
               <option value="5">5</option>
             </select>
           </div>
-          <button className="arcade-btn start-btn" onClick={handleStartGame}>
-            Iniciar partida
-          </button>
+          {loading ? (
+              <p className="loading-text">INICIANDO...</p>
+            ) : (
+              <button className="arcade-btn start-btn" onClick={handleStartGame}>
+                INICIAR PARTIDA
+              </button>
+            )}
+          
         </>
       )}
     </div>

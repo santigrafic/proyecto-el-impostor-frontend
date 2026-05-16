@@ -53,9 +53,9 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  const handlePrint = () => {
+  /* const handlePrint = () => {
     window.print();
-  };
+  };*/
 
   // if (loading) return <p>Cargando perfil...</p>;
   if (loading) {
@@ -80,9 +80,9 @@ const ProfilePage: React.FC = () => {
         <p><span className="cursor">&gt;</span> Partidas ganadas: {profile.gamesWon}</p>
         <p><span className="cursor">&gt;</span> Veces impostor: {profile.timesImpostor}</p>
       </section>
-      <button className="arcade-btn print-btn" onClick={handlePrint}>
+      {/* <button className="arcade-btn print-btn" onClick={handlePrint}>
         IMPRIMIR INFO
-      </button>
+      </button> */}
     </div>
   );
 };
