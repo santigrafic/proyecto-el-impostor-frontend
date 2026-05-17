@@ -46,10 +46,11 @@ const GamePage: React.FC = () => {
     default: "General",
     animals: "Animales",
     movies: "Películas",
-    harrypotter: "Harry Potter",
-    simpsons: "The Simpsons",
     movies80s: "Películas 80s",
     movies90s: "Películas 90s",
+    series: "Series",
+    harrypotter: "Harry Potter",
+    simpsons: "The Simpsons",
   };
 
   const currentPlayer = gameState?.players.find(
@@ -385,10 +386,14 @@ useEffect(() => {
 
   if (gameState.status === "playing") {
     return (
+      <div className="container">
+        {/*<section className="game-header">
+          <button className="btn-exit-game" onClick={handleExitGame}>
+            <span className="cursor">&lt;</span>Salir
+          </button>
+        </section>*/}
       <div className="game-container">
-        <button className="btn-exit" onClick={handleExitGame}>
-          <span className="cursor">&lt;</span>Salir
-        </button>
+        
         <h1 className="game-title">Partida {roomId}</h1>
 
         <section className="top-info">
@@ -427,7 +432,7 @@ useEffect(() => {
             / {me.wordsPerPlayer}
           </p>
           {currentPlayer && (
-            <p><span>&gt;</span> Turno de: {currentPlayer.nickname}</p>
+            <p><span className="blink">&gt;</span> Turno de: {currentPlayer.nickname}</p>
           )}
         </section>
 
@@ -492,6 +497,7 @@ useEffect(() => {
           </div>
         )}
         
+      </div>
       </div>
     );
   }

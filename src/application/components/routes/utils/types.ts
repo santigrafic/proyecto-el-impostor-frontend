@@ -5,4 +5,5 @@ export type RouteTypes = {
   path: string;
   element: React.ReactNode;
   hideHeader?: boolean;
+  gameHeader?: boolean;
 }

@@ -194,7 +194,7 @@ const RegisterPage: React.FC = () => {
             disabled={loading}
             onClick={handleSubmitRegisterForm}
           >
-            {loading ? "Enviando..." : "Enviar"}
+            {loading ? "Guardando..." : "Guardar"}
           </button>
         </form>
       </div>
