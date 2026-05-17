@@ -4,7 +4,6 @@ import Header from './components/header'
 import Footer from './components/footer'
 import GameHeader from './components/game-header'
 
-
 import { appRoutes } from '../routes/utils/app-routes'
 
 import type { LayoutTypes } from './utils/types'

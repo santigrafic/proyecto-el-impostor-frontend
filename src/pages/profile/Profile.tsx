@@ -59,7 +59,7 @@ const ProfilePage: React.FC = () => {
 
   // if (loading) return <p>Cargando perfil...</p>;
   if (loading) {
-      return <LoadingScreen />;
+    return <LoadingScreen />;
   }
   if (!profile) return <p>Error cargando perfil</p>;
 
@@ -68,17 +68,32 @@ const ProfilePage: React.FC = () => {
       <h1 className="profile-title">PERFIL DE USUARIO</h1>
 
       <section className="profile-section">
-        <p><span className="cursor">&gt;</span> Nombre: {profile.name}</p>
-        <p><span className="cursor">&gt;</span> Nickname: {profile.nickname}</p>
-        <p><span className="cursor">&gt;</span> Email: {profile.email}</p>
+        <p>
+          <span className="cursor">&gt;</span> Nombre: {profile.name}
+        </p>
+        <p>
+          <span className="cursor">&gt;</span> Nickname: {profile.nickname}
+        </p>
+        <p>
+          <span className="cursor">&gt;</span> Email: {profile.email}
+        </p>
       </section>
 
       <section className="profile-section">
         <h2 className="profile-subtitle">Estadísticas</h2>
 
-        <p><span className="cursor">&gt;</span> Partidas jugadas: {profile.gamesPlayed}</p>
-        <p><span className="cursor">&gt;</span> Partidas ganadas: {profile.gamesWon}</p>
-        <p><span className="cursor">&gt;</span> Veces impostor: {profile.timesImpostor}</p>
+        <p>
+          <span className="cursor">&gt;</span> Partidas jugadas:{" "}
+          {profile.gamesPlayed}
+        </p>
+        <p>
+          <span className="cursor">&gt;</span> Partidas ganadas:{" "}
+          {profile.gamesWon}
+        </p>
+        <p>
+          <span className="cursor">&gt;</span> Veces impostor:{" "}
+          {profile.timesImpostor}
+        </p>
       </section>
       {/* <button className="arcade-btn print-btn" onClick={handlePrint}>
         IMPRIMIR INFO

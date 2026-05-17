@@ -1,44 +1,66 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
-import CopyRoomCode from "../../commons/components/copyRoomCode/CopyRoomCode";
+import CopyRoomCode from "../../commons/components/copyRoomCode";
+
+import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
 import { getEcho } from "../../lib/echo";
-const echo = getEcho();
+
+import type { RoomState } from "./utils/interfaces";
 
 import "./Room.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const API_TOKEN = import.meta.env.VITE_GAME_API_TOKEN;
-
-interface Player {
-  id: string;
-  nickname: string;
-}
-
-interface RoomState {
-  hostId: string;
-  players: Player[];
-  status: "waiting" | "playing";
-}
+const echo = getEcho();
 
 const RoomPage: React.FC = () => {
-  const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
 
+  const { roomId } = useParams<{ roomId: string }>();
+
   const [room, setRoom] = useState<RoomState | null>(null);
-  const [isHost, setIsHost] = useState(false);
+  const [isHost, setIsHost] = useState<boolean>(false);
+  const [theme, setTheme] = useState<string>("default");
+  const [wordsPerPlayer, setWordsPerPlayer] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const playerId = localStorage.getItem("playerId");
 
-  const hasNavigatedRef = useRef(false);
+  useEffect(() => {
+    fetchRoomState();
 
-  const [theme, setTheme] = useState<string>("default");
-  const [wordsPerPlayer, setWordsPerPlayer] = useState<number>(1);
+    const channel = echo.channel(`room.${roomId}`);
 
-  const [loading, setLoading] = useState(false);
+    // Player joined
+    channel.listen(".player.joined", (event: any) => {
+      setRoom(event.room);
+      setIsHost(playerId === event.room.hostId);
+    });
 
-  // Fetch inicial (solo 1 vez)
+    // Player exits
+    channel.listen(".room.exit", (event: any) => {
+      setRoom(event.room);
+    });
+
+    // Host exits
+    channel.listen(".room.closed", () => {
+      alert("El host abandonó la partida. La sala se ha cerrado.");
+      navigate(ROUTE_PATHS.HOME);
+    });
+
+    // Game started
+    channel.listen(".game.started", () => {
+      navigate(`/game/${roomId}`);
+    });
+
+    return () => {
+      echo.leave(`room.${roomId}`);
+    };
+  }, []);
+
   const fetchRoomState = async () => {
     try {
       const res = await fetch(`${API_URL}/api/rooms/${roomId}/state`);
@@ -49,8 +71,7 @@ const RoomPage: React.FC = () => {
       setRoom(data);
       setIsHost(playerId === data.hostId);
 
-      if (data.status === "playing" && !hasNavigatedRef.current) {
-        hasNavigatedRef.current = true;
+      if (data.status === "playing") {
         navigate(`/game/${roomId}`);
       }
     } catch (err) {
@@ -60,16 +81,20 @@ const RoomPage: React.FC = () => {
   };
 
   const handleStartGame = async () => {
-    if (loading) return;
     setLoading(true);
+
     try {
       const res = await fetch(`${API_URL}/api/rooms/${roomId}/start`, {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
           "X-GAME-TOKEN": `${API_TOKEN}`,
-       },
-        body: JSON.stringify({ hostId: playerId, theme: theme, wordsPerPlayer: wordsPerPlayer }),
+        },
+        body: JSON.stringify({
+          hostId: playerId,
+          theme: theme,
+          wordsPerPlayer: wordsPerPlayer,
+        }),
       });
 
       const data = await res.json();
@@ -78,71 +103,9 @@ const RoomPage: React.FC = () => {
     } catch (err: any) {
       console.error(err);
       alert(err.message);
-    } finally {
       setLoading(false);
     }
   };
-
-  /*const handleLeaveRoom = async () => {
-    const socketId = (window as any).Echo?.socketId();
-
-    await fetch(`${API_URL}/api/rooms/${roomId}/leave`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Socket-Id": socketId,
-      },
-      body: JSON.stringify({ playerId }),
-    });
-
-    navigate("/home");
-  };*/
-
-  useEffect(() => {
-    if (!roomId) return;
-
-    fetchRoomState();
-
-    console.log("SUBSCRIBED TO ROOM:", roomId);
-
-    const channel = echo.channel(`room.${roomId}`);
-
-    // Player joined
-    channel.listen(".player.joined", (event: any) => {
-      console.log("PLAYER JOINED", event);
-
-      setRoom(event.room);
-      setIsHost(playerId === event.room.hostId);
-    });
-
-    // Player exits
-    channel.listen(".room.exit", (event: any) => {
-      console.log("PLAYER LEFT ROOM", event);
-      setRoom(event.room);
-    });
-
-    // Host exits
-    channel.listen(".room.closed", () => {
-      alert("El host abandonó la partida. La sala se ha cerrado.");
-      navigate("/home");
-    });
-
-    // Game started
-    channel.listen(".game.started", (event: any) => {
-      console.log("GAME STARTED", event);
-
-      if (!hasNavigatedRef.current) {
-        hasNavigatedRef.current = true;
-        navigate(`/game/${roomId}`);
-      }
-    });
-
-    return () => {
-      echo.leave(`room.${roomId}`);
-    };
-  }, [roomId]);
-
-  // if (!room) return <div className="room-charge">CARGANDO SALA...</div>;
 
   if (!room) {
     return <LoadingScreen />;
@@ -192,7 +155,9 @@ const RoomPage: React.FC = () => {
             </select>
           </div>
           <div className="wordsPerPlayer-selector">
-            <label className="wordsPerPlayer-label">Palabras a introducir</label>
+            <label className="wordsPerPlayer-label">
+              Palabras a introducir
+            </label>
             <br></br>
             <select
               className="options-input"
@@ -207,13 +172,12 @@ const RoomPage: React.FC = () => {
             </select>
           </div>
           {loading ? (
-              <p className="loading-text">INICIANDO...</p>
-            ) : (
-              <button className="arcade-btn start-btn" onClick={handleStartGame}>
-                INICIAR PARTIDA
-              </button>
-            )}
-          
+            <p className="loading-text">INICIANDO...</p>
+          ) : (
+            <button className="arcade-btn start-btn" onClick={handleStartGame}>
+              INICIAR PARTIDA
+            </button>
+          )}
         </>
       )}
     </div>

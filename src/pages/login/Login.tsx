@@ -2,20 +2,18 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./Login.css";
+import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-
-    if (loading) return;
-
     e.preventDefault();
 
     setLoading(true);
@@ -43,11 +41,10 @@ const LoginPage: React.FC = () => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("currentUser", JSON.stringify(data.user));
 
-      navigate("/home");
+      navigate(ROUTE_PATHS.HOME);
     } catch (err) {
       console.error(err);
       alert("Error en el login");
-    } finally {
       setLoading(false);
     }
   };

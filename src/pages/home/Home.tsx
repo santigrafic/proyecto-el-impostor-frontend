@@ -1,7 +1,4 @@
-import React from "react";
-
 import { useNavigate } from "react-router-dom";
-import {  useState } from "react";
 
 import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
@@ -13,34 +10,41 @@ import "./Home.css";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const [currentUser] = useState(() => {
-  return JSON.parse(localStorage.getItem("currentUser") || "null");
-});
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
 
-  const handleGuestPlay = () => {
-    localStorage.setItem("userType", "guest");
-    navigate("/lobby");
+  const handlePlay = () => {
+    navigate(ROUTE_PATHS.LOBBY);
   };
 
   return (
     <div className="home-container">
-      {/* Logo */}
       <div className="home-logo-wrapper">
         <img src={impostorIcon} className="home-logo" alt="Impostor Logo" />
       </div>
 
-      {/* Título */}
       <h1 className="home-title">BIENVENIDO A EL IMPOSTOR</h1>
 
-      {/* Subtítulo */}
       <p className="home-subtitle">
         <span className="cursor">&gt;</span>Descubre quién miente… o traiciona a
         los demás.
       </p>
 
-      {/* Botones */}
       <div className="home-buttons">
-        {!currentUser && (
+        <Button text="JUGAR" styleClass="arcade-btn" handleClick={handlePlay} />
+        {currentUser ? (
+          <>
+            <Button
+              text="VER PERFIL"
+              styleClass="arcade-btn"
+              handleClick={() => navigate(ROUTE_PATHS.PROFILE)}
+            />
+            <Button
+              text="VER RANKING"
+              styleClass="arcade-btn"
+              handleClick={() => navigate(ROUTE_PATHS.RANKING)}
+            />
+          </>
+        ) : (
           <>
             <Button
               text="LOGIN"
@@ -51,27 +55,6 @@ const HomePage: React.FC = () => {
               text="REGISTRO"
               styleClass="arcade-btn"
               handleClick={() => navigate(ROUTE_PATHS.REGISTER)}
-            />
-          </>
-        )}
-
-        <Button
-          text="JUGAR"
-          styleClass="arcade-btn"
-          handleClick={handleGuestPlay}
-        />
-
-        {currentUser && (
-          <>
-            <Button
-              text="VER PERFIL"
-              styleClass="arcade-btn"
-              handleClick={() => navigate("/profile")}
-            />
-            <Button
-              text="VER RANKING"
-              styleClass="arcade-btn"
-              handleClick={() => navigate("/ranking")}
             />
           </>
         )}

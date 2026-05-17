@@ -1,5 +1,3 @@
-import React from "react";
-
 import Layout from "./application/components/layout";
 
 import RoutesComponent from "./application/components/routes";

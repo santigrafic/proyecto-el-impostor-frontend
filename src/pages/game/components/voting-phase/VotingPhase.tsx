@@ -1,29 +1,13 @@
-import React from "react";
 import { useState } from "react";
-//import { useNavigate } from "react-router-dom";
-import type { MeType, GameStateType } from "../../types";
+
+import type { VotingPhaseProps } from "./utils/types";
 
 import "./VotingPhase.css";
 
-type VotingPhaseProps = {
-  me: MeType;
-  gameState: GameStateType;
-  onVote: (targetPlayerId: string) => void;
-  roomId: string;
-  fetchGameState: () => Promise<void>;
-};
+const VotingPhase: React.FC<VotingPhaseProps> = ({ me, gameState, onVote }) => {
+  const [loading, setLoading] = useState<boolean>(false);
 
-const VotingPhase: React.FC<VotingPhaseProps> = ({
-  me,
-  gameState,
-  onVote,
-  // roomId,
-  // fetchGameState,
-}) => {
-  // const navigate = useNavigate();
-  const hasVoted = me.hasVoted;
-  const [loading, setLoading] = useState(false);
-  const hasAlreadyVoted = hasVoted || loading;
+  const hasAlreadyVoted = me.hasVoted || loading;
 
   return (
     <div className="voting-container">
@@ -45,7 +29,7 @@ const VotingPhase: React.FC<VotingPhaseProps> = ({
                 className="arcade-btn voting-btn"
                 onClick={async () => {
                   setLoading(true);
-                  await onVote(p.id);
+                  onVote(p.id);
                 }}
               >
                 {p.nickname}

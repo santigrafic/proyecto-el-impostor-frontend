@@ -1,18 +1,15 @@
-import React from "react";
-
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import './Welcome.css'
+import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
-const Welcome: React.FC = () => {
+import "./Welcome.css";
+
+const WelcomePage: React.FC = () => {
   const navigate = useNavigate();
 
-  //Para ir a la home
-  const handleStart = () => {
-    navigate('/home');
-  };
+  const handleStart = () => navigate(ROUTE_PATHS.HOME);
 
   // Pulsando enter vamos a la home
   useEffect(() => {
@@ -39,4 +36,4 @@ const Welcome: React.FC = () => {
   );
 };
 
-export default Welcome;
+export default WelcomePage;

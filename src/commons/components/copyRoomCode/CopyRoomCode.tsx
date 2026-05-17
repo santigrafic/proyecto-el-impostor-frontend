@@ -6,7 +6,7 @@ type CopyRoomCodeProps = {
 };
 
 export default function CopyRoomCode({ roomId }: CopyRoomCodeProps) {
-  const [copiado, setCopiado] = useState(false);
+  const [copiado, setCopiado] = useState<boolean>(false);
 
   const copiarCodigo = async () => {
     try {
