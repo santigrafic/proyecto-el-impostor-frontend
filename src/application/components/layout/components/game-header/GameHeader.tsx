@@ -1,45 +1,31 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 import { getEcho } from "../../../../../lib/echo";
-const echo = getEcho();
+
+import { ROUTE_PATHS } from "../../../routes/utils/route-paths";
 
 import "./GameHeader.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
-
-interface User {
-  name: string;
-  email: string;
-  userAvatar?: string; // opcional
-}
+const echo = getEcho();
 
 const GameHeader: React.FC = () => {
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
   const location = useLocation();
   const roomId = location.pathname.split("/")[2];
   const playerId = localStorage.getItem("playerId");
 
-  // Comprobar si hay usuario logueado al cargar
-  useEffect(() => {
-    const storedUser = localStorage.getItem("currentUser");
-    if (storedUser) {
-      setCurrentUser(JSON.parse(storedUser));
-      console.log(currentUser);
-    }
-  }, []);
-
   const handleExitGame = async () => {
     const confirmExit = window.confirm(
-      "¿Seguro que quieres salir? La partida termina aquí.",
+      "¿Seguro que quieres salir? La partida terminará",
     );
 
     if (!confirmExit) return;
 
     try {
       const socketId = echo.socketId();
-      const res = await fetch(`${API_URL}/api/games/${roomId}/exit`, {
+      await fetch(`${API_URL}/api/games/${roomId}/exit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,11 +37,7 @@ const GameHeader: React.FC = () => {
         }),
       });
 
-      const data = await res.json();
-
-      console.log("EXIT RESPONSE:", data);
-
-      navigate("/home");
+      navigate(ROUTE_PATHS.HOME);
     } catch (error) {
       console.error("Error exiting game:", error);
     }
@@ -64,9 +46,6 @@ const GameHeader: React.FC = () => {
   return (
     <header className="arcade-header">
       <h3 className="header-title">
-        {/*<Link to="/home" className="header-link">
-          <span className="cursor">&lt;</span>Volver
-        </Link>*/}
         <button className="btn-exit" onClick={handleExitGame}>
           <span className="cursor">&lt;</span>Salir
         </button>

@@ -2,6 +2,10 @@ import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import type { RegisterFormType } from "./utils/types";
+
+import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
+
 import "./Register.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -9,7 +13,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [registerForm, setRegisterForm] = useState<any>({
+  const [registerForm, setRegisterForm] = useState<RegisterFormType>({
     name: "",
     nickname: "",
     email: "",
@@ -17,12 +21,9 @@ const RegisterPage: React.FC = () => {
     repeatPassword: "",
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmitRegisterForm = async () => {
-
-    if (loading) return;
-
     // VALIDAR NOMBRE
     if (registerForm.name.trim().length < 3) {
       alert("El nombre debe tener al menos 3 caracteres");
@@ -58,37 +59,36 @@ const RegisterPage: React.FC = () => {
     setLoading(true);
 
     try {
-    const res = await fetch(`${API_URL}/api/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: registerForm.name,
-        nickname: registerForm.nickname,
-        email: registerForm.email,
-        password: registerForm.password,
-      }),
-    });
+      const res = await fetch(`${API_URL}/api/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: registerForm.name,
+          nickname: registerForm.nickname,
+          email: registerForm.email,
+          password: registerForm.password,
+        }),
+      });
 
-    if (!res.ok) {
-      const err = await res.json();
-      alert(err.message || "Error en el registro");
-      return;
-    }
-    
-    const data = await res.json();
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.message || "Error en el registro");
+        return;
+      }
 
-    // guardar login automático si quieres
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("currentUser", JSON.stringify(data.user));
+      const data = await res.json();
 
-    alert("Usuario registrado correctamente");
-    navigate("/home");
+      // guardar login automático si quieres
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+
+      alert("Usuario registrado correctamente");
+      navigate(ROUTE_PATHS.HOME);
     } catch (err) {
       console.error(err);
       alert("Error en el registro");
-    } finally {
       setLoading(false);
     }
   };

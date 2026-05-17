@@ -1,3 +1,5 @@
+import type { WordsByPlayerType } from "./types";
+
 export interface MeType {
   playerId: string;
   nickname: string;
@@ -10,11 +12,6 @@ export interface MeType {
   isMyTurn: boolean;
   hasVoted: boolean;
 }
-
-export type WordsByPlayerType = {
-  nickname: string;
-  words: string[];
-};
 
 export interface GameStateType {
   roomId: string;
@@ -34,10 +31,3 @@ export interface GameStateType {
   votesCount: number;
   votes?: Record<string, string>;
 }
-
-export type ResultsType = {
-  winner: "impostor" | "players";
-  votes: Record<string, number>;
-  impostorNickname: string | null;
-};
-

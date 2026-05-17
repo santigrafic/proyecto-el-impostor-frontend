@@ -1,8 +1,6 @@
-//import React from "react";
-
 import { Navigate } from "react-router-dom";
 
-import Welcome from "../../../../pages/welcome";
+import WelcomePage from "../../../../pages/welcome";
 import HomePage from "../../../../pages/home";
 import Login from "../../../../pages/login/Login";
 import Register from "../../../../pages/register/Register";
@@ -10,9 +8,7 @@ import Profile from "../../../../pages/profile/Profile";
 import Ranking from "../../../../pages/ranking/Ranking";
 import Lobby from "../../../../pages/lobby/Lobby";
 import Room from "../../../../pages/room/Room";
-import RevealPage from "../../../../pages/reveal-page/RevealPage";
 import Game from "../../../../pages/game/Game";
-import NotFound from "../../../../pages/not-found/NotFound";
 
 import { ROUTE_PATHS } from "./route-paths";
 
@@ -22,7 +18,7 @@ export const appRoutes: RouteTypes[] = [
   {
     key: "welcome",
     path: ROUTE_PATHS.WELCOME,
-    element: <Welcome  />,
+    element: <WelcomePage  />,
     hideHeader: true,
   },
   {
@@ -62,20 +58,10 @@ export const appRoutes: RouteTypes[] = [
     element: <Room />,
   },
   {
-    key: "reveal-page",
-    path: ROUTE_PATHS.REVEALPAGE,
-    element: <RevealPage />,
-  },
-  {
     key: "game",
     path: ROUTE_PATHS.GAME,
     element: <Game />,
     gameHeader: true,
-  },
-  {
-    key: "not-found",
-    path: ROUTE_PATHS.NOTFOUND,
-    element: <NotFound />,
   },
   {
     key: "default",

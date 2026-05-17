@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 
-
 import "./Ranking.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -39,12 +38,11 @@ const Ranking: React.FC = () => {
 
   // if (loading) return <p>Cargando ranking...</p>;
   if (loading) {
-        return <LoadingScreen />;
-}
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="ranking-container">
-
       <h1 className="ranking-title">TOP 16 JUGADORES</h1>
 
       <section className="ranking-section">
@@ -55,16 +53,14 @@ const Ranking: React.FC = () => {
             {ranking.map((user) => (
               <li key={user.id} className="ranking-item">
                 <span className="ranking-left">
-                    <span className="cursor">&gt;</span>
-                    {user.nickname}
+                  <span className="cursor">&gt;</span>
+                  {user.nickname}
                 </span>
 
                 <span className="ranking-dots"></span>
 
-                <span className="ranking-right">
-                    {user.games_won}
-                </span>
-                </li>
+                <span className="ranking-right">{user.games_won}</span>
+              </li>
             ))}
           </ol>
         )}
