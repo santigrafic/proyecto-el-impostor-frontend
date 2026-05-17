@@ -70,7 +70,7 @@ export const appRoutes: RouteTypes[] = [
     key: "game",
     path: ROUTE_PATHS.GAME,
     element: <Game />,
-    hideHeader: true,
+    gameHeader: true,
   },
   {
     key: "not-found",

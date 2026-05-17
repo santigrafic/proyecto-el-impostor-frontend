@@ -86,7 +86,7 @@ const LoginPage: React.FC = () => {
             />
           </div>
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? "Enviando..." : "Enviar"}
+            {loading ? "Accediendo..." : "Acceder"}
           </button>
         </form>
       </div>

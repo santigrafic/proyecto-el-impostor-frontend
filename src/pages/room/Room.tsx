@@ -184,10 +184,11 @@ const RoomPage: React.FC = () => {
               <option value="default">General</option>
               <option value="animals">Animales</option>
               <option value="movies">Películas</option>
-              <option value="harrypotter">Harry Potter</option>
-              <option value="simpsons">The Simpsons</option>
               <option value="movies80s">Películas 80s</option>
               <option value="movies90s">Películas 90s</option>
+              <option value="series">Series</option>
+              <option value="harrypotter">Harry Potter</option>
+              <option value="simpsons">The Simpsons</option>
             </select>
           </div>
           <div className="wordsPerPlayer-selector">

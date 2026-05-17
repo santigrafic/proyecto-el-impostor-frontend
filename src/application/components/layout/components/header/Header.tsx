@@ -31,13 +31,6 @@ const Header: React.FC = () => {
     }
   }, []);
 
-  // Logout
-  const handleLogout = () => {
-    localStorage.removeItem("currentUser");
-    setCurrentUser(null);
-    navigate("/home");
-  };
-
   // Volver
   const inRoom = location.pathname.includes("room");
 
@@ -69,6 +62,18 @@ const Header: React.FC = () => {
 
     await handleExitRoom();
     navigate("/register");
+  };
+
+  // Logout
+  const handleLogout = async () => {
+    localStorage.removeItem("currentUser");
+    setCurrentUser(null);
+    if (!inRoom) {
+      navigate("/home");
+      return;
+    }
+    await handleExitRoom();
+    navigate("/home");
   };
 
   const handleExitRoom = async () => {
