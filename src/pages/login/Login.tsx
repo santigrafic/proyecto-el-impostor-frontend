@@ -37,6 +37,7 @@ const LoginPage: React.FC = () => {
 
       const data = await res.json();
 
+      localStorage.clear();
       // guardar token + usuario
       localStorage.setItem("token", data.token);
       localStorage.setItem("currentUser", JSON.stringify(data.user));

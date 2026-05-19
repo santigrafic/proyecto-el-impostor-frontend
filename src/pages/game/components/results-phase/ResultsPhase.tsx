@@ -76,6 +76,7 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
     if (!results) return;
 
     finishGame();
+    localStorage.removeItem('roomId');
   }, [results]);
 
   if (loading) return <LoadingScreen />;
