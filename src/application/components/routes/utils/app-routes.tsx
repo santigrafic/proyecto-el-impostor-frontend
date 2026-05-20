@@ -5,6 +5,7 @@ import HomePage from "../../../../pages/home";
 import Login from "../../../../pages/login/Login";
 import Register from "../../../../pages/register/Register";
 import Profile from "../../../../pages/profile/Profile";
+import EditProfile from "../../../../pages/profile/components/editprofile/EditProfile";
 import Ranking from "../../../../pages/ranking/Ranking";
 import Lobby from "../../../../pages/lobby/Lobby";
 import Room from "../../../../pages/room/Room";
@@ -41,6 +42,11 @@ export const appRoutes: RouteTypes[] = [
     key: "profile",
     path: ROUTE_PATHS.PROFILE,
     element: <Profile />,
+  },
+  {
+    key: "editprofile",
+    path: ROUTE_PATHS.EDITPROFILE,
+    element: <EditProfile />,
   },
   {
     key: "ranking",
