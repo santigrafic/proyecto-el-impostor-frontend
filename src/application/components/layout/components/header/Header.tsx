@@ -64,7 +64,7 @@ const Header: React.FC = () => {
 
   // Logout
   const handleLogout = async () => {
-    localStorage.removeItem("currentUser");
+    localStorage.clear();
     setCurrentUser(null);
     if (!inRoom) {
       navigate(ROUTE_PATHS.HOME);
