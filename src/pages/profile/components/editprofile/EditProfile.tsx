@@ -17,16 +17,16 @@ const EditProfile: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
+  useEffect(() => {
     if (!token) {
       navigate(ROUTE_PATHS.LOGIN);
       return;
     }
 
     fetchProfile(token);
-  }, []);
+  }, [localStorage]);
 
   const fetchProfile = async (token: string) => {
     setLoading(true);
@@ -60,7 +60,7 @@ const EditProfile: React.FC = () => {
       const res = await fetch(`${API_URL}/api/update`, {
         method: "POST",
         headers: {
-            Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -78,7 +78,8 @@ const EditProfile: React.FC = () => {
       const data = await res.json();
 
       // guardar token + usuario
-      localStorage.setItem("token", data.token);
+      //localStorage.setItem("token", data.token);
+      localStorage.currentUser.clear();
       localStorage.setItem("currentUser", JSON.stringify(data.user));
 
       navigate(ROUTE_PATHS.PROFILE);
@@ -88,6 +89,8 @@ const EditProfile: React.FC = () => {
       setLoading(false);
     }
   };
+
+  if (!profile) return <p>Error cargando perfil</p>;
 
   return (
     <div className="login-page">
