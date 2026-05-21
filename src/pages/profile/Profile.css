@@ -86,3 +86,16 @@
     font-size: 14px;
   }
 }
+
+@media (max-width: 400px) {
+  .profile-btn {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .edit-btn,
+  .print-btn {
+    margin-top: px;
+    width: 100%;
+  }
+}
