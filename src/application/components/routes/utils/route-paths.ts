@@ -5,6 +5,7 @@ export const ROUTE_PATHS = {
   LOGIN: '/login',
   REGISTER: '/register',
   PROFILE: '/profile',
+  EDITPROFILE: '/editprofile',
   RANKING: '/ranking',
   LOBBY: '/lobby',
   ROOM: '/room/:roomId',
