@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 
+import { useModal } from "../../commons/context/AlertsModalContext";
+
 import "./Lobby.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -12,6 +14,8 @@ const LobbyPage: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [roomID, setRoomID] = useState<string>("");
+
+  const { showAlertsModal } = useModal();
 
   const user = JSON.parse(localStorage.getItem("currentUser") || "null");
   let playerId = localStorage.getItem("playerId");
@@ -63,7 +67,7 @@ const LobbyPage: React.FC = () => {
       navigate(`/room/${roomID}`);
     } catch (error) {
       console.error(error);
-      alert("Error al crear la partida");
+      showAlertsModal("ERROR", "Error al crear la partida");
       setLoading(false);
     }
   };
@@ -71,7 +75,7 @@ const LobbyPage: React.FC = () => {
   // Unirse a partida
   const handleJoinRoom = async () => {
     if (!roomID) {
-      alert("Introduce un código de partida");
+      showAlertsModal("ERROR", "Introduce un código de partida");
       return;
     }
 
@@ -109,7 +113,7 @@ const LobbyPage: React.FC = () => {
       navigate(`/room/${roomID}`);
     } catch (error) {
       console.error(error);
-      alert("No se pudo unir a la partida");
+      showAlertsModal("ERROR", "No se pudo unir a la partida");
       setLoading(false);
     }
   };

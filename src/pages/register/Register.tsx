@@ -6,6 +6,8 @@ import type { RegisterFormType } from "./utils/types";
 
 import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
+import { useModal } from "../../commons/context/AlertsModalContext";
+
 import "./Register.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -22,17 +24,18 @@ const RegisterPage: React.FC = () => {
   });
 
   const [loading, setLoading] = useState<boolean>(false);
+  const { showAlertsModal } = useModal();
 
   const handleSubmitRegisterForm = async () => {
     // VALIDAR NOMBRE
     if (registerForm.name.trim().length < 3) {
-      alert("El nombre debe tener al menos 3 caracteres");
+      showAlertsModal("ERROR", "El nombre debe tener al menos 3 caracteres");
       return;
     }
 
     // VALIDAR NICK
     if (registerForm.nickname.trim().length < 3) {
-      alert("El nick debe tener al menos 3 caracteres");
+      showAlertsModal("ERROR", "El nick debe tener al menos 3 caracteres");
       return;
     }
 
@@ -40,19 +43,19 @@ const RegisterPage: React.FC = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(registerForm.email)) {
-      alert("Introduce un email válido");
+      showAlertsModal("ERROR", "Introduce un email válido");
       return;
     }
 
     // VALIDAR PASSWORD
     if (registerForm.password.length < 6) {
-      alert("La contraseña debe tener al menos 6 caracteres");
+      showAlertsModal("ERROR", "La contraseña debe tener al menos 6 caracteres");
       return;
     }
 
     // VALIDAR REPETICIÓN PASSWORD
     if (registerForm.password !== registerForm.repeatPassword) {
-      alert("Las contraseñas no coinciden");
+      showAlertsModal("ERROR", "Las contraseñas no coinciden");
       return;
     }
 
@@ -74,7 +77,7 @@ const RegisterPage: React.FC = () => {
 
       if (!res.ok) {
         const err = await res.json();
-        alert(err.message || "Error en el registro");
+        showAlertsModal("ERROR", err.message);
         return;
       }
 
@@ -84,11 +87,11 @@ const RegisterPage: React.FC = () => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("currentUser", JSON.stringify(data.user));
 
-      alert("Usuario registrado correctamente");
+      showAlertsModal("OK", "Usuario registrado correctamente");
       navigate(ROUTE_PATHS.HOME);
     } catch (err) {
       console.error(err);
-      alert("Error en el registro");
+      showAlertsModal("ERROR", "Error en el registro");
       setLoading(false);
     }
   };

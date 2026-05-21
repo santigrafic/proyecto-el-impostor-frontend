@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
+import { useModal } from "../../commons/context/AlertsModalContext";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const LoginPage: React.FC = () => {
@@ -12,6 +14,9 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+
+    const { showAlertsModal } = useModal();
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +36,7 @@ const LoginPage: React.FC = () => {
       });
 
       if (!res.ok) {
-        alert("Credenciales incorrectas");
+        showAlertsModal("ERROR", "Credenciales incorrectas");
         return;
       }
 
@@ -45,7 +50,7 @@ const LoginPage: React.FC = () => {
       navigate(ROUTE_PATHS.HOME);
     } catch (err) {
       console.error(err);
-      alert("Error en el login");
+      showAlertsModal("ERROR", "Error en el login");
       setLoading(false);
     }
   };

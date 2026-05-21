@@ -6,6 +6,7 @@ import CopyRoomCode from "../../commons/components/copyRoomCode";
 
 import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
+import { useModal } from "../../commons/context/AlertsModalContext";
 import { getEcho } from "../../lib/echo";
 
 import type { RoomState } from "./utils/interfaces";
@@ -26,6 +27,7 @@ const RoomPage: React.FC = () => {
   const [theme, setTheme] = useState<string>("default");
   const [wordsPerPlayer, setWordsPerPlayer] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
+  const { showAlertsModal } = useModal();
 
   const playerId = localStorage.getItem("playerId");
 
@@ -47,7 +49,7 @@ const RoomPage: React.FC = () => {
 
     // Host exits
     channel.listen(".room.closed", () => {
-      alert("El host abandonó la partida. La sala se ha cerrado.");
+      showAlertsModal("ERROR", "El host abandonó la partida. La sala se ha cerrado");
       navigate(ROUTE_PATHS.HOME);
     });
 
@@ -76,7 +78,7 @@ const RoomPage: React.FC = () => {
       }
     } catch (err) {
       console.error(err);
-      alert("No se pudo cargar la sala");
+      showAlertsModal("ERROR", "No se pudo cargar la sala");
     }
   };
 
@@ -102,7 +104,7 @@ const RoomPage: React.FC = () => {
       if (!res.ok) throw new Error(data.error);
     } catch (err: any) {
       console.error(err);
-      alert(err.message);
+      showAlertsModal("ERROR", err.message);
       setLoading(false);
     }
   };
