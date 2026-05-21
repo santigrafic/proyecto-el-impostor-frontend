@@ -44,26 +44,21 @@
   animation: blink 1.2s steps(2, start) infinite;
 }
 
-/* Botón volver */
-/*.btn-exit {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background: transparent;
-  color: #00ff66;
-  border: none;
-  font-family: inherit;
-}*/
+/* Botones perfil */
+.profile-btn {
+  display: flex;
+  gap: 10px;
+}
 
-/* Botón imprimir */
+/* Botones */
+.edit-btn,
 .print-btn {
   margin-top: 20px;
-  width: 100%;
+  width: 50%;
 }
 
 @media print {
-  .btn-exit,
-  .print-btn {
+  .btn-exit {
     display: none;
   }
 

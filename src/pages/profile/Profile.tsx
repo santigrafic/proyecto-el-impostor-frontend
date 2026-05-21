@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
+import Button from "../../commons/components/presentational/button";
 
 import "./Profile.css";
+import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
+import type { UserProfile } from "./utils/interfaces";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-interface UserProfile {
-  name: string;
-  nickname: string;
-  email: string;
-  gamesPlayed: number;
-  gamesWon: number;
-  timesImpostor: number;
-}
 const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -23,7 +19,7 @@ const ProfilePage: React.FC = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      navigate("/login");
+      navigate(ROUTE_PATHS.LOGIN);
       return;
     }
 
@@ -53,9 +49,9 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  /* const handlePrint = () => {
+  const handlePrint = () => {
     window.print();
-  };*/
+  };
 
   // if (loading) return <p>Cargando perfil...</p>;
   if (loading) {
@@ -95,9 +91,18 @@ const ProfilePage: React.FC = () => {
           {profile.timesImpostor}
         </p>
       </section>
-      {/* <button className="arcade-btn print-btn" onClick={handlePrint}>
-        IMPRIMIR INFO
-      </button> */}
+      <section className="profile-btn">
+        <Button
+              text="EDITAR"
+              styleClass="arcade-btn edit-btn"
+              handleClick={() => navigate(ROUTE_PATHS.EDITPROFILE)}
+            />
+      <Button
+              text="IMPRIMIR"
+              styleClass="arcade-btn print-btn"
+              handleClick={handlePrint}
+            />
+      </section>
     </div>
   );
 };
