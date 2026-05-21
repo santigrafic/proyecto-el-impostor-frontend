@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "./EditProfile.css";
-
 import { ROUTE_PATHS } from "../../../../application/components/routes/utils/route-paths";
-import type { UserProfile } from "./utils/interfaces";
+
 import LoadingScreen from "../../../../commons/components/loadingScreen";
+
+import type { UserProfile } from "./utils/interfaces";
 import type { EditProfileFormType } from "./utils/types";
+
+import { useModal } from "../../../../commons/context/AlertsModalContext";
+
+import "./EditProfile.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,6 +19,8 @@ const EditProfile: React.FC = () => {
 
   const [profile, setProfile] = useState<UserProfile>();
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { showAlertsModal } = useModal();
 
   const token = localStorage.getItem("token");
 
@@ -87,7 +93,7 @@ const EditProfile: React.FC = () => {
       });
 
       if (!res.ok) {
-        alert("Fallo al guardar");
+        showAlertsModal("ERROR", "Fallo al guardar");
         return;
       }
 
@@ -96,11 +102,11 @@ const EditProfile: React.FC = () => {
       localStorage.removeItem("currentUser");
       localStorage.setItem("currentUser", JSON.stringify(data.user));
 
-      alert("Jugador actualizado");
+      showAlertsModal("OK", "Jugador actualizado");
       navigate(ROUTE_PATHS.PROFILE);
     } catch (err) {
       console.error(err);
-      alert("Error editando información");
+      showAlertsModal("ERROR", "Error editando información");
       setLoading(false);
     }
   };

@@ -1,0 +1,122 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 120px;
+  z-index: 9999;
+  font-family: "Press Start 2P", monospace;
+  overflow: hidden;
+}
+
+/* CRT overlay */
+.modal-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0.25) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+.modal-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 255, 102, 0.050);
+  animation: scan 5s linear infinite;
+}
+
+.modal-container {
+  position: relative;
+  width: 420px;
+  padding: 20px;
+  background: black;
+  color: #00ff66;
+  border: 2px solid #00ff66;
+  box-shadow:
+    0 0 10px #00ff66,
+    0 0 20px rgba(0, 255, 102, 0.5);
+  animation:
+    flicker 0.15s infinite,
+    modalAppear 0.2s ease;
+  z-index: 2;
+}
+
+.modal-container h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 24px;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px #00ff66;
+}
+
+.modal-container p {
+  margin: 5px 0;
+  font-size: 14px;
+  line-height: 2;
+  word-break: break-word;
+}
+
+/* Botón */
+.modal-container button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: #00ff66;
+  border: 2px solid #00ff66;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.modal-container button:hover {
+  background: #00ff66;
+  color: black;
+  box-shadow: 0 0 10px #00ff66;
+}
+
+/* Aparición */
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Flicker CRT */
+@keyframes flicker {
+  0% {
+    opacity: 0.92;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.96;
+  }
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .modal-container {
+    width: 90%;
+  }
+}

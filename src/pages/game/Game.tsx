@@ -7,11 +7,12 @@ import ResultsPhase from "./components/results-phase/ResultsPhase";
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 
 import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
+import { THEME_LABELS } from "../../application/config/constants";
 
 import { getEcho } from "../../lib/echo";
+import { useModal } from "../../commons/context/AlertsModalContext";
 
 import type { GameStateType, MeType } from "./utils/interfaces";
-import { THEME_LABELS } from "../../application/config/constants";
 
 import "./Game.css";
 
@@ -21,6 +22,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
+  const { showAlertsModal } = useModal();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingWord, setLoadingWord] = useState<boolean>(false);
@@ -50,7 +52,7 @@ const GamePage: React.FC = () => {
     const channel = echo.channel(`room.${roomId}`);
 
     channel.listen(".game.exit", () => {
-      alert("Un jugador abandonó la partida");
+      showAlertsModal("ERROR", "Un jugador abandonó la partida");
       navigate(ROUTE_PATHS.HOME);
     });
 
@@ -141,7 +143,8 @@ const GamePage: React.FC = () => {
 
       if (!res.ok) {
         const errData = await res.json();
-        alert(errData.error || "Error al enviar palabra");
+        showAlertsModal("ERROR", errData.error);
+        
         return;
       }
 
@@ -149,7 +152,7 @@ const GamePage: React.FC = () => {
       setWordSubmitted(true);
     } catch (err) {
       console.error(err);
-      alert("Error enviando palabra");
+      showAlertsModal("ERROR", "Error enviando palabra");
     } finally {
       setLoadingWord(false);
     }
@@ -165,7 +168,7 @@ const GamePage: React.FC = () => {
       });
       if (!res.ok) {
         const errData = await res.json();
-        alert(errData.error || "Error al iniciar votación");
+        showAlertsModal("ERROR", errData.error);
         setVotingStarted(false);
         return;
       }
@@ -192,7 +195,7 @@ const GamePage: React.FC = () => {
 
       if (!res.ok) {
         const errData = await res.json();
-        alert(errData.error || "Error al enviar voto");
+        showAlertsModal("ERROR", errData.error);
         return;
       }
 
@@ -200,7 +203,7 @@ const GamePage: React.FC = () => {
       await fetchGameState();
     } catch (err) {
       console.error(err);
-      alert("Error enviando voto");
+      showAlertsModal("ERROR", "Error enviando voto");
     }
   };
 
