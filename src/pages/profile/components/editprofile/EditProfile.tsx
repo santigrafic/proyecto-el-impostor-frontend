@@ -83,7 +83,7 @@ const EditProfile: React.FC = () => {
 
     try {
       const res = await fetch(`${API_URL}/api/update`, {
-        method: "POST",
+        method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -93,7 +93,9 @@ const EditProfile: React.FC = () => {
       });
 
       if (!res.ok) {
-        showAlertsModal("ERROR", "Fallo al guardar");
+        const err = await res.json();
+        showAlertsModal("ERROR", err.message);
+        setLoading(false);
         return;
       }
 

@@ -27,38 +27,6 @@ const RegisterPage: React.FC = () => {
   const { showAlertsModal } = useModal();
 
   const handleSubmitRegisterForm = async () => {
-    // VALIDAR NOMBRE
-    if (registerForm.name.trim().length < 3) {
-      showAlertsModal("ERROR", "El nombre debe tener al menos 3 caracteres");
-      return;
-    }
-
-    // VALIDAR NICK
-    if (registerForm.nickname.trim().length < 3) {
-      showAlertsModal("ERROR", "El nick debe tener al menos 3 caracteres");
-      return;
-    }
-
-    // VALIDAR EMAIL
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(registerForm.email)) {
-      showAlertsModal("ERROR", "Introduce un email válido");
-      return;
-    }
-
-    // VALIDAR PASSWORD
-    if (registerForm.password.length < 6) {
-      showAlertsModal("ERROR", "La contraseña debe tener al menos 6 caracteres");
-      return;
-    }
-
-    // VALIDAR REPETICIÓN PASSWORD
-    if (registerForm.password !== registerForm.repeatPassword) {
-      showAlertsModal("ERROR", "Las contraseñas no coinciden");
-      return;
-    }
-
     setLoading(true);
 
     try {
@@ -66,6 +34,7 @@ const RegisterPage: React.FC = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({
           name: registerForm.name,
@@ -78,6 +47,7 @@ const RegisterPage: React.FC = () => {
       if (!res.ok) {
         const err = await res.json();
         showAlertsModal("ERROR", err.message);
+        setLoading(false);
         return;
       }
 
