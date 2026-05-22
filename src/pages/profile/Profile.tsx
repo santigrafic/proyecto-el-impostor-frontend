@@ -59,7 +59,7 @@ const ProfilePage: React.FC = () => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "application/json",
+          //Accept: "application/json",
         },
       });
 
