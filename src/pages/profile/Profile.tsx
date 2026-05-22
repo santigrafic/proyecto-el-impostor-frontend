@@ -49,8 +49,29 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    console.log("Entra en imprimir");
+
+    try {
+      const response = await fetch(`${API_URL}/api/me/pdf`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      window.open(url, "_blank");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // if (loading) return <p>Cargando perfil...</p>;
