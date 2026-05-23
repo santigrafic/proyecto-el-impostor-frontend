@@ -35,6 +35,22 @@
   text-shadow: 0 0 4px #00ff66;
 }
 
+.ranking-item-title {
+  display: flex;
+  align-items: center;
+  font-size: clamp(6px, 3vw, 18px);
+  margin-bottom: 12px;
+  text-shadow: 0 0 4px #00ff66;
+  border-bottom: 1px solid #00ff66;
+}
+
+.ranking-item-title-space {
+  flex: 1;
+  margin: 0 10px;
+  transform: translateY(1px);
+  opacity: 0.7;
+}
+
 /* izquierda */
 .ranking-left {
   white-space: nowrap;

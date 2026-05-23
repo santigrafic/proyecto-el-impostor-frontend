@@ -28,6 +28,7 @@ const LoginPage: React.FC = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({
           email,
@@ -36,7 +37,9 @@ const LoginPage: React.FC = () => {
       });
 
       if (!res.ok) {
-        showAlertsModal("ERROR", "Credenciales incorrectas");
+        const err = await res.json();
+        showAlertsModal("ERROR", err.message);
+        setLoading(false);
         return;
       }
 
