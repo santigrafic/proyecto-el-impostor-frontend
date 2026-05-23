@@ -59,6 +59,23 @@ const HomePage: React.FC = () => {
           </>
         )}
       </div>
+      
+      <div className="subscribe-buttons">
+        {currentUser?.isPremium ? (
+          <button
+            className="premium-active-btn"
+            disabled
+          >
+            PREMIUM ACTIVADO
+          </button>
+        ) : (
+          <Button
+                text="HAZTE PREMIUM"
+                styleClass="subscribe-btn"
+                handleClick={() => navigate(ROUTE_PATHS.SUBSCRIPTION)}
+                />)}
+      </div>
+      
     </div>
   );
 };

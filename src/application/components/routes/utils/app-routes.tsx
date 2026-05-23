@@ -10,6 +10,8 @@ import Ranking from "../../../../pages/ranking/Ranking";
 import Lobby from "../../../../pages/lobby/Lobby";
 import Room from "../../../../pages/room/Room";
 import Game from "../../../../pages/game/Game";
+import Subscription from "../../../../pages/subscription";
+import PremiumSuccess from "../../../../pages/premium-success";
 
 import { ROUTE_PATHS } from "./route-paths";
 
@@ -68,6 +70,16 @@ export const appRoutes: RouteTypes[] = [
     path: ROUTE_PATHS.GAME,
     element: <Game />,
     gameHeader: true,
+  },
+  {
+    key: "subscription",
+    path: ROUTE_PATHS.SUBSCRIPTION,
+    element: <Subscription />,
+  },
+  {
+    key: "premiumsuccess",
+    path: ROUTE_PATHS.PREMIUMSUCCESS,
+    element: <PremiumSuccess />,
   },
   {
     key: "default",

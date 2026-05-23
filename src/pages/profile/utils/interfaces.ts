@@ -5,4 +5,5 @@ export interface UserProfile {
   gamesPlayed: number;
   gamesWon: number;
   timesImpostor: number;
+  isPremium?: boolean;
 }

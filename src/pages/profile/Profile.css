@@ -71,6 +71,39 @@
     box-shadow: none;
   }
 }
+/* Premium */
+.premium-status {
+  margin: 25px 0;
+  padding: 30px 10px 10px 10px;
+  border: 1px solid #00ff66;
+  background: #000;
+  box-shadow: 0 0 5px #00ff66;
+  text-align: center;
+}
+
+@keyframes terminalGlow {
+  from {
+    box-shadow: 0 0 8px #00ff66;
+  }
+
+  to {
+    box-shadow: 0 0 20px #00ff66;
+  }
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
 
 /* Responsive */
 @media (min-width: 768px) {
