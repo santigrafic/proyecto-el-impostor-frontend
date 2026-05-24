@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useModal } from "../../commons/context/AlertsModalContext";
 
 import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
-import type { UserProfile } from "./utils/interfaces";
 
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 
