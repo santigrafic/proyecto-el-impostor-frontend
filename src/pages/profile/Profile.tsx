@@ -88,7 +88,12 @@ const ProfilePage: React.FC = () => {
   if (loading) {
     return <LoadingScreen />;
   }
-  if (!profile) return <p>Error cargando perfil</p>;
+  if (!profile) {
+    showAlertsModal("ERROR", "Error cargando perfil. Haz Login de nuevo");
+    localStorage.clear();
+    navigate(ROUTE_PATHS.LOGIN);
+    return;
+  }
 
   return (
     <div className="profile-container">
@@ -116,29 +121,26 @@ const ProfilePage: React.FC = () => {
         <h2 className="profile-subtitle">Estadísticas</h2>
 
         <p>
-          <span>&gt;</span> Partidas jugadas:{" "}
-          {profile.gamesPlayed}
+          <span>&gt;</span> Partidas jugadas: {profile.gamesPlayed}
         </p>
         <p>
-          <span>&gt;</span> Partidas ganadas:{" "}
-          {profile.gamesWon}
+          <span>&gt;</span> Partidas ganadas: {profile.gamesWon}
         </p>
         <p>
-          <span>&gt;</span> Veces impostor:{" "}
-          {profile.timesImpostor}
+          <span>&gt;</span> Veces impostor: {profile.timesImpostor}
         </p>
       </section>
       <section className="profile-btn">
         <Button
-              text="EDITAR"
-              styleClass="arcade-btn edit-btn"
-              handleClick={() => navigate(ROUTE_PATHS.EDITPROFILE)}
-            />
-      <Button
-              text="IMPRIMIR"
-              styleClass="arcade-btn print-btn"
-              handleClick={handlePrint}
-            />
+          text="EDITAR"
+          styleClass="arcade-btn edit-btn"
+          handleClick={() => navigate(ROUTE_PATHS.EDITPROFILE)}
+        />
+        <Button
+          text="IMPRIMIR"
+          styleClass="arcade-btn print-btn"
+          handleClick={handlePrint}
+        />
       </section>
     </div>
   );
