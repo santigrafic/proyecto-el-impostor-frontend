@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useModal } from "../../commons/context/AlertsModalContext";
+
+import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
+import type { UserProfile } from "./utils/interfaces";
 
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 import Button from "../../commons/components/presentational/button";
 
 import "./Profile.css";
-import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
-import type { UserProfile } from "./utils/interfaces";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -14,6 +16,8 @@ const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const { showAlertsModal } = useModal();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -38,7 +42,14 @@ const ProfilePage: React.FC = () => {
         },
       });
 
-      if (!res.ok) throw new Error("Error cargando perfil");
+      //if (!res.ok) throw new Error("Error cargando perfil");
+      if (!res.ok) {
+        const err = await res.json();
+        showAlertsModal("ERROR", `${err.message}. Haz Login de nuevo`);
+        localStorage.clear();
+        navigate(ROUTE_PATHS.LOGIN);
+        return;
+      }
 
       const data = await res.json();
       setProfile(data);

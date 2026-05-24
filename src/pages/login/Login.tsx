@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useModal } from "../../commons/context/AlertsModalContext";
 
-import "./Login.css";
 import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
-import { useModal } from "../../commons/context/AlertsModalContext";
+import "./Login.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,8 +15,8 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-    const { showAlertsModal } = useModal();
-  
+  const { showAlertsModal } = useModal();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
