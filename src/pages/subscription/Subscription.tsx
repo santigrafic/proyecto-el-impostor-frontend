@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 
@@ -10,6 +11,7 @@ const SubscriptionPage: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
 
   const handlePremium = async () => {
     setLoading(true);
@@ -74,9 +76,20 @@ const SubscriptionPage: React.FC = () => {
         </p>
       </div>
 
-      <button className="arcade-btn premium-btn" disabled={loading} onClick={handlePremium}>
+      <button className="arcade-btn premium-btn" disabled={loading || !currentUser || currentUser.isPremium} onClick={handlePremium}>
         ACTIVAR PREMIUM
       </button>
+
+      {!currentUser && (
+        <p className="premium-login-warning">
+          Haz <Link to="/login">login</Link> o <Link to="/register">regístrate</Link> para activar tu cuenta premium.
+        </p>
+      )}
+      {currentUser?.isPremium && (
+        <p className="premium-login-warning">
+          Ya tienes una suscripción premium activa.
+        </p>
+      )}
     </div>
   );
 };

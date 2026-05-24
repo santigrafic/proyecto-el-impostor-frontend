@@ -76,6 +76,24 @@
   color: #000;
 }
 
+.premium-login-warning {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #ff4d4d;
+  text-align: center;
+}
+
+.premium-login-warning a {
+  color: #00ff66;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.premium-login-warning a:hover {
+  text-decoration: none;
+  text-shadow: 0 0 10px #00ff66;
+}
+
 @keyframes flicker {
   0% {
     opacity: 0.85;
