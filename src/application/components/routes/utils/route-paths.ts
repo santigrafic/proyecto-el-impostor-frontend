@@ -11,5 +11,7 @@ export const ROUTE_PATHS = {
   ROOM: '/room/:roomId',
   REVEALPAGE: '/reveal-page/:roomId',
   GAME: '/game/:roomId',
+  SUBSCRIPTION: '/subscription',
+  PREMIUMSUCCESS: '/premium-success',
   NOTFOUND: '/not-found',
 }

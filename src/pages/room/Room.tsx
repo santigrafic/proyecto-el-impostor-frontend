@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 import CopyRoomCode from "../../commons/components/copyRoomCode";
+import Button from "../../commons/components/presentational/button";
+
 
 import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
@@ -30,6 +32,8 @@ const RoomPage: React.FC = () => {
   const { showAlertsModal } = useModal();
 
   const playerId = localStorage.getItem("playerId");
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+  const isPremium = currentUser?.isPremium;
 
   useEffect(() => {
     fetchRoomState();
@@ -148,12 +152,12 @@ const RoomPage: React.FC = () => {
             >
               <option value="default">General</option>
               <option value="animals">Animales</option>
-              <option value="movies">Películas</option>
-              <option value="movies80s">Películas 80s</option>
-              <option value="movies90s">Películas 90s</option>
-              <option value="series">Series</option>
-              <option value="harrypotter">Harry Potter</option>
-              <option value="simpsons">The Simpsons</option>
+              <option value="movies" disabled={!isPremium}>Películas</option>
+              <option value="movies80s" disabled={!isPremium}>Películas 80s</option>
+              <option value="movies90s" disabled={!isPremium}>Películas 90s</option>
+              <option value="series" disabled={!isPremium}>Series</option>
+              <option value="harrypotter" disabled={!isPremium}>Harry Potter</option>
+              <option value="simpsons" disabled={!isPremium}>The Simpsons</option>
             </select>
           </div>
           <div className="wordsPerPlayer-selector">
@@ -168,9 +172,9 @@ const RoomPage: React.FC = () => {
             >
               <option value="1">1</option>
               <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
+              <option value="3" disabled={!isPremium}>3</option>
+              <option value="4" disabled={!isPremium}>4</option>
+              <option value="5" disabled={!isPremium}>5</option>
             </select>
           </div>
           {loading ? (
@@ -181,6 +185,19 @@ const RoomPage: React.FC = () => {
             </button>
           )}
         </>
+      )}
+      {!isPremium && (
+        <div className="premium-lock-message">
+          <p>
+            <span className="cursor">&gt;</span>
+            FUNCIONES PREMIUM BLOQUEADAS
+          </p>
+          <Button
+                text="HAZTE PREMIUM"
+                styleClass="subscribe-btn"
+                handleClick={() => navigate(ROUTE_PATHS.SUBSCRIPTION)}
+                />
+        </div>
       )}
     </div>
   );

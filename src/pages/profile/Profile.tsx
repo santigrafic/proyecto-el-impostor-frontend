@@ -52,7 +52,6 @@ const ProfilePage: React.FC = () => {
   const handlePrint = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
-    console.log("Entra en imprimir");
 
     try {
       const response = await fetch(`${API_URL}/api/me/pdf`, {
@@ -86,29 +85,35 @@ const ProfilePage: React.FC = () => {
 
       <section className="profile-section">
         <p>
-          <span className="cursor">&gt;</span> Nombre: {profile.name}
+          <span>&gt;</span> Nombre: {profile.name}
         </p>
         <p>
-          <span className="cursor">&gt;</span> Nickname: {profile.nickname}
+          <span>&gt;</span> Nickname: {profile.nickname}
         </p>
         <p>
-          <span className="cursor">&gt;</span> Email: {profile.email}
+          <span>&gt;</span> Email: {profile.email}
         </p>
       </section>
+
+      {profile.isPremium && (
+        <section className="premium-status">
+          <h2 className="profile-subtitle">CUENTA PREMIUM ACTIVA</h2>
+        </section>
+      )}
 
       <section className="profile-section">
         <h2 className="profile-subtitle">Estadísticas</h2>
 
         <p>
-          <span className="cursor">&gt;</span> Partidas jugadas:{" "}
+          <span>&gt;</span> Partidas jugadas:{" "}
           {profile.gamesPlayed}
         </p>
         <p>
-          <span className="cursor">&gt;</span> Partidas ganadas:{" "}
+          <span>&gt;</span> Partidas ganadas:{" "}
           {profile.gamesWon}
         </p>
         <p>
-          <span className="cursor">&gt;</span> Veces impostor:{" "}
+          <span>&gt;</span> Veces impostor:{" "}
           {profile.timesImpostor}
         </p>
       </section>

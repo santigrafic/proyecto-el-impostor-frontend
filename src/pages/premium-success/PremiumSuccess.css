@@ -1,0 +1,45 @@
+.premium-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  background: #000;
+  color: #00ff66;
+  border: 2px solid #00ff66;
+  box-shadow: 0 0 20px #00ff66;
+  padding: 30px 20px;
+  border-radius: 10px;
+  font-family: "Press Start 2P", monospace;
+  overflow: hidden;
+}
+
+.premium-ascii {
+  color: #00ff66;
+  font-size: 0.80rem;
+  line-height: 1.2;
+  text-align: center;
+  text-shadow: 0 0 8px #00ff66;
+  margin-bottom: 30px;
+  animation: flicker 2s infinite alternate;
+}
+
+.premium-success {
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+  .premium-ascii {
+    font-size: 0.60rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .premium-ascii {
+    font-size: 0.30rem;
+  }
+}
+
+@media (max-width: 300px) {
+  .premium-ascii {
+    font-size: 0.18rem;
+  }
+}

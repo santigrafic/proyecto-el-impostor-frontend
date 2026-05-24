@@ -99,6 +99,29 @@
   font-family: "Press Start 2P", monospace;
 }
 
+.premium-lock-message {
+  margin-top: 20px;
+  padding: 12px;
+  text-align: center;
+  animation: flicker 1.5s infinite alternate;
+}
+.subscribe-btn {
+  background: #00ff66;
+  color: #000;
+  border: 2px solid #00ff66;
+  padding: 12px 24px;
+  font-family: "Press Start 2P", monospace;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00ff66;
+  transition: all 0.2s;
+  margin-top: 20px;
+}
+.subscribe-btn:hover {
+  box-shadow: 0 0 20px #00ff66;
+  transform: scale(1.05);
+}
+
 @media (min-width: 350px) {
   .options-input {
     width: 270px;
