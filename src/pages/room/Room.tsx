@@ -86,6 +86,21 @@ const RoomPage: React.FC = () => {
     }
   };
 
+  const handleExitSubscription = async () => {
+    const socketId = echo.socketId();
+
+    await fetch(`${API_URL}/api/rooms/${roomId}/exit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(socketId ? { "X-Socket-Id": socketId } : {}),
+      },
+      body: JSON.stringify({ playerId }),
+    });
+
+    navigate(ROUTE_PATHS.SUBSCRIPTION)
+  };
+
   const handleStartGame = async () => {
     setLoading(true);
 
@@ -195,7 +210,7 @@ const RoomPage: React.FC = () => {
           <Button
                 text="HAZTE PREMIUM"
                 styleClass="subscribe-btn"
-                handleClick={() => navigate(ROUTE_PATHS.SUBSCRIPTION)}
+                handleClick={handleExitSubscription}
                 />
         </div>
       )}
