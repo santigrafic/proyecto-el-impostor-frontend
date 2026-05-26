@@ -87,6 +87,7 @@ const RoomPage: React.FC = () => {
   };
 
   const handleExitSubscription = async () => {
+    setLoading(true);
     const socketId = echo.socketId();
 
     await fetch(`${API_URL}/api/rooms/${roomId}/exit`, {
@@ -129,6 +130,10 @@ const RoomPage: React.FC = () => {
   };
 
   if (!room) {
+    return <LoadingScreen />;
+  }
+
+  if (loading) {
     return <LoadingScreen />;
   }
 
