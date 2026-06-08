@@ -49,9 +49,10 @@ const PremiumSuccess: React.FC = () => {
       }
 
       // Consultar isPremium y ponerlo a true
-      const data = await res.json();
+      //const data = await res.json();
       const currentUser = JSON.parse(localStorage.getItem("currentUser")!);
-      currentUser.isPremium = data.isPremium;
+      //currentUser.isPremium = data.isPremium;
+      currentUser.isPremium = "true";
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
     } catch (err) {
       console.error(err);
