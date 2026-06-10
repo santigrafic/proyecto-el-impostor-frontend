@@ -64,9 +64,29 @@ const RoomPage: React.FC = () => {
     });
 
     return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       echo.leave(`room.${roomId}`);
     };
   }, []);
+
+  // Detectar cierre de pestaña, recarga o cierre de navegador
+  const handleBeforeUnload = () => {
+    fetch(`${API_URL}/api/rooms/${roomId}/exit`, {
+      method: "POST",
+      keepalive: true,
+      headers: {
+        "Content-Type": "application/json",
+        ...(echo.socketId()
+          ? { "X-Socket-Id": echo.socketId() }
+          : {}),
+      },
+      body: JSON.stringify({
+        playerId,
+      }),
+    });
+  };
+
+  window.addEventListener("beforeunload", handleBeforeUnload);
 
   const fetchRoomState = async () => {
     try {
