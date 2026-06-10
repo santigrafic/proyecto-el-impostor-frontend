@@ -5,6 +5,7 @@ import LoadingScreen from "../../../../commons/components/loadingScreen/LoadingS
 
 import type { ResultsPhaseProps } from "./utils/types";
 import type { ResultsType } from "../../utils/types";
+import { playClick01, stopGameMusic } from "../../../../commons/utils/soundManager";
 
 import { ROUTE_PATHS } from "../../../../application/components/routes/utils/route-paths";
 
@@ -108,7 +109,7 @@ const ResultsPhase: React.FC<ResultsPhaseProps> = ({ gameState, roomId }) => {
 
       <button
         className="arcade-btn results-btn"
-        onClick={() => navigate(ROUTE_PATHS.HOME)}
+        onClick={() => { stopGameMusic(); playClick01(); navigate(ROUTE_PATHS.HOME)}}
       >
         Volver a inicio
       </button>

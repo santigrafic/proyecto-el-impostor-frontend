@@ -15,6 +15,7 @@ import { useModal } from "../../commons/context/AlertsModalContext";
 import type { GameStateType, MeType } from "./utils/interfaces";
 
 import "./Game.css";
+import { playClick01, playClick02, startGameMusic, stopBackgroundMusic } from "../../commons/utils/soundManager";
 
 const echo = getEcho();
 const API_URL = import.meta.env.VITE_API_URL;
@@ -47,6 +48,8 @@ const GamePage: React.FC = () => {
   );
 
   useEffect(() => {
+    stopBackgroundMusic();
+    startGameMusic();
     fetchInitialData();
 
     const channel = echo.channel(`room.${roomId}`);
@@ -298,9 +301,9 @@ const GamePage: React.FC = () => {
                     minLength={2}
                     maxLength={15}
                     required
-                    placeholder="Tu palabra"
+                    placeholder="Escribe tu palabra"
                   />
-                  <button type="submit" className="arcade-btn">
+                  <button type="submit" className="arcade-btn" onClick={() => playClick01()}>
                     Enviar
                   </button>
                 </form>
@@ -315,7 +318,10 @@ const GamePage: React.FC = () => {
               ) : (
                 <button
                   className="arcade-btn"
-                  onClick={goToVoting}
+                  onClick={() => {
+                    playClick02();
+                    goToVoting();
+                  }}
                   disabled={votingStarted}
                 >
                   Ir a votación

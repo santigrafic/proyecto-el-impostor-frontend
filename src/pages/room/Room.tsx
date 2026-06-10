@@ -10,6 +10,7 @@ import { ROUTE_PATHS } from "../../application/components/routes/utils/route-pat
 
 import { useModal } from "../../commons/context/AlertsModalContext";
 import { getEcho } from "../../lib/echo";
+import { playClick02 } from "../../commons/utils/soundManager";
 
 import type { RoomState } from "./utils/interfaces";
 
@@ -103,6 +104,7 @@ const RoomPage: React.FC = () => {
   };
 
   const handleStartGame = async () => {
+    playClick02();
     setLoading(true);
 
     try {
