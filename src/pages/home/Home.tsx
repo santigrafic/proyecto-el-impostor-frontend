@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { playClick01, startBackgroundMusic } from "../../commons/utils/soundManager";
 
 import { ROUTE_PATHS } from "../../application/components/routes/utils/route-paths";
 
@@ -13,8 +14,11 @@ const HomePage: React.FC = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
 
   const handlePlay = () => {
+    playClick01();
     navigate(ROUTE_PATHS.LOBBY);
   };
+
+  startBackgroundMusic();
 
   return (
     <div className="home-container">
@@ -36,12 +40,12 @@ const HomePage: React.FC = () => {
             <Button
               text="VER PERFIL"
               styleClass="arcade-btn"
-              handleClick={() => navigate(ROUTE_PATHS.PROFILE)}
+              handleClick={() => {playClick01(); navigate(ROUTE_PATHS.PROFILE)}}
             />
             <Button
               text="VER RANKING"
               styleClass="arcade-btn"
-              handleClick={() => navigate(ROUTE_PATHS.RANKING)}
+              handleClick={() => {playClick01(); navigate(ROUTE_PATHS.RANKING)}}
             />
           </>
         ) : (
@@ -49,12 +53,12 @@ const HomePage: React.FC = () => {
             <Button
               text="LOGIN"
               styleClass="arcade-btn"
-              handleClick={() => navigate(ROUTE_PATHS.LOGIN)}
+              handleClick={() => {playClick01(); navigate(ROUTE_PATHS.LOGIN)}}
             />
             <Button
               text="REGISTRO"
               styleClass="arcade-btn"
-              handleClick={() => navigate(ROUTE_PATHS.REGISTER)}
+              handleClick={() => {playClick01(); navigate(ROUTE_PATHS.REGISTER)}}
             />
           </>
         )}
@@ -72,7 +76,7 @@ const HomePage: React.FC = () => {
           <Button
                 text="HAZTE PREMIUM"
                 styleClass="subscribe-btn"
-                handleClick={() => navigate(ROUTE_PATHS.SUBSCRIPTION)}
+                handleClick={() => {playClick01(); navigate(ROUTE_PATHS.SUBSCRIPTION)}}
                 />)}
       </div>
       

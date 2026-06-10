@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { playClick01 } from "../../commons/utils/soundManager";
 
 import LoadingScreen from "../../commons/components/loadingScreen/LoadingScreen";
 
@@ -22,6 +23,7 @@ const LobbyPage: React.FC = () => {
 
   // Crear partida
   const handleCreateRoom = async () => {
+    playClick01();
     setLoading(true);
 
     try {
@@ -74,6 +76,7 @@ const LobbyPage: React.FC = () => {
 
   // Unirse a partida
   const handleJoinRoom = async () => {
+    playClick01();
     if (!roomID) {
       showAlertsModal("ERROR", "Introduce un código de partida");
       return;
