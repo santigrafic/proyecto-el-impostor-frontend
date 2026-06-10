@@ -16,6 +16,12 @@ export const playClick02 = () => {
   audio.play();
 };
 
+export const resultsAudio = () => {
+  const audio = new Audio("../../sounds/results.mp3");
+  audio.volume = 0.5;
+  audio.play();
+};
+
 
 // Melodia de fondo
 let backgroundMusic: HTMLAudioElement | null = null;

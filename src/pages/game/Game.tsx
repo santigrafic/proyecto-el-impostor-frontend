@@ -73,9 +73,26 @@ const GamePage: React.FC = () => {
     });
 
     return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       echo.leave(`room.${roomId}`);
     };
   }, []);
+
+  // NUEVO: detectar cierre de pestaña, navegador o recarga
+  const handleBeforeUnload = () => {
+    fetch(`${API_URL}/api/games/${roomId}/exit`, {
+      method: "POST",
+      keepalive: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        playerId,
+      }),
+    });
+  };
+
+  window.addEventListener("beforeunload", handleBeforeUnload);
 
   useEffect(() => {
     setWordSubmitted(false);

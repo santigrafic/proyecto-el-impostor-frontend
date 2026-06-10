@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import type { VotingPhaseProps } from "./utils/types";
+import { playClick01 } from "../../../../commons/utils/soundManager";
 
 import "./VotingPhase.css";
 
@@ -28,6 +29,7 @@ const VotingPhase: React.FC<VotingPhaseProps> = ({ me, gameState, onVote }) => {
                 key={p.id}
                 className="arcade-btn voting-btn"
                 onClick={async () => {
+                  playClick01();
                   setLoading(true);
                   onVote(p.id);
                 }}
