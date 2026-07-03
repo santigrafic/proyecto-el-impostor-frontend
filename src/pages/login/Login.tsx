@@ -69,7 +69,7 @@ const LoginPage: React.FC = () => {
             </label>
             <input
               type="email"
-              className="form-control"
+              className="arcade-input"
               id="email"
               placeholder="Introduce email"
               name="email"
@@ -83,15 +83,15 @@ const LoginPage: React.FC = () => {
             </label>
             <input
               type="password"
-              className="form-control"
+              className="arcade-input"
               id="pwd"
-              placeholder="Introduce password"
+              placeholder="Introduce pass"
               name="pswd"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-primary" disabled={loading}>
+          <button type="submit" className="arcade-btn" disabled={loading}>
             {loading ? "Accediendo..." : "Acceder"}
           </button>
         </form>

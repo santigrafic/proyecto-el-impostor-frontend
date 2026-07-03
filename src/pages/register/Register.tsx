@@ -77,7 +77,7 @@ const RegisterPage: React.FC = () => {
             </label>
             <input
               type="text"
-              className="form-control"
+              className="arcade-input"
               id="name"
               placeholder="Introduce nombre"
               name="name"
@@ -95,7 +95,7 @@ const RegisterPage: React.FC = () => {
             </label>
             <input
               type="text"
-              className="form-control"
+              className="arcade-input"
               id="nickname"
               placeholder="Introduce nick"
               name="nickname"
@@ -113,7 +113,7 @@ const RegisterPage: React.FC = () => {
             </label>
             <input
               type="email"
-              className="form-control"
+              className="arcade-input"
               id="email"
               placeholder="Introduce email"
               name="email"
@@ -131,9 +131,9 @@ const RegisterPage: React.FC = () => {
             </label>
             <input
               type="password"
-              className="form-control"
+              className="arcade-input"
               id="pwd"
-              placeholder="Introduce password"
+              placeholder="Introduce pass"
               name="pswd"
               onChange={(e: any) =>
                 setRegisterForm({
@@ -149,9 +149,9 @@ const RegisterPage: React.FC = () => {
             </label>
             <input
               type="password"
-              className="form-control"
+              className="arcade-input"
               id="repwd"
-              placeholder="Repite password"
+              placeholder="Repite pass"
               name="repswd"
               onChange={(e: any) =>
                 setRegisterForm({
@@ -163,7 +163,7 @@ const RegisterPage: React.FC = () => {
           </div>
           <button
             type="button"
-            className="btn btn-primary"
+            className="arcade-btn"
             disabled={loading}
             onClick={handleSubmitRegisterForm}
           >
